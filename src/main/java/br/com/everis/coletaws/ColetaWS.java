@@ -19,9 +19,6 @@ public class ColetaWS {
     public String mostrarValor(){
         return "RENE VIADÃO";
     }
-    
-    public static void main(String[] args) {
-        System.out.println("asdasd");
-    }
+
     
 }
