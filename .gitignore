@@ -1,19 +1,12 @@
-# Build and Release Folders
-bin/
-bin-debug/
-bin-release/
-[Oo]bj/ # FlashDevelop obj
-[Bb]in/ # FlashDevelop bin
 
-# Other files and folders
-.settings/
+# Created by https://www.gitignore.io/api/netbeans
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# End of https://www.gitignore.io/api/netbeans
