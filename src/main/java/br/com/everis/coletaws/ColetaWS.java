@@ -1,4 +1,3 @@
-
 package br.com.everis.coletaws;
 
 import javax.ws.rs.GET;
