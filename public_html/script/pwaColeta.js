@@ -52,6 +52,10 @@ window.onload = function () {
 
             $('#id_div_inicial').attr('id', divId);
             $('#id_play_inicial').attr('id', playId);
+            
+            $('#' + playId).click(function(){
+                alert('asdasdasd');
+            });
 
         });
     });
@@ -70,9 +74,6 @@ window.onload = function () {
             }
         });
     });
-
-
-
 
 };
 function startTime() {
