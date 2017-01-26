@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Coleta PWA</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="styles/style.css"/>
+        <script src="plugins/jquery-3.1.1.min.js" ></script>
+        <script src="script/pwaColeta.js" ></script>
+    </head>
+    <body>
+        <div id="content">
+
+            <div id="header_info">
+                <h1>NAC - Ferramenta de Coleta de Tempos</h1>
+                <form>
+                    <label for="select_amostrador">Amostrador</label>
+                    <select id="select_amostrador">
+                        <option>1</option> 
+                        <option>2</option> 
+                        <option>3</option> 
+                        <option>4</option> 
+                    </select>
+                    <label for="select_loja">Loja</label>
+                    <select id="select_loja">
+                        <option>1</option> 
+                        <option>2</option> 
+                        <option>3</option> 
+                        <option>4</option> 
+                    </select>
+                    <label for="select_unidade">Unidade</label>
+                    <select id="select_unidade">
+                        <option>1</option> 
+                        <option>2</option> 
+                        <option>3</option> 
+                        <option>4</option> 
+                    </select>  
+                    <span id="txtHoraAtual">12:45</span>                
+                </form>
+            </div>
+            <div id="func_info">
+                <div id="header_func" style="width: 100%">
+                    <table style="width: 100%" id="myTable">
+                        <tbody>
+                            <tr>
+                                <th>&nbsp</th>
+                                <th>Funcionário</th>
+                                <th>Produto</th>
+                                <th>Atividade</th>
+                                <th>Ação</th>
+                                <th>Tempo</th>
+                                <th><button id="btnNovaLinha" >Nova linha</button>&nbsp<button id="btnDelLinha" >Deletar linha</button></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

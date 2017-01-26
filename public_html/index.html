@@ -1,61 +1,68 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
+<html >
     <head>
-        <title>Coleta PWA</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="styles/style.css"/>
+        <title>Responstable 2.0: a responsive table solution</title>
+        <link rel="stylesheet" href="styles/normalize.min.css">
+        <link rel="stylesheet" href="styles/style.css">
         <script src="plugins/jquery-3.1.1.min.js" ></script>
         <script src="script/pwaColeta.js" ></script>
+        <script src="script/respond.js"></script>
     </head>
+
     <body>
-        <div id="content">
-            
-            <div id="header_info">
-                <h1>NAC - Ferramenta de Coleta de Tempos</h1>
-                <form>
-                    <label for="select_amostrador">Amostrador</label>
-                    <select id="select_amostrador">
-                        <option>1</option> 
-                        <option>2</option> 
-                        <option>3</option> 
-                        <option>4</option> 
-                    </select>
-                    <label for="select_loja">Loja</label>
-                    <select id="select_loja">
-                        <option>1</option> 
-                        <option>2</option> 
-                        <option>3</option> 
-                        <option>4</option> 
-                    </select>
-                    <label for="select_unidade">Unidade</label>
-                    <select id="select_unidade">
-                        <option>1</option> 
-                        <option>2</option> 
-                        <option>3</option> 
-                        <option>4</option> 
-                    </select>  
-                    <span id="txtHoraAtual">12:45</span>                
-                </form>
-            </div>
-            <div id="func_info">
-                <div id="header_func">
-                    <ul>
-                        <li>Funcionário</li>
-                        <li>Produto</li>
-                        <li>Atividade</li>
-                        <li><button id="btnNovaLinha" >Nova linha</button></li>
-                    </ul>
-                </div>
-                
-                
-                
-            </div>
+        <div class="responstable">
+            <h1>NAC - Ferramenta de Coleta de Tempos</h1>
+            <form>
+                <table class="responstable">
+                    <tr>
+                        <td>
+                            <label for="select_amostrador">Amostrador</label>
+                            <select id="select_amostrador">
+                                <option>1</option> 
+                                <option>2</option> 
+                                <option>3</option> 
+                                <option>4</option> 
+                            </select>
+                        </td>
+                        <td>
+                            <label for="select_loja">Loja</label>
+                            <select id="select_loja">
+                                <option>1</option> 
+                                <option>2</option> 
+                                <option>3</option> 
+                                <option>4</option> 
+                            </select>
+                        </td>
+                        <td>
+                            <label for="select_unidade">Unidade</label>
+                            <select id="select_unidade">
+                                <option>1</option> 
+                                <option>2</option> 
+                                <option>3</option> 
+                                <option>4</option> 
+                            </select> 
+                        </td>
+                        <td>
+                            <span id="txtHoraAtual">12:45</span>
+                        </td>
+                    </tr>
+                </table>
+            </form>
         </div>
+
+        <!--<div style="float: right ">-->
+        <button id="btnNovaLinha" >Nova linha</button>&nbsp<button id="btnDelLinha" disabled >Deletar linha</button>
+        <!--</div>-->
+        <table class="responstable" id="tblColeta">
+            <tr>
+                <th>&nbsp</th>
+                <th>Funcionário</th>
+                <th>Produto</th>
+                <th>Atividade</th>
+                <th>Ação</th>
+                <th>Tempo</th>
+            </tr>
+        </table>
     </body>
 </html>
