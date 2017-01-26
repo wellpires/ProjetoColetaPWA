@@ -30,18 +30,23 @@ var components = function () {
 
 }();
 
+var ids = function () {
+
+
+};
+
 window.onload = function () {
     startTime();
     components.btnNovaLinha().click(function () {
         var rowCount = $('#tblColeta > tbody > tr').length;
 
         if (rowCount === 1) {
-            components.btnDelLinha().prop("disabled", true);
-            components.btnDelLinha().prop("disabled", false);
+            components.btnDelLinha().attr("disabled", true);
+            components.btnDelLinha().attr("disabled", false);
         }
 
         if (rowCount > 5) {
-            $(this).prop("disabled", true);
+            $(this).attr("disabled", true);
             return;
         }
         $.get('row_coleta.html', function (data) {
@@ -49,13 +54,18 @@ window.onload = function () {
             var randomId = parseInt(Math.random() * 1000);
             var divId = 'idDiv' + randomId;
             var playId = 'imgPlay' + randomId;
+            var tempoId = 'spanTempo' + randomId;
 
             $('#id_div_inicial').attr('id', divId);
             $('#id_play_inicial').attr('id', playId);
-            
-            $('#' + playId).click(function(){
-                alert('asdasdasd');
+            $('#spanTempo').attr('id', tempoId);
+
+
+            $('table tr img').on('click', function (e) {
+
             });
+
+
 
         });
     });
@@ -63,13 +73,13 @@ window.onload = function () {
     components.btnDelLinha().click(function () {
         $('input:checked').each(function () {
             $(this).parents('tr').remove();
-            
+
             var rowCount = $('#tblColeta > tbody > tr').length;
             if (rowCount === 1) {
                 components.btnDelLinha().attr('disabled', true);
                 components.btnNovaLinha().attr("disabled", false);
             }
-            if(rowCount < 6){
+            if (rowCount < 6) {
                 components.btnNovaLinha().attr("disabled", false);
             }
         });
@@ -93,3 +103,30 @@ function checkTime(i) {
     ;
     return i;
 }
+
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.text(minutes + ":" + seconds);
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+}
+
+jQuery(function ($) {
+    var fiveMinutes = 60 * 5;
+
+    var rowIndex = $('table tr img').closest('td').parent()[0].sectionRowIndex;
+    $('table tr span').closest('td').parent()[rowIndex].children[5].children[0].innerHTML = Math.random() * 1000;
+
+    var display = $('#time');
+    startTimer(fiveMinutes, display);
+});
