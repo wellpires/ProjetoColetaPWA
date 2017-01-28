@@ -46,10 +46,16 @@ var components = function () {
 }();
 
 window.onload = function () {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/ProjetoColetaPWA/coleta-service-worker.js').then(function (registration) {
+            console.log('Service Worker registered ', registration);
+        }).catch(function (e) {
+            console.log('ERRO ', e);
+        });
+    }
+
     var TEXTO_INICIAR = 'INICIAR';
     var TEXTO_PAUSAR = 'PAUSAR';
-
-
 
     startTime();
     components.btnNovaLinha().click(function () {
@@ -96,8 +102,8 @@ window.onload = function () {
                     buttonComponent[rowIndex].disabled = false;
                     buttonComponent[rowIndex - 1].disabled = true;
                 }
-                
-                if(componentDisplay.innerHTML === '05:00') {
+
+                if (componentDisplay.innerHTML === '05:00') {
                     CountDown().Start(300000, componentDisplay);
                 }
 
@@ -123,15 +129,15 @@ window.onload = function () {
 
         } else if (components.btnIniciar().val() === TEXTO_PAUSAR) {
             components.btnIniciar().attr('value', TEXTO_INICIAR);
-            $('#tblColeta tr td button').attr('disabled',true);
-            var id = setTimeout(function(){}, 0);
-            while(id--){
+            $('#tblColeta tr td button').attr('disabled', true);
+            var id = setTimeout(function () {}, 0);
+            while (id--) {
                 clearTimeout(id);
             }
-            $('#tblColeta tr td span').each(function(index, comp){
+            $('#tblColeta tr td span').each(function (index, comp) {
                 comp.innerHTML = '05:00';
             });
-            
+
         }
 
     });
