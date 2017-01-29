@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<html ng-app="PWAColeta">
     <head>
         <meta charset="UTF-8">
         <title>NAC - Ferramenta de Coleta de Tempos</title>
@@ -7,12 +7,15 @@
         <link rel="stylesheet" href="styles/normalize.min.css">
         <link rel="stylesheet" href="styles/style.css">
         <script src="plugins/jquery-3.1.1.min.js" ></script>
-        <script src="plugins/jquery.countdown.min.js"></script>
+        <script src="plugins/angular/angular.js" ></script>
+        <script src="plugins/angular-timer.min.js" ></script>
         <script src="script/pwaColeta.js" ></script>
         <script src="script/respond.js"></script>
+        <script src="script/app.js"></script>
+        <script src="script/controller/pwaColetaCtrl.js"></script>
     </head>
 
-    <body>
+    <body ng-controller="pwaColetaCtrl">
         <div class="responstable">
             <h1>NAC - Ferramenta de Coleta de Tempos</h1>
             <form>
@@ -20,33 +23,24 @@
                     <tr>
                         <td>
                             <label for="select_amostrador">Amostrador</label>
-                            <select id="select_amostrador">
-                                <option>Amostrador 1</option> 
-                                <option>Amostrador 2</option> 
-                                <option>Amostrador 3</option> 
-                                <option>Amostrador 4</option> 
+                            <select id="select_amostrador"ng-model="amostrador" ng-options="amostrador.amostrador_desc for amostrador in lstAmostradores" ng-change="buscarLojas(amostrador)">
+                                <option value="">Selecione</option> 
                             </select>
                         </td>
                         <td>
                             <label for="select_loja">Loja</label>
-                            <select id="select_loja">
-                                <option>Loja 1</option> 
-                                <option>Loja 2</option> 
-                                <option>Loja 3</option> 
-                                <option>Loja 4</option> 
+                            <select id="select_loja" ng-model="loja" ng-options="loja.loja_desc for loja in lstLojas" ng-disabled="!amostrador || amostrador.length === 0" ng-change="buscarUnidades(loja)">
+                                <option value="">Selecione</option> 
                             </select>
                         </td>
                         <td>
                             <label for="select_unidade">Unidade</label>
-                            <select id="select_unidade">
-                                <option>Unidade 1</option> 
-                                <option>Unidade 2</option> 
-                                <option>Unidade 3</option> 
-                                <option>Unidade 4</option> 
+                            <select id="select_unidade" ng-model="unidade" ng-options="unidade.unidade_desc for unidade in lstUnidades" ng-disabled="!loja || loja.length === 0">
+                                <option value="">Selecione</option> 
                             </select> 
                         </td>
                         <td style="width: 15%">
-                            <input id="btnIniciar" type="button" value="INICIAR" disabled/>
+                            <input id="btnIniciar" type="button" value="INICIAR" disabled ng-click="iniciarColeta()"/>
                             <input id="btnParar" type="button" value="PARAR" disabled/>
                         </td>
                         <td>
@@ -56,7 +50,7 @@
                 </table>
             </form>
         </div>
-        <button id="btnNovaLinha" >Nova linha</button>
+        <button id="btnNovaLinha" ng-disabled="(!amostrador || !loja || !unidade)" ng-click="adcLinha()">Nova linha</button>
         <table class="responstable" id="tblColeta">
             <tr>
                 <th>Funcionário</th>

@@ -46,115 +46,17 @@ var components = function () {
 }();
 
 window.onload = function () {
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/ProjetoColetaPWA/coleta-service-worker.js').then(function (registration) {
-            console.log('Service Worker registered ', registration);
-        }).catch(function (e) {
-            console.log('ERRO ', e);
-        });
-    }
-
-    var TEXTO_INICIAR = 'INICIAR';
-    var TEXTO_PAUSAR = 'PAUSAR';
+//    if ('serviceWorker' in navigator) {
+//        navigator.serviceWorker.register('/ProjetoColetaPWA/coleta-service-worker.js').then(function (registration) {
+//            console.log('Service Worker registered ', registration);
+//        }).catch(function (e) {
+//            console.log('ERRO ', e);
+//        });
+//    }
 
     startTime();
-    components.btnNovaLinha().click(function () {
-        var rowCount = $('#tblColeta > tbody > tr').length;
-
-        if (rowCount === 1) {
-            components.btnIniciar().attr("disabled", false);
-        }
-
-        if (rowCount > 5) {
-            $(this).attr("disabled", true);
-            return;
-        }
-        $.get('row_coleta.html', function (data) {
-            $('#tblColeta > tbody:last-child').append(data);
-            var randomId = parseInt(Math.random() * 1000);
-            var divId = 'idDiv' + randomId;
-            var idBtnAcao = 'btnAcao' + randomId;
-            var tempoId = 'spanTempo' + randomId;
-            var deletarId = 'btnDeletar' + randomId;
-
-            $('#id_div_inicial').attr('id', divId);
-            $('#id_btn_inicial').attr('id', idBtnAcao);
-            $('#id_btn_apagar').attr('id', deletarId);
-            $('#spanTempo').attr('id', tempoId);
-
-            var jqueryBtnAcao = '#' + idBtnAcao;
-            $(jqueryBtnAcao).click(function (e) {
-                $(jqueryBtnAcao).attr('value', 'REGISTRAR');
-                var rowIndex = $('#tblColeta tr').index(e.target.parentNode.parentNode);
-                var componentDisplay = undefined;
-                var spanComponent = $('#tblColeta tr span');
-                var buttonComponent = $('#tblColeta tr td button');
-                if ($('table tr span')[rowIndex] === undefined) {
-                    componentDisplay = spanComponent[1];
-                } else {
-                    componentDisplay = spanComponent[rowIndex];
-                }
-
-                if (buttonComponent[rowIndex] === undefined) {
-                    buttonComponent[0].disabled = false;
-                    buttonComponent[rowIndex - 1].disabled = true;
-                } else {
-                    buttonComponent[rowIndex].disabled = false;
-                    buttonComponent[rowIndex - 1].disabled = true;
-                }
-
-                if (componentDisplay.innerHTML === '05:00') {
-                    CountDown().Start(300000, componentDisplay);
-                }
-
-            });
-
-            var jqueryBtnDeletar = '#' + deletarId;
-            $(jqueryBtnDeletar).click(removerLinha);
-
-        });
-    });
-
-    components.btnIniciar().click(function () {
-        if (!confirm('Tem certeza?')) {
-            return;
-        }
-
-        if (components.btnIniciar().val() === TEXTO_INICIAR) {
-            components.btnIniciar().attr('value', TEXTO_PAUSAR);
-            components.btnParar().attr("disabled", false);
-            $('#tblColeta tr td button')[0].disabled = false;
-
-            CountDown().Start(70000, $('#tblColeta tr td span')[0]);
-
-        } else if (components.btnIniciar().val() === TEXTO_PAUSAR) {
-            components.btnIniciar().attr('value', TEXTO_INICIAR);
-            $('#tblColeta tr td button').attr('disabled', true);
-            var id = setTimeout(function () {}, 0);
-            while (id--) {
-                clearTimeout(id);
-            }
-            $('#tblColeta tr td span').each(function (index, comp) {
-                comp.innerHTML = '05:00';
-            });
-
-        }
-
-    });
 };
 
-function removerLinha() {
-    $(this).parents('tr').remove();
-
-    var rowCount = $('#tblColeta > tbody > tr').length;
-    if (rowCount === 1) {
-        components.btnIniciar().attr("disabled", true);
-        components.btnNovaLinha().attr("disabled", false);
-    }
-    if (rowCount < 6) {
-        components.btnNovaLinha().attr("disabled", false);
-    }
-}
 
 function startTime() {
     var today = new Date();
