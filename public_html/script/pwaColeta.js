@@ -32,6 +32,10 @@ var components = function () {
         return $('#btnParar');
     };
 
+    var cbAmostrador = function () {
+        return $('#cbAmostrador');
+    }
+
     return{
         divFuncInfo: func_info,
         btnNovaLinha: btnNovaLinha,
@@ -40,14 +44,15 @@ var components = function () {
         tblColeta: tblColeta,
         btnIniciar: btnIniciar,
         btnPausar: btnPausar,
-        btnParar: btnParar
+        btnParar: btnParar,
+        cbAmostrador: cbAmostrador
     };
 
 }();
 
 window.onload = function () {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/ProjetoColetaPWA/coleta-service-worker.js').then(function (registration) {
+        navigator.serviceWorker.register('coleta-service-worker.js').then(function (registration) {
             console.log('Service Worker registered ', registration);
         }).catch(function (e) {
             console.log('ERRO ', e);
@@ -58,6 +63,9 @@ window.onload = function () {
     var TEXTO_PAUSAR = 'PAUSAR';
 
     startTime();
+
+    components.cbAmostrador();
+
     components.btnNovaLinha().click(function () {
         var rowCount = $('#tblColeta > tbody > tr').length;
 
@@ -69,6 +77,20 @@ window.onload = function () {
             $(this).attr("disabled", true);
             return;
         }
+
+        $.ajax({
+            url: url,
+            crossDomain: true,
+            data: form,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+            },
+            type: 'POST'
+        }).done(function(){
+            
+        });
+
         $.get('row_coleta.html', function (data) {
             $('#tblColeta > tbody:last-child').append(data);
             var randomId = parseInt(Math.random() * 1000);
@@ -110,7 +132,18 @@ window.onload = function () {
             });
 
             var jqueryBtnDeletar = '#' + deletarId;
-            $(jqueryBtnDeletar).click(removerLinha);
+            $(jqueryBtnDeletar).click(function () {
+                $(this).parents('tr').remove();
+
+                var rowCount = $('#tblColeta > tbody > tr').length;
+                if (rowCount === 1) {
+                    components.btnIniciar().attr("disabled", true);
+                    components.btnNovaLinha().attr("disabled", false);
+                }
+                if (rowCount < 6) {
+                    components.btnNovaLinha().attr("disabled", false);
+                }
+            });
 
         });
     });
@@ -142,19 +175,6 @@ window.onload = function () {
 
     });
 };
-
-function removerLinha() {
-    $(this).parents('tr').remove();
-
-    var rowCount = $('#tblColeta > tbody > tr').length;
-    if (rowCount === 1) {
-        components.btnIniciar().attr("disabled", true);
-        components.btnNovaLinha().attr("disabled", false);
-    }
-    if (rowCount < 6) {
-        components.btnNovaLinha().attr("disabled", false);
-    }
-}
 
 function startTime() {
     var today = new Date();
@@ -240,6 +260,22 @@ var CountDown = function () {
     };
 };
 
+
+var carregarFuncionarios = function () {
+
+    var lstFuncionarios = [];
+
+    for (var i = 0; i < 100; i++) {
+
+//        var funcionario = function (idFuncionario) {
+//            var idFuncionario
+//            =
+//        }
+
+    }
+    ;
+
+}
 
 //var cronometro = undefined;
 //function startTimer(duration, display) {
