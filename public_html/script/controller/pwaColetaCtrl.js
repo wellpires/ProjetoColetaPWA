@@ -64,7 +64,6 @@ app.controller('pwaColetaCtrl', function ($scope) {
             };
             $scope.lstFuncionarios.push(funcionario(i));
         }
-        console.log($scope.lstFuncionarios);
     };
 
     $scope.adcLinha = function () {
@@ -79,7 +78,8 @@ app.controller('pwaColetaCtrl', function ($scope) {
             $(this).attr("disabled", true);
             return;
         }
-        $.get('row_coleta.html', function (data) {
+//        $.get('row_coleta.html', function (data) {
+            var data = '<tr> <td> <select class=\"func_nome\" ng-model="funcionario" ng-options="funcionario.funcionario_desc for funcionario in lstFuncionarios"> <option value=\"\"></option> </select> </td> <td> <select class=\"func_produto\">  <option value=\"\"></option> </select> </td> <td> <select class=\"func_atividade\"> <option value=\"\"></option> </select> </td> <td> <button type=\"button\" id=\"id_btn_inicial\" disabled>FINALIZAR</button> </td> <td> <span id=\"spanTempo\">05:00</span> </td> <td> <input type=\"button\" id=\"id_btn_apagar\" value=\"DELETAR\" />  </td> </tr>';
             $('#tblColeta > tbody:last-child').append(data);
             var randomId = parseInt(Math.random() * 1000);
             var divId = 'idDiv' + randomId;
@@ -134,7 +134,7 @@ app.controller('pwaColetaCtrl', function ($scope) {
             });
             carregarFuncionarios();
 
-        });
+//        });
     };
 
     $scope.iniciarColeta = function () {
@@ -174,6 +174,20 @@ app.controller('pwaColetaCtrl', function ($scope) {
     $scope.buscarUnidades = function (item) {
         carregarUnidades();
     };
+
+    var carregarFuncionario = function(){
+        for (var i = 0; i < 100; i++) {
+            var funcionario = function (idFuncionario) {
+                var id_funcionario = idFuncionario;
+                var funcionario_desc = 'Funcionario ' + idUnidade;
+                return{
+                    id_funcionario: id_funcionario,
+                    funcionario_desc: funcionario_desc
+                };
+            };
+            $scope.lstFuncionarios.push(funcionario(i));
+        }
+    }
 
     carregarAmostrador();
 
