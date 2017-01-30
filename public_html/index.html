@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="styles/normalize.min.css">
         <link rel="stylesheet" href="styles/style.css">
         <script src="plugins/jquery-3.1.1.min.js" ></script>
-        <script src="plugins/jquery.countdown.min.js"></script>
         <script src="script/pwaColeta.js" ></script>
         <script src="script/respond.js"></script>
     </head>
@@ -56,7 +55,9 @@
                 </table>
             </form>
         </div>
-        <button id="btnNovaLinha" >Nova linha</button>
+        <div style="width: 100%">
+        <button id="btnNovaLinha">Nova linha</button>
+        <input id="btnSincronizar" type="button" value="Sincronizar" style="float: right;" /></div>
         <table class="responstable" id="tblColeta">
             <tr>
                 <th>Funcionário</th>
