@@ -33,7 +33,15 @@ var components = function () {
     };
 
     var cbAmostrador = function () {
-        return $('#cbAmostrador');
+        return $('#select_amostrador');
+    };
+
+    var cbLojas = function () {
+        return $('#select_loja');
+    };
+
+    var cbUnidades = function () {
+        return $('#select_unidade');
     }
 
     return{
@@ -45,7 +53,9 @@ var components = function () {
         btnIniciar: btnIniciar,
         btnPausar: btnPausar,
         btnParar: btnParar,
-        cbAmostrador: cbAmostrador
+        cbAmostrador: cbAmostrador,
+        cbLojas: cbLojas,
+        cbUnidades: cbUnidades
     };
 
 }();
@@ -64,7 +74,7 @@ window.onload = function () {
 
     startTime();
 
-    components.cbAmostrador();
+    carregarAmostrador();
 
     components.btnNovaLinha().click(function () {
         var rowCount = $('#tblColeta > tbody > tr').length;
@@ -77,19 +87,6 @@ window.onload = function () {
             $(this).attr("disabled", true);
             return;
         }
-
-        $.ajax({
-            url: url,
-            crossDomain: true,
-            data: form,
-            dataType: 'json',
-            success: function (data) {
-                console.log(data);
-            },
-            type: 'POST'
-        }).done(function(){
-            
-        });
 
         $.get('row_coleta.html', function (data) {
             $('#tblColeta > tbody:last-child').append(data);
@@ -163,6 +160,7 @@ window.onload = function () {
         } else if (components.btnIniciar().val() === TEXTO_PAUSAR) {
             components.btnIniciar().attr('value', TEXTO_INICIAR);
             $('#tblColeta tr td button').attr('disabled', true);
+            components.btnParar().attr("disabled", true);
             var id = setTimeout(function () {}, 0);
             while (id--) {
                 clearTimeout(id);
@@ -174,6 +172,40 @@ window.onload = function () {
         }
 
     });
+
+    components.cbAmostrador().change(function (event) {
+        components.btnNovaLinha().attr('disabled', !combosPreenchidos());
+        components.cbLojas().attr('disabled', !combosPreenchidos());
+        components.cbUnidades().attr('disabled', !combosPreenchidos());
+        components.cbLojas().val('');
+        components.cbUnidades().val('');
+        if (event.target.value === '') {
+            return;
+        }
+        components.cbLojas().attr('disabled', false);
+        carregarLojas();
+
+    });
+
+    components.cbLojas().change(function () {
+        components.btnNovaLinha().attr('disabled', !combosPreenchidos());
+        components.cbUnidades().attr('disabled', !combosPreenchidos());
+        components.cbUnidades().val('');
+        if (event.target.value === '') {
+            return;
+        }
+        components.cbUnidades().attr('disabled', false);
+        carregarUnidades();
+    });
+
+    components.cbUnidades().change(function () {
+        components.btnNovaLinha().attr('disabled', !combosPreenchidos());
+        if (event.target.value === '') {
+            return;
+        }
+        carregarUnidades();
+    });
+
 };
 
 function startTime() {
@@ -260,48 +292,97 @@ var CountDown = function () {
     };
 };
 
+var carregarAmostrador = function () {
 
-var carregarFuncionarios = function () {
-
-    var lstFuncionarios = [];
+    var lstAmostrador = [];
+    $select = components.cbAmostrador();
 
     for (var i = 0; i < 100; i++) {
+        var amostrador = function (idAmostrador) {
+            var idAmostrador = idAmostrador;
+            var nomeAmostrador = 'Amostrador ' + idAmostrador;
 
-//        var funcionario = function (idFuncionario) {
-//            var idFuncionario
-//            =
-//        }
+            return{
+                idAmostrador: idAmostrador,
+                nomeAmostrador: nomeAmostrador
+            };
+        };
+
+        lstAmostrador.push(amostrador(i));
 
     }
     ;
 
+    $.each(lstAmostrador, function (index, object) {
+        $('<option>').val(object.idAmostrador).text(object.nomeAmostrador).appendTo($select);
+    });
+};
+
+var carregarLojas = function () {
+
+    var lstLojas = [];
+    $select = components.cbLojas();
+
+    for (var i = 0; i < 100; i++) {
+        var loja = function (idLoja) {
+            var idLoja = idLoja;
+            var nomeLoja = 'Loja ' + idLoja;
+
+            return{
+                idLoja: idLoja,
+                nomeLoja: nomeLoja
+            };
+        };
+
+        lstLojas.push(loja(i));
+
+    }
+    ;
+
+    $.each(lstLojas, function (index, object) {
+        $('<option>').val(object.idLoja).text(object.nomeLoja).appendTo($select);
+    });
+
 }
 
-//var cronometro = undefined;
-//function startTimer(duration, display) {
-//    var timer = duration;
-//    var minutes;
-//    var seconds;
-//    cronometro = setInterval(function () {
-//        minutes = parseInt(timer / 60, 10);
-//        seconds = parseInt(timer % 60, 10);
-//
-//        minutes = minutes < 10 ? "0" + minutes : minutes;
-//        seconds = seconds < 10 ? "0" + seconds : seconds;
-//
-//        if (display !== undefined) {
-//            display.innerHTML = minutes + ":" + seconds;
-//        }
-//
-//        if (--timer < 0) {
-//            timer = duration;
-//        }
-//    }, 1000);
-//}
-//
-//function iniciarTimer(display) {
-//    var fiveMinutes = 5;
-//    var minutos = 60 * fiveMinutes;
-//    startTimer(minutos, display);
-//}
-//;
+var carregarUnidades = function () {
+
+    var lstUnidades = [];
+    $select = components.cbUnidades();
+
+    for (var i = 0; i < 100; i++) {
+        var unidade = function (idUnidade) {
+            var idUnidade = idUnidade;
+            var nomeUnidade = 'Unidade ' + idUnidade;
+
+            return{
+                idUnidade: idUnidade,
+                nomeUnidade: nomeUnidade
+            };
+        };
+
+        lstUnidades.push(unidade(i));
+
+    }
+    ;
+
+    $.each(lstUnidades, function (index, object) {
+        $('<option>').val(object.idUnidade).text(object.nomeUnidade).appendTo($select);
+    });
+
+}
+
+
+var combosPreenchidos = function () {
+
+    var valorAmostrador = components.cbAmostrador().val();
+    var valorLojas = components.cbLojas().val();
+    var valorUnidades = components.cbUnidades().val();
+
+    if (valorAmostrador === '' || valorLojas === '' || valorUnidades === '') {
+        return false;
+    }
+    return true;
+
+};
+

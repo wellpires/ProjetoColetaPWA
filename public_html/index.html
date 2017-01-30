@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="styles/normalize.min.css">
         <link rel="stylesheet" href="styles/style.css">
         <script src="plugins/jquery-3.1.1.min.js" ></script>
-        <script src="plugins/jquery.countdown.min.js"></script>
         <script src="script/pwaColeta.js" ></script>
         <script src="script/respond.js"></script>
     </head>
@@ -16,33 +15,24 @@
         <div class="responstable">
             <h1>NAC - Ferramenta de Coleta de Tempos</h1>
             <form>
-                <table class="responstable">
+                <table class="responstable" id="tblCabecalho">
                     <tr>
                         <td>
                             <label for="select_amostrador">Amostrador</label>
-                            <select id="select_amostrador" id="cbAmostrador">
-                                <option>Amostrador 1</option> 
-                                <option>Amostrador 2</option> 
-                                <option>Amostrador 3</option> 
-                                <option>Amostrador 4</option> 
+                            <select id="select_amostrador">
+                                <option value="">Selecione</option>
                             </select>
                         </td>
                         <td>
                             <label for="select_loja">Loja</label>
-                            <select id="select_loja">
-                                <option>Loja 1</option> 
-                                <option>Loja 2</option> 
-                                <option>Loja 3</option> 
-                                <option>Loja 4</option> 
+                            <select id="select_loja" disabled>
+                                <option value="">Selecione</option> 
                             </select>
                         </td>
                         <td>
                             <label for="select_unidade">Unidade</label>
-                            <select id="select_unidade">
-                                <option>Unidade 1</option> 
-                                <option>Unidade 2</option> 
-                                <option>Unidade 3</option> 
-                                <option>Unidade 4</option> 
+                            <select id="select_unidade" disabled>
+                                <option value="">Selecione</option> 
                             </select> 
                         </td>
                         <td style="width: 15%">
@@ -56,7 +46,7 @@
                 </table>
             </form>
         </div>
-        <button id="btnNovaLinha" >Nova linha</button>
+        <button id="btnNovaLinha" disabled="verificarCombosPreenchidos()">Nova linha</button>
         <table class="responstable" id="tblColeta">
             <tr>
                 <th>Funcionário</th>
