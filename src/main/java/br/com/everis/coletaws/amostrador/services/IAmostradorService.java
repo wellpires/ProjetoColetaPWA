@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface IAmostradorService {
     
-    public List<Amostrador> buscarAmostradores(Amostrador amostrador);
+    public List<Amostrador> buscarAmostradores() throws Exception;
     
 }

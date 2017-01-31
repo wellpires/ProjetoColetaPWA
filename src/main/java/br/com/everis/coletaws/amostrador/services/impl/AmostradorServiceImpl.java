@@ -12,10 +12,10 @@ import java.util.List;
 public class AmostradorServiceImpl implements IAmostradorService {
 
     @Override
-    public List<Amostrador> buscarAmostradores(Amostrador amostrador) {
+    public List<Amostrador> buscarAmostradores() throws Exception {
         List<Amostrador> lstAmostradores = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 1; i < 100; i++) {
             Amostrador a = new Amostrador();
             a.setIdAmostrador(i);
             a.setNomeAmostrador("Amostrador " + i);
