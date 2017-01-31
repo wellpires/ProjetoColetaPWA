@@ -44,6 +44,10 @@ var components = function () {
         return $('#select_unidade');
     }
 
+    var btnSincronizar = function () {
+        return $('#btnSincronizar');
+    }
+
     return{
         divFuncInfo: func_info,
         btnNovaLinha: btnNovaLinha,
@@ -55,10 +59,26 @@ var components = function () {
         btnParar: btnParar,
         cbAmostrador: cbAmostrador,
         cbLojas: cbLojas,
-        cbUnidades: cbUnidades
+        cbUnidades: cbUnidades,
+        btnSincronizar: btnSincronizar
     };
 
 }();
+
+var urls = function () {
+    var ORIGEM = 'http://localhost:8080/ColetaWS/';
+    var GET_BUSCAR_AMOSTRADORES = ORIGEM + 'buscarAmostrador';
+    var GET_BUSCAR_LOJAS = ORIGEM + 'buscarLojas';
+    var GET_BUSCAR_UNIDADES = ORIGEM + 'buscarUnidades';
+
+    return{
+        GET_BUSCAR_AMOSTRADORES: GET_BUSCAR_AMOSTRADORES,
+        GET_BUSCAR_LOJAS: GET_BUSCAR_LOJAS,
+        GET_BUSCAR_UNIDADES: GET_BUSCAR_UNIDADES
+    };
+}();
+
+//====================================================================================================
 
 window.onload = function () {
     if ('serviceWorker' in navigator) {
@@ -135,7 +155,10 @@ window.onload = function () {
                 var rowCount = $('#tblColeta > tbody > tr').length;
                 if (rowCount === 1) {
                     components.btnIniciar().attr("disabled", true);
+                    components.btnParar().attr("disabled", true);
+                    components.btnIniciar().val(TEXTO_INICIAR);
                     components.btnNovaLinha().attr("disabled", false);
+                    zerarContagemRegressiva();
                 }
                 if (rowCount < 6) {
                     components.btnNovaLinha().attr("disabled", false);
@@ -152,7 +175,12 @@ window.onload = function () {
 
         if (components.btnIniciar().val() === TEXTO_INICIAR) {
             components.btnIniciar().attr('value', TEXTO_PAUSAR);
-            components.btnParar().attr("disabled", false);
+            components.btnParar().attr('disabled', false);
+            components.cbAmostrador().attr('disabled', true);
+            components.cbLojas().attr('disabled', true);
+            components.cbUnidades().attr('disabled', true);
+            components.btnNovaLinha().attr('disabled', true);
+            
             $('#tblColeta tr td button')[0].disabled = false;
 
             CountDown().Start(70000, $('#tblColeta tr td span')[0]);
@@ -161,10 +189,7 @@ window.onload = function () {
             components.btnIniciar().attr('value', TEXTO_INICIAR);
             $('#tblColeta tr td button').attr('disabled', true);
             components.btnParar().attr("disabled", true);
-            var id = setTimeout(function () {}, 0);
-            while (id--) {
-                clearTimeout(id);
-            }
+            zerarContagemRegressiva();
             $('#tblColeta tr td span').each(function (index, comp) {
                 comp.innerHTML = '05:00';
             });
@@ -203,9 +228,7 @@ window.onload = function () {
         if (event.target.value === '') {
             return;
         }
-        carregarUnidades();
     });
-
 };
 
 function startTime() {
@@ -228,6 +251,13 @@ function checkTime(i) {
 }
 
 var timeout;
+
+var zerarContagemRegressiva = function () {
+    var id = setTimeout(function () {}, 0);
+    while (id--) {
+        clearTimeout(id);
+    }
+};
 
 var CountDown = function () {
 
@@ -294,84 +324,41 @@ var CountDown = function () {
 
 var carregarAmostrador = function () {
 
-    var lstAmostrador = [];
     $select = components.cbAmostrador();
 
-    for (var i = 0; i < 100; i++) {
-        var amostrador = function (idAmostrador) {
-            var idAmostrador = idAmostrador;
-            var nomeAmostrador = 'Amostrador ' + idAmostrador;
-
-            return{
-                idAmostrador: idAmostrador,
-                nomeAmostrador: nomeAmostrador
-            };
-        };
-
-        lstAmostrador.push(amostrador(i));
-
-    }
-    ;
-
-    $.each(lstAmostrador, function (index, object) {
-        $('<option>').val(object.idAmostrador).text(object.nomeAmostrador).appendTo($select);
+    $.get(urls.GET_BUSCAR_AMOSTRADORES, function (data) {
+        $.each(data, function (index, object) {
+            $('<option>').val(object.idAmostrador).text(object.nomeAmostrador).appendTo($select);
+        });
     });
+
 };
 
 var carregarLojas = function () {
 
-    var lstLojas = [];
     $select = components.cbLojas();
 
-    for (var i = 0; i < 100; i++) {
-        var loja = function (idLoja) {
-            var idLoja = idLoja;
-            var nomeLoja = 'Loja ' + idLoja;
+    $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
 
-            return{
-                idLoja: idLoja,
-                nomeLoja: nomeLoja
-            };
-        };
-
-        lstLojas.push(loja(i));
-
-    }
-    ;
-
-    $.each(lstLojas, function (index, object) {
-        $('<option>').val(object.idLoja).text(object.nomeLoja).appendTo($select);
+    $.get(urls.GET_BUSCAR_LOJAS, {idAmostrador: components.cbAmostrador().val()}, function (data) {
+        $.each(data, function (index, object) {
+            $('<option>').val(object.idLoja).text(object.nomeLoja).appendTo($select);
+        });
     });
 
-}
+};
 
 var carregarUnidades = function () {
 
-    var lstUnidades = [];
     $select = components.cbUnidades();
 
-    for (var i = 0; i < 100; i++) {
-        var unidade = function (idUnidade) {
-            var idUnidade = idUnidade;
-            var nomeUnidade = 'Unidade ' + idUnidade;
-
-            return{
-                idUnidade: idUnidade,
-                nomeUnidade: nomeUnidade
-            };
-        };
-
-        lstUnidades.push(unidade(i));
-
-    }
-    ;
-
-    $.each(lstUnidades, function (index, object) {
-        $('<option>').val(object.idUnidade).text(object.nomeUnidade).appendTo($select);
+    $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+    $.get(urls.GET_BUSCAR_UNIDADES, {idLoja: components.cbLojas().val()}, function (data) {
+        $.each(data, function (index, object) {
+            $('<option>').val(object.idUnidade).text(object.nomeUnidade).appendTo($select);
+        });
     });
-
-}
-
+};
 
 var combosPreenchidos = function () {
 
