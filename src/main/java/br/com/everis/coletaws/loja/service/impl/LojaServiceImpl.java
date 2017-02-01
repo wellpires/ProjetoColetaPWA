@@ -1,9 +1,10 @@
 package br.com.everis.coletaws.loja.service.impl;
 
 import br.com.everis.coletaws.amostrador.model.Amostrador;
+import br.com.everis.coletaws.loja.dao.ILojaDAO;
+import br.com.everis.coletaws.loja.dao.impl.LojaDAOImpl;
 import br.com.everis.coletaws.loja.model.Loja;
 import br.com.everis.coletaws.loja.service.ILojaService;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,19 +13,12 @@ import java.util.List;
  */
 public class LojaServiceImpl implements ILojaService {
 
+    private ILojaDAO lojaDAO = null;
+    
     @Override
     public List<Loja> buscarLojas(Amostrador amostrador) throws Exception {
-        List<Loja> lstLojas = new ArrayList<>();
-
-        for (int i = 1; i < 100; i++) {
-            if (amostrador.getIdAmostrador() % i == amostrador.getIdAmostrador()) {
-                Loja loja = new Loja();
-                loja.setIdLoja(i);
-                loja.setNomeLoja("Loja " + i);
-                lstLojas.add(loja);
-            }
-        }
-        return lstLojas;
+        lojaDAO = new LojaDAOImpl();
+        return lojaDAO.buscarLojasPorAmostrador(amostrador);
     }
 
 }

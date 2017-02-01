@@ -3,8 +3,10 @@ package br.com.everis.coletaws.unidade.model;
 import br.com.everis.coletaws.amostrador.model.Amostrador;
 import br.com.everis.coletaws.loja.model.Loja;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -80,5 +82,48 @@ public class Unidade implements Serializable {
     public void setFuncionario(String funcionario) {
         this.funcionario = funcionario;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.idUnidade);
+        hash = 53 * hash + Objects.hashCode(this.amostrador);
+        hash = 53 * hash + Objects.hashCode(this.loja);
+        hash = 53 * hash + Objects.hashCode(this.nomeUnidade);
+        hash = 53 * hash + Objects.hashCode(this.funcionario);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Unidade other = (Unidade) obj;
+        if (!Objects.equals(this.nomeUnidade, other.nomeUnidade)) {
+            return false;
+        }
+        if (!Objects.equals(this.funcionario, other.funcionario)) {
+            return false;
+        }
+        if (!Objects.equals(this.idUnidade, other.idUnidade)) {
+            return false;
+        }
+        if (!Objects.equals(this.amostrador, other.amostrador)) {
+            return false;
+        }
+        if (!Objects.equals(this.loja, other.loja)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

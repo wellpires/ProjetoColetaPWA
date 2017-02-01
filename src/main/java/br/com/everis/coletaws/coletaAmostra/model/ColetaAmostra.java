@@ -2,6 +2,7 @@ package br.com.everis.coletaws.ColetaAmostra.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import static org.hibernate.criterion.Restrictions.ge;
 
 /**
  *
@@ -137,5 +137,67 @@ public class ColetaAmostra implements Serializable {
         this.status_amostra = status_amostra;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.idAmostra);
+        hash = 59 * hash + Objects.hashCode(this.amostrador);
+        hash = 59 * hash + Objects.hashCode(this.loja);
+        hash = 59 * hash + Objects.hashCode(this.unidade);
+        hash = 59 * hash + Objects.hashCode(this.data_coleta);
+        hash = 59 * hash + Objects.hashCode(this.hora_coleta);
+        hash = 59 * hash + Objects.hashCode(this.ts_sincronismo);
+        hash = 59 * hash + Objects.hashCode(this.produto);
+        hash = 59 * hash + Objects.hashCode(this.atividade);
+        hash = 59 * hash + Objects.hashCode(this.status_amostra);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ColetaAmostra other = (ColetaAmostra) obj;
+        if (!Objects.equals(this.amostrador, other.amostrador)) {
+            return false;
+        }
+        if (!Objects.equals(this.loja, other.loja)) {
+            return false;
+        }
+        if (!Objects.equals(this.unidade, other.unidade)) {
+            return false;
+        }
+        if (!Objects.equals(this.produto, other.produto)) {
+            return false;
+        }
+        if (!Objects.equals(this.atividade, other.atividade)) {
+            return false;
+        }
+        if (!Objects.equals(this.status_amostra, other.status_amostra)) {
+            return false;
+        }
+        if (!Objects.equals(this.idAmostra, other.idAmostra)) {
+            return false;
+        }
+        if (!Objects.equals(this.data_coleta, other.data_coleta)) {
+            return false;
+        }
+        if (!Objects.equals(this.hora_coleta, other.hora_coleta)) {
+            return false;
+        }
+        if (!Objects.equals(this.ts_sincronismo, other.ts_sincronismo)) {
+            return false;
+        }
+        return true;
+    }
+
+    
     
 }
