@@ -4,7 +4,6 @@ import br.com.everis.coletaws.amostrador.model.Amostrador;
 import br.com.everis.coletaws.dao.JpaDao;
 import br.com.everis.coletaws.loja.dao.ILojaDAO;
 import br.com.everis.coletaws.loja.model.Loja;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Query;
 

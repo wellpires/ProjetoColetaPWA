@@ -1,7 +1,5 @@
 package br.com.everis.coletaws.unidade.service.impl;
 
-import br.com.everis.coletaws.amostrador.model.Amostrador;
-import br.com.everis.coletaws.loja.model.Loja;
 import br.com.everis.coletaws.unidade.dao.IUnidadeDAO;
 import br.com.everis.coletaws.unidade.dao.impl.UnidadeDAOImpl;
 import br.com.everis.coletaws.unidade.model.Unidade;
@@ -17,9 +15,10 @@ public class UnidadeServiceImpl implements IUnidadeService {
     private IUnidadeDAO unidadeDAO = null;
     
     @Override
-    public List<Unidade> buscarUnidades(Loja loja, Amostrador amostrador) throws Exception {
+    public List<Unidade> buscarUnidades(Unidade unidade) throws Exception {
         unidadeDAO = new UnidadeDAOImpl();
-        return unidadeDAO.buscarUnidadePorLojaAmostrador(loja, amostrador);
+        return unidadeDAO.buscarUnidadePorLojaAmostrador(unidade);
     }
+
 
 }

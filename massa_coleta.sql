@@ -77,66 +77,117 @@ INSERT INTO sysnac.produtos (produto, atividade, id_loja) VALUES('PRODUTO AMERIC
 =================== TABELA UNIDADES ==========================
 */
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 1','FUNCIONÁRIO EXTRA JOÃO 1',1,1);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 2','FUNCIONÁRIO EXTRA JOÃO 2',1,1);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 3','FUNCIONÁRIO EXTRA JOÃO 3',1,1);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 4','FUNCIONÁRIO EXTRA JOÃO 3',1,1);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 4','FUNCIONÁRIO EXTRA JOÃO 5',1,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 1',1,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 2',1,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 3',1,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 4',1,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA JOÃO 4',1,1);
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 1','FUNCIONÁRIO EXTRA GUILHERME 1',1,2);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 2','FUNCIONÁRIO EXTRA GUILHERME 2',1,2);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 3','FUNCIONÁRIO EXTRA GUILHERME 3',1,2);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 4','FUNCIONÁRIO EXTRA GUILHERME 4',1,2);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 5','FUNCIONÁRIO EXTRA GUILHERME 5',1,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 1',1,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 2',1,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 3',1,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 4',1,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GUILHERME 5',1,2);
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 1','FUNCIONÁRIO EXTRA WELLINGTON 1',1,3);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 2','FUNCIONÁRIO EXTRA WELLINGTON 2',1,3);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 3','FUNCIONÁRIO EXTRA WELLINGTON 3',1,3);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 4','FUNCIONÁRIO EXTRA WELLINGTON 4',1,3);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 5','FUNCIONÁRIO EXTRA WELLINGTON 5',1,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 1',1,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 2',1,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 3',1,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 4',1,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA WELLINGTON 5',1,3);
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 1','FUNCIONÁRIO EXTRA VICTOR 1',1,4);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 2','FUNCIONÁRIO EXTRA VICTOR 2',1,4);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 3','FUNCIONÁRIO EXTRA VICTOR 3',1,4);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 4','FUNCIONÁRIO EXTRA VICTOR 4',1,4);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 5','FUNCIONÁRIO EXTRA VICTOR 5',1,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 1',1,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 2',1,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 3',1,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 4',1,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA VICTOR 5',1,4);
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 1','FUNCIONÁRIO EXTRA GABRIEL 1',1,5);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 2','FUNCIONÁRIO EXTRA GABRIEL 2',1,5);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 3','FUNCIONÁRIO EXTRA GABRIEL 3',1,5);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 4','FUNCIONÁRIO EXTRA GABRIEL 4',1,5);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 5','FUNCIONÁRIO EXTRA GABRIEL 5',1,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 1',1,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 2',1,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 3',1,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 4',1,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE EXTRA GABRIEL 5',1,5);
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 1','FUNCIONÁRIO CARREFOUR JOÃO 1',2,1);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 2','FUNCIONÁRIO CARREFOUR JOÃO 2',2,1);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 3','FUNCIONÁRIO CARREFOUR JOÃO 3',2,1);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 4','FUNCIONÁRIO CARREFOUR JOÃO 3',2,1);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 4','FUNCIONÁRIO CARREFOUR JOÃO 5',2,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 1',2,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 2',2,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 3',2,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 4',2,1);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR JOÃO 4',2,1);
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 1','FUNCIONÁRIO CARREFOUR GUILHERME 1',2,2);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 2','FUNCIONÁRIO CARREFOUR GUILHERME 2',2,2);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 3','FUNCIONÁRIO CARREFOUR GUILHERME 3',2,2);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 4','FUNCIONÁRIO CARREFOUR GUILHERME 4',2,2);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 5','FUNCIONÁRIO CARREFOUR GUILHERME 5',2,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 1',2,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 2',2,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 3',2,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 4',2,2);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GUILHERME 5',2,2);
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 1','FUNCIONÁRIO CARREFOUR WELLINGTON 1',2,3);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 2','FUNCIONÁRIO CARREFOUR WELLINGTON 2',2,3);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 3','FUNCIONÁRIO CARREFOUR WELLINGTON 3',2,3);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 4','FUNCIONÁRIO CARREFOUR WELLINGTON 4',2,3);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 5','FUNCIONÁRIO CARREFOUR WELLINGTON 5',2,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 1',2,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 2',2,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 3',2,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 4',2,3);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR WELLINGTON 5',2,3);
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 1','FUNCIONÁRIO CARREFOUR VICTOR 1',2,4);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 2','FUNCIONÁRIO CARREFOUR VICTOR 2',2,4);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 3','FUNCIONÁRIO CARREFOUR VICTOR 3',2,4);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 4','FUNCIONÁRIO CARREFOUR VICTOR 4',2,4);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 5','FUNCIONÁRIO CARREFOUR VICTOR 5',2,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 1',2,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 2',2,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 3',2,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 4',2,4);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR VICTOR 5',2,4);
 
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 1','FUNCIONÁRIO CARREFOUR GABRIEL 1',2,5);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 2','FUNCIONÁRIO CARREFOUR GABRIEL 2',2,5);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 3','FUNCIONÁRIO CARREFOUR GABRIEL 3',2,5);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 4','FUNCIONÁRIO CARREFOUR GABRIEL 4',2,5);
-INSERT INTO sysnac.unidades (unidade, funcionario, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 5','FUNCIONÁRIO CARREFOUR GABRIEL 5',2,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 1',2,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 2',2,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 3',2,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 4',2,5);
+INSERT INTO sysnac.unidades (unidade, id_loja, id_amostrador) VALUES('UNIDADE CARREFOUR GABRIEL 5',2,5);
 
+
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA JOÃO 1','',1);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA JOÃO 2','',2);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA JOÃO 3','',3);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA JOÃO 3','',4);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA JOÃO 5','',5);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GUILHERME 1','',6);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GUILHERME 2','',7);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GUILHERME 3','',8);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GUILHERME 4','',9);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GUILHERME 5','',10);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA WELLINGTON 1','',11);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA WELLINGTON 2','',12);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA WELLINGTON 3','',13);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA WELLINGTON 4','',14);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA WELLINGTON 5','',15);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA VICTOR 1','',16);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA VICTOR 2','',17);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA VICTOR 3','',18);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA VICTOR 4','',19);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA VICTOR 5','',20);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GABRIEL 1','',21);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GABRIEL 2','',22);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GABRIEL 3','',23);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GABRIEL 4','',24);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO EXTRA GABRIEL 5','',25);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR JOÃO 1','',26);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR JOÃO 2','',27);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR JOÃO 3','',28);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR JOÃO 3','',29);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR JOÃO 5','',30);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GUILHERME 1','',31);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GUILHERME 2','',32);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GUILHERME 3','',33);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GUILHERME 4','',34);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GUILHERME 5','',35);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR WELLINGTON 1','',36);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR WELLINGTON 2','',37);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR WELLINGTON 3','',38);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR WELLINGTON 4','',39);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR WELLINGTON 5','',40);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR VICTOR 1','',41);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR VICTOR 2','',42);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR VICTOR 3','',43);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR VICTOR 4','',44);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR VICTOR 5','',45);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GABRIEL 1','',46);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GABRIEL 2','',47);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GABRIEL 3','',48);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GABRIEL 4','',49);
+INSERT INTO sysnac.funcionarios(funcionario, cargo, id_unidade) VALUES ('FUNCIONÁRIO CARREFOUR GABRIEL 5','',50);
 
 
 

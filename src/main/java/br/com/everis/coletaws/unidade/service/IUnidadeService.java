@@ -1,7 +1,5 @@
 package br.com.everis.coletaws.unidade.service;
 
-import br.com.everis.coletaws.amostrador.model.Amostrador;
-import br.com.everis.coletaws.loja.model.Loja;
 import br.com.everis.coletaws.unidade.model.Unidade;
 import java.util.List;
 
@@ -11,6 +9,6 @@ import java.util.List;
  */
 public interface IUnidadeService {
     
-    public List<Unidade> buscarUnidades(Loja loja, Amostrador amostrador) throws Exception;
+    public List<Unidade> buscarUnidades(Unidade unidade) throws Exception;
     
 }

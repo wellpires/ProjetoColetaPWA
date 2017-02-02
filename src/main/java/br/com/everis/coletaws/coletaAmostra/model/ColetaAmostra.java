@@ -1,4 +1,4 @@
-package br.com.everis.coletaws.ColetaAmostra.model;
+package br.com.everis.coletaws.coletaAmostra.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -44,8 +44,8 @@ public class ColetaAmostra implements Serializable {
     @Temporal(value = TemporalType.TIME)
     private Date hora_coleta = null;
     
-    @Column(name = "ts_sincronismo", nullable = false)
-    @Temporal(value = TemporalType.TIMESTAMP)
+    @Column(name = "hora_real", nullable = false)
+    @Temporal(value = TemporalType.TIME)
     private Date ts_sincronismo = null;
 
     @Column(name = "produto", nullable = false, length = 60)

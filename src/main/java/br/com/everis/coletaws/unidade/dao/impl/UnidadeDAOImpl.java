@@ -1,10 +1,9 @@
 package br.com.everis.coletaws.unidade.dao.impl;
 
-import br.com.everis.coletaws.amostrador.model.Amostrador;
 import br.com.everis.coletaws.dao.JpaDao;
-import br.com.everis.coletaws.loja.model.Loja;
 import br.com.everis.coletaws.unidade.dao.IUnidadeDAO;
 import br.com.everis.coletaws.unidade.model.Unidade;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Query;
 
@@ -12,17 +11,17 @@ import javax.persistence.Query;
  *
  * @author Wellington Gonçalves Pires
  */
-public class UnidadeDAOImpl extends JpaDao<Integer, Unidade> implements IUnidadeDAO{
+public class UnidadeDAOImpl extends JpaDao<Integer, Unidade> implements IUnidadeDAO {
 
     @Override
-    public List<Unidade> buscarUnidadePorLojaAmostrador(Loja loja, Amostrador amostrador) {
+    public List<Unidade> buscarUnidadePorLojaAmostrador(Unidade unidade) {
         //SELECT U.id_unidade, U.unidade FROM sysnac.unidades U WHERE U.id_amostrador = 1 AND U.id_loja = 1
-        String sqlQuery = "SELECT distinct new Unidade(U.idUnidade, U.nomeUnidade )"
+        String sqlQuery = "SELECT distinct new Unidade(U.idUnidade, U.nomeUnidade) "
                 + "FROM " + Unidade.class.getName() + " U WHERE U.amostrador.idAmostrador = :codigoAmostrador AND U.loja.idLoja = :codigoLoja";
         Query q = entityManager.createQuery(sqlQuery);
-        q.setParameter("codigoAmostrador", amostrador.getIdAmostrador());
-        q.setParameter("codigoLoja", loja.getIdLoja());
-        
+        q.setParameter("codigoAmostrador", unidade.getAmostrador().getIdAmostrador());
+        q.setParameter("codigoLoja", unidade.getLoja().getIdLoja());
+
         return q.getResultList();
     }
 
@@ -40,5 +39,5 @@ public class UnidadeDAOImpl extends JpaDao<Integer, Unidade> implements IUnidade
     public Unidade findById(Integer id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

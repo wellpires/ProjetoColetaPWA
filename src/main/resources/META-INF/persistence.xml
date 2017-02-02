@@ -7,6 +7,7 @@
     <class>br.com.everis.coletaws.loja.model.Loja</class>
     <class>br.com.everis.coletaws.produto.model.Produto</class>
     <class>br.com.everis.coletaws.unidade.model.Unidade</class>
+    <class>br.com.everis.coletaws.funcionario.model.Funcionario</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
@@ -15,10 +16,10 @@
       <property name="javax.persistence.jdbc.password" value="123456"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>
       <property name="hibernate.default_schema" value="sysnac"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
   </persistence-unit>
 </persistence>

@@ -46,5 +46,16 @@ Contributor(s):
     <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/SYSNAC</property>
     <property name="hibernate.connection.username">postgres</property>
     <property name="hibernate.connection.password">123456</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.format_sql">true</property>
+    <!--<property name="hibernate.hbm2ddl.auto">update</property>-->
+    <property name="hibernate.current_session_context_class">thread</property>
+    <property name="hibernate.default_schema">sysnac</property>
+    <mapping class="br.com.everis.coletaws.coletaAmostra.model.ColetaAmostra"/>
+    <mapping class="br.com.everis.coletaws.amostrador.model.Amostrador"/>
+    <mapping class="br.com.everis.coletaws.loja.model.Loja"/>
+    <mapping class="br.com.everis.coletaws.produto.model.Produto"/>
+    <mapping class="br.com.everis.coletaws.unidade.model.Unidade"/>
+    <mapping class="br.com.everis.coletaws.funcionario.model.Funcionario"/>
   </session-factory>
 </hibernate-configuration>
