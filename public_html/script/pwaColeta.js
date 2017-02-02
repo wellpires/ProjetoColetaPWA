@@ -42,11 +42,11 @@ var components = function () {
 
     var cbUnidades = function () {
         return $('#select_unidade');
-    }
+    };
 
     var btnSincronizar = function () {
         return $('#btnSincronizar');
-    }
+    };
 
     return{
         divFuncInfo: func_info,
@@ -70,11 +70,17 @@ var urls = function () {
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + 'buscarAmostrador';
     var GET_BUSCAR_LOJAS = ORIGEM + 'buscarLojas';
     var GET_BUSCAR_UNIDADES = ORIGEM + 'buscarUnidades';
+    var GET_BUSCAR_FUNCIONARIOS = ORIGEM + 'buscarFuncionarios';
+    var GET_BUSCAR_PRODUTOS_ATIVIDADES = ORIGEM + 'buscarProdutosAtividades';
+    var POST_GRAVAR_COLETA = ORIGEM + 'gravarColeta';
 
     return{
         GET_BUSCAR_AMOSTRADORES: GET_BUSCAR_AMOSTRADORES,
         GET_BUSCAR_LOJAS: GET_BUSCAR_LOJAS,
-        GET_BUSCAR_UNIDADES: GET_BUSCAR_UNIDADES
+        GET_BUSCAR_UNIDADES: GET_BUSCAR_UNIDADES,
+        GET_BUSCAR_FUNCIONARIOS: GET_BUSCAR_FUNCIONARIOS,
+        GET_BUSCAR_PRODUTOS_ATIVIDADES: GET_BUSCAR_PRODUTOS_ATIVIDADES,
+        POST_GRAVAR_COLETA: POST_GRAVAR_COLETA
     };
 }();
 
@@ -120,20 +126,38 @@ window.onload = function () {
             $('#id_btn_inicial').attr('id', idBtnAcao);
             $('#id_btn_apagar').attr('id', deletarId);
             $('#spanTempo').attr('id', tempoId);
+            var tamanhoFunci = $('#tblColeta tr td select').length;
+            var cbFuncionario = $('#tblColeta tr td select')[tamanhoFunci - 3];
+            var cbProduto = $('#tblColeta tr td select')[tamanhoFunci - 2];
+            var cbAtividade = $('#tblColeta tr td select')[tamanhoFunci - 1];
+
+            carregarFuncionarios(cbFuncionario);
+            carregarProdutos(cbProduto, cbAtividade);
 
             var jqueryBtnAcao = '#' + idBtnAcao;
             $(jqueryBtnAcao).click(function (e) {
                 $(jqueryBtnAcao).attr('value', 'REGISTRAR');
                 var rowIndex = $('#tblColeta tr').index(e.target.parentNode.parentNode);
-                var componentDisplay = undefined;
-                var spanComponent = $('#tblColeta tr span');
+//                var componentDisplay = undefined;
+//                var spanComponent = $('#tblColeta tr span');
                 var buttonComponent = $('#tblColeta tr td button');
-                if ($('table tr span')[rowIndex] === undefined) {
-                    componentDisplay = spanComponent[1];
-                } else {
-                    componentDisplay = spanComponent[rowIndex];
-                }
-
+//                if ($('table tr span')[rowIndex] === undefined) {
+//                    componentDisplay = spanComponent[1];
+//                } else {
+//                    componentDisplay = spanComponent[rowIndex];
+//                }
+                
+                var amostradorValue = components.cbAmostrador().val();
+                var lojaValue = components.cbLojas().val();
+                var unidadeVale = components.cbUnidades().val();
+                var funcionarioValue = $('#tblColeta tr .func_nome :selected')[rowIndex].text;
+                var produtoValue = $('#tblColeta tr .func_produto :selected')[rowIndex].text;
+                var atividadeValue = $('#tblColeta tr .func_atividade :selected')[rowIndex].text;
+                
+                
+                $.post(urls.POST_GRAVAR_COLETA, {});
+                
+                
                 if (buttonComponent[rowIndex] === undefined) {
                     buttonComponent[0].disabled = false;
                     buttonComponent[rowIndex - 1].disabled = true;
@@ -142,9 +166,11 @@ window.onload = function () {
                     buttonComponent[rowIndex - 1].disabled = true;
                 }
 
-                if (componentDisplay.innerHTML === '05:00') {
-                    CountDown().Start(300000, componentDisplay);
-                }
+//                if (componentDisplay.innerHTML === '05:00') {
+//                    CountDown().Start(300000, componentDisplay);
+//                }
+
+
 
             });
 
@@ -228,6 +254,9 @@ window.onload = function () {
         if (event.target.value === '') {
             return;
         }
+
+
+
     });
 };
 
@@ -366,6 +395,46 @@ var carregarUnidades = function () {
         });
     });
 };
+
+var carregarFuncionarios = function (id) {
+
+    $select = $(id);
+
+    $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+    $.get(urls.GET_BUSCAR_FUNCIONARIOS, {
+        'idAmostrador': components.cbAmostrador().val(),
+        'idLoja': components.cbLojas().val(),
+        'idUnidade': components.cbUnidades().val()
+    }, function (data) {
+        $.each(data, function (index, object) {
+            $('<option>').val(object.idFuncionario).text(object.nomeFuncionario).appendTo($select);
+        });
+    });
+
+};
+
+
+var carregarProdutos = function (cbProduto, cbAtividade) {
+
+    cbProduto = $(cbProduto);
+    cbAtividade = $(cbAtividade);
+
+    cbProduto.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+    cbAtividade.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+    $.get(urls.GET_BUSCAR_PRODUTOS_ATIVIDADES, {'idLoja': components.cbLojas().val()}, function (data) {
+        $.each(data, function (index, object) {
+            $('<option>').val(object.idProduto).text(object.nomeProduto).appendTo(cbProduto);
+        });
+
+        $.each(data, function (index, object) {
+            $('<option>').val(object.idProduto).text(object.atividade).appendTo(cbAtividade);
+        });
+
+    });
+
+
+};
+
 
 var combosPreenchidos = function () {
 
