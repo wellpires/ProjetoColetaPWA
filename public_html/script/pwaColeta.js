@@ -353,7 +353,7 @@ var carregarUnidades = function () {
     $select = components.cbUnidades();
 
     $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-    $.get(urls.GET_BUSCAR_UNIDADES, {idLoja: components.cbLojas().val()}, function (data) {
+    $.get(urls.GET_BUSCAR_UNIDADES, {'idLoja': components.cbLojas().val(), 'idAmostrador': components.cbAmostrador().val()}, function (data) {
         $.each(data, function (index, object) {
             $('<option>').val(object.idUnidade).text(object.nomeUnidade).appendTo($select);
         });
