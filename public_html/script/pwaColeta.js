@@ -103,7 +103,7 @@ window.onload = function () {
             components.btnIniciar().attr("disabled", false);
         }
 
-        if (rowCount > 5) {
+        if (rowCount > 7) {
             $(this).attr("disabled", true);
             return;
         }
@@ -179,11 +179,11 @@ window.onload = function () {
             components.cbAmostrador().attr('disabled', true);
             components.cbLojas().attr('disabled', true);
             components.cbUnidades().attr('disabled', true);
-            components.btnNovaLinha().attr('disabled', true);
-            
+            components.btnNovaLinha().attr('disabled', false);
+
             $('#tblColeta tr td button')[0].disabled = false;
 
-            CountDown().Start(70000, $('#tblColeta tr td span')[0]);
+            CountDown().Start(70000, $('#tblColeta tr td span'));
 
         } else if (components.btnIniciar().val() === TEXTO_PAUSAR) {
             components.btnIniciar().attr('value', TEXTO_INICIAR);
@@ -282,9 +282,13 @@ var CountDown = function () {
         // Countdown if running
         if (Running) {
             CurrentTime += TimeGap;
-            if (GuiTimer.innerHTML === '01:00') {
-                GuiTimer.parentNode.parentNode.style.backgroundColor = 'red';
+
+            for (var x in GuiTimer) {
+                if (x.innerHTML === '01:00') {
+                    x.parentNode.parentNode.style.backgroundColor = 'red';
+                }
             }
+
         }
         // Update Gui
         var Time = new Date();
@@ -292,7 +296,10 @@ var CountDown = function () {
         var Minutes = Time.getMinutes();
         var Seconds = Time.getSeconds();
 
-        GuiTimer.innerHTML = (Minutes < 10 ? '0' : '') + Minutes + ':' + (Seconds < 10 ? '0' : '') + Seconds;
+        for (var x in GuiTimer) {
+            x.innerHTML = (Minutes < 10 ? '0' : '') + Minutes + ':' + (Seconds < 10 ? '0' : '') + Seconds;
+        }
+
     };
 
     var Pause = function () {
