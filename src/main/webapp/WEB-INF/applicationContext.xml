@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context "
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+                            http://www.springframework.org/schema/context 
+                            http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    
+    <context:component-scan base-package="br.com.everis.coletaws"></context:component-scan>
+    <context:component-scan base-package="br.com.everis.coletaws.amostrador.services"></context:component-scan>
+    <context:component-scan base-package="br.com.everis.coletaws.amostrador.services.impl"></context:component-scan>
+    <!--<context:annotation-config/>-->
+    <!--<bean  id="centralMachine" class="br.com.everis.coletaws."/>-->
+
+    
+<!--    <bean id="amostradorService" class="br.com.everis.coletaws.amostrador.services.impl.AmostradorServiceImpl" />
+    
+    <bean id="coleta" class="br.com.everis.coletaws.ColetaWS">
+        <property name="amostradorService">
+            <ref bean="amostradorService" />
+        </property>
+        <property name="outputService">
+            <ref bean="out" />
+        </property>
+    </bean>-->
+    
+</beans>

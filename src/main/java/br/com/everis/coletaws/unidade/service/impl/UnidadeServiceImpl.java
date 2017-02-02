@@ -1,9 +1,11 @@
 package br.com.everis.coletaws.unidade.service.impl;
 
+import br.com.everis.coletaws.amostrador.model.Amostrador;
 import br.com.everis.coletaws.loja.model.Loja;
+import br.com.everis.coletaws.unidade.dao.IUnidadeDAO;
+import br.com.everis.coletaws.unidade.dao.impl.UnidadeDAOImpl;
 import br.com.everis.coletaws.unidade.model.Unidade;
 import br.com.everis.coletaws.unidade.service.IUnidadeService;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,20 +14,12 @@ import java.util.List;
  */
 public class UnidadeServiceImpl implements IUnidadeService {
 
+    private IUnidadeDAO unidadeDAO = null;
+    
     @Override
-    public List<Unidade> buscarUnidades(Loja loja) throws Exception {
-        List<Unidade> lstUnidades = new ArrayList<>();
-
-        for (int i = 1; i < 100; i++) {
-            if (loja.getIdLoja() % i == loja.getIdLoja()) {
-                Unidade unidade = new Unidade();
-                unidade.setIdUnidade(i);
-                unidade.setNomeUnidade("Unidade " + i);
-                lstUnidades.add(unidade);
-            }
-        }
-        return lstUnidades;
-
+    public List<Unidade> buscarUnidades(Loja loja, Amostrador amostrador) throws Exception {
+        unidadeDAO = new UnidadeDAOImpl();
+        return unidadeDAO.buscarUnidadePorLojaAmostrador(loja, amostrador);
     }
 
 }

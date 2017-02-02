@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,6 +23,14 @@ public class Unidade implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Unidade() {
+    }
+
+    public Unidade(Integer idUnidade,String nomeUnidade) {
+        this.idUnidade = idUnidade;
+        this.nomeUnidade = nomeUnidade;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_unidade")
@@ -39,7 +46,7 @@ public class Unidade implements Serializable {
 
     @Column(name = "unidade", nullable = false, length = 60)
     private String nomeUnidade = null;
-    
+
     @Column(name = "funcionario", nullable = false, length = 60)
     private String funcionario = null;
 
@@ -123,7 +130,5 @@ public class Unidade implements Serializable {
         }
         return true;
     }
-    
-    
 
 }

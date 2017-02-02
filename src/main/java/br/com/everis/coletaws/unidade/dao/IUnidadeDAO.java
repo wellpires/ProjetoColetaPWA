@@ -1,6 +1,7 @@
-package br.com.everis.coletaws.unidade.service;
+package br.com.everis.coletaws.unidade.dao;
 
 import br.com.everis.coletaws.amostrador.model.Amostrador;
+import br.com.everis.coletaws.dao.Dao;
 import br.com.everis.coletaws.loja.model.Loja;
 import br.com.everis.coletaws.unidade.model.Unidade;
 import java.util.List;
@@ -9,8 +10,8 @@ import java.util.List;
  *
  * @author Wellington Gonçalves Pires
  */
-public interface IUnidadeService {
+public interface IUnidadeDAO extends Dao<Integer, Unidade>{
     
-    public List<Unidade> buscarUnidades(Loja loja, Amostrador amostrador) throws Exception;
+    public List<Unidade> buscarUnidadePorLojaAmostrador(Loja loja, Amostrador amostrador);
     
 }

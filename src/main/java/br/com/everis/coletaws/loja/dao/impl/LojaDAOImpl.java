@@ -23,7 +23,7 @@ public class LojaDAOImpl extends JpaDao<Integer, Loja> implements ILojaDAO {
                 + "FROM " + Loja.class.getName() + " l JOIN l.unidades as u where u.amostrador.idAmostrador = :codigoAmostrador";
         
         Query q = entityManager.createQuery(sqlQuery).setParameter("codigoAmostrador", amostrador.getIdAmostrador());
-        return (ArrayList<Loja>) q.getResultList();
+        return q.getResultList();
     }
 
 }

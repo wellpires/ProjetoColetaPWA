@@ -9,7 +9,6 @@ import br.com.everis.coletaws.loja.service.impl.LojaServiceImpl;
 import br.com.everis.coletaws.unidade.model.Unidade;
 import br.com.everis.coletaws.unidade.service.IUnidadeService;
 import br.com.everis.coletaws.unidade.service.impl.UnidadeServiceImpl;
-import br.com.everis.coletaws.utils.JPAUtil;
 import com.google.gson.Gson;
 import java.util.List;
 import javax.ws.rs.Consumes;
@@ -27,7 +26,7 @@ import javax.ws.rs.core.Response;
 @Path("/")
 public class ColetaWS {
 
-    private IAmostradorService amostradorService = null;
+    private IAmostradorService amostradorService;
     private ILojaService lojaService = null;
     private IUnidadeService unidadeService = null;
     
@@ -67,17 +66,27 @@ public class ColetaWS {
     @Path("/buscarUnidades")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
-    public Response buscarUnidades(@QueryParam("idLoja") Integer idLoja) {
+    public Response buscarUnidades(@QueryParam("idLoja") Integer idLoja, @QueryParam("idAmostrador") Integer idAmostrador) {
         try {
             unidadeService = new UnidadeServiceImpl();
             Loja loja = new Loja();
             loja.setIdLoja(idLoja);
-            List<Unidade> lstUnidades = unidadeService.buscarUnidades(loja);
+            Amostrador amostrador = new Amostrador();
+            amostrador.setIdAmostrador(idAmostrador);
+            List<Unidade> lstUnidades = unidadeService.buscarUnidades(loja, amostrador);
             return Response.ok(new Gson().toJson(lstUnidades)).build();
         } catch (Exception e) {
             return Response.serverError().build();
         }
 
+    }
+
+    public IAmostradorService getAmostradorService() {
+        return amostradorService;
+    }
+
+    public void setAmostradorService(IAmostradorService amostradorService) {
+        this.amostradorService = amostradorService;
     }
 
 }
