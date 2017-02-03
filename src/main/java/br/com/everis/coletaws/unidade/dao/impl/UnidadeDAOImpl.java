@@ -14,15 +14,20 @@ import javax.persistence.Query;
 public class UnidadeDAOImpl extends JpaDao<Integer, Unidade> implements IUnidadeDAO {
 
     @Override
-    public List<Unidade> buscarUnidadePorLojaAmostrador(Unidade unidade) {
+    public List<Unidade> buscarUnidadePorLojaAmostrador(Unidade unidade) throws Exception{
         //SELECT U.id_unidade, U.unidade FROM sysnac.unidades U WHERE U.id_amostrador = 1 AND U.id_loja = 1
-        String sqlQuery = "SELECT distinct new Unidade(U.idUnidade, U.nomeUnidade) "
-                + "FROM " + Unidade.class.getName() + " U WHERE U.amostrador.idAmostrador = :codigoAmostrador AND U.loja.idLoja = :codigoLoja";
-        Query q = entityManager.createQuery(sqlQuery);
-        q.setParameter("codigoAmostrador", unidade.getAmostrador().getIdAmostrador());
-        q.setParameter("codigoLoja", unidade.getLoja().getIdLoja());
+        try {
+            String sqlQuery = "SELECT distinct new Unidade(U.idUnidade, U.nomeUnidade) "
+                    + "FROM " + Unidade.class.getName() + " U WHERE U.amostrador.idAmostrador = :codigoAmostrador AND U.loja.idLoja = :codigoLoja";
+            Query q = entityManager.createQuery(sqlQuery);
+            q.setParameter("codigoAmostrador", unidade.getAmostrador().getIdAmostrador());
+            q.setParameter("codigoLoja", unidade.getLoja().getIdLoja());
+            return q.getResultList();
+        } catch (Exception e) {
+            entityManager.close();
+            throw new Exception(e);
+        }
 
-        return q.getResultList();
     }
 
     @Override

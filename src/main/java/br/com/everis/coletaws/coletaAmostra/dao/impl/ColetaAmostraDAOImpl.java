@@ -22,5 +22,8 @@ public class ColetaAmostraDAOImpl extends JpaDao<Integer, ColetaAmostra> impleme
         }catch(Exception e){
             tx.rollback();
         }
+        finally{
+            entityManager.close();
+        }
     }
 }

@@ -12,8 +12,13 @@ import java.util.List;
 public class AmostradorDAOImpl extends JpaDao<Integer, Amostrador> implements IAmostradorDAO {
 
     @Override
-    public List<Amostrador> buscarAmostradores() {
-        return entityManager.createQuery("FROM " + Amostrador.class.getName()).getResultList();
+    public List<Amostrador> buscarAmostradores() throws Exception {
+        try {
+            return entityManager.createQuery("FROM " + Amostrador.class.getName()).getResultList();
+        } catch (Exception e) {
+            entityManager.close();
+            throw new Exception(e);
+        }
     }
 
 }

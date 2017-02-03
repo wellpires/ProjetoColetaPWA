@@ -18,6 +18,7 @@ import br.com.everis.coletaws.produto.service.ProdutoServiceImpl;
 import br.com.everis.coletaws.unidade.model.Unidade;
 import br.com.everis.coletaws.unidade.service.IUnidadeService;
 import br.com.everis.coletaws.unidade.service.impl.UnidadeServiceImpl;
+import br.com.everis.coletaws.utils.JPAUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,11 @@ public class ColetaWS {
     private IProdutoService produtoService = null;
     private IColetaAmostraService coletaAmostraService = null;
 
+    public ColetaWS() {
+        JPAUtil.getEntityManaged();
+    }
+
+    
     @GET
     @Path("/buscarAmostrador")
     @Produces(MediaType.APPLICATION_JSON)

@@ -9,14 +9,17 @@ import java.util.List;
  *
  * @author Wellington Gonçalves Pires
  */
-public class ProdutoServiceImpl implements IProdutoService{
+public class ProdutoServiceImpl implements IProdutoService {
 
     private IProdutoDAO produtoDAO = null;
-    
+
     @Override
-    public List<Produto> buscarProdutos(Produto produto) {
-        produtoDAO = new ProdutoDAOImpl();
-        return produtoDAO.buscarProdutos(produto);
+    public List<Produto> buscarProdutos(Produto produto) throws Exception{
+        try {
+            produtoDAO = new ProdutoDAOImpl();
+            return produtoDAO.buscarProdutos(produto);
+        } catch (Exception ex) {
+            throw new Exception(ex);
+        }
     }
-    
 }

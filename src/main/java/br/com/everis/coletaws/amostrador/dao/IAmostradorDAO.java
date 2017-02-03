@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface IAmostradorDAO extends Dao<Integer, Amostrador>{
     
-    public List<Amostrador> buscarAmostradores();
+    public List<Amostrador> buscarAmostradores() throws Exception;
     
 }

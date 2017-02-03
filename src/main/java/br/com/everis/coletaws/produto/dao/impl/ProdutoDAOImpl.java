@@ -16,21 +16,26 @@ import javax.persistence.Query;
  *
  * @author Wellington Gonçalves Pires
  */
-public class ProdutoDAOImpl extends JpaDao<Integer, Produto> implements IProdutoDAO{
+public class ProdutoDAOImpl extends JpaDao<Integer, Produto> implements IProdutoDAO {
 
     @Override
-    public List<Produto> buscarProdutos(Produto produto) {
-        
-        //SELECT P.id_produto, P.produto, P.atividade FROM sysnac.produtos P WHERE P.id_loja = 2
-        String strQuery = "SELECT new Produto(P.idProduto, P.nomeProduto, P.atividade) "
-                + "FROM " + entityClass.getName() + " P "
-                + "WHERE P.loja.idLoja = :codigoLoja";
-        
-        Query q = entityManager.createQuery(strQuery);
-        q.setParameter("codigoLoja", produto.getLoja().getIdLoja());
-        
-        return (ArrayList<Produto>) q.getResultList();
-        
+    public List<Produto> buscarProdutos(Produto produto) throws Exception {
+
+        try {
+            //SELECT P.id_produto, P.produto, P.atividade FROM sysnac.produtos P WHERE P.id_loja = 2
+            String strQuery = "SELECT new Produto(P.idProduto, P.nomeProduto, P.atividade) "
+                    + "FROM " + entityClass.getName() + " P "
+                    + "WHERE P.loja.idLoja = :codigoLoja";
+
+            Query q = entityManager.createQuery(strQuery);
+            q.setParameter("codigoLoja", produto.getLoja().getIdLoja());
+
+            return (ArrayList<Produto>) q.getResultList();
+        } catch (Exception e) {
+            entityManager.close();
+            throw new Exception(e);
+        }
+
     }
 
     @Override
@@ -47,5 +52,5 @@ public class ProdutoDAOImpl extends JpaDao<Integer, Produto> implements IProduto
     public Produto findById(Integer id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }
