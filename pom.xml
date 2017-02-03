@@ -16,9 +16,9 @@
     
     <dependencies>
         <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>hibernate-jpamodelgen-4.3.1.Final</artifactId>
-            <version>SNAPSHOT</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>4.3.1.Final</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -60,6 +60,12 @@
             <artifactId>gson</artifactId>
             <version>2.2.4</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1</version>
+        </dependency>
 
         <!-- POSTGRESQL -->
         <dependency>
@@ -67,7 +73,7 @@
             <artifactId>postgresql</artifactId>
             <version>9.1-901.jdbc4</version>
         </dependency>
-
+        
     </dependencies>
 
     <build>

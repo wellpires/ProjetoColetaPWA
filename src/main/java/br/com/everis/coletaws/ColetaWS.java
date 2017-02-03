@@ -20,6 +20,7 @@ import br.com.everis.coletaws.unidade.service.IUnidadeService;
 import br.com.everis.coletaws.unidade.service.impl.UnidadeServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -29,6 +30,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  *
@@ -151,15 +154,28 @@ public class ColetaWS {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response gravarColeta(String coleta) {
-
         try {
+            JSONObject json = (JSONObject) new JSONParser().parse(coleta);
+            SimpleDateFormat sdf = new SimpleDateFormat("d/M/yyyy");
+            SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm:ss");
+
+            ColetaAmostra coletaAmostra = new ColetaAmostra();
+            coletaAmostra.setAmostrador(json.get("amostrador").toString());
+            coletaAmostra.setLoja(json.get("loja").toString());
+            coletaAmostra.setUnidade(json.get("unidade").toString());
+            coletaAmostra.setData_coleta(sdf.parse(json.get("data_coleta").toString()));
+            coletaAmostra.setHora_coleta(sdfHora.parse(json.get("hora_coleta").toString()));
+            coletaAmostra.setTs_sincronismo(sdfHora.parse(json.get("ts_sincronismo").toString()));
+            coletaAmostra.setProduto(json.get("produto").toString());
+            coletaAmostra.setAtividade(json.get("atividade").toString());
+            coletaAmostra.setStatus_amostra("EU NAO SEI O QUE COLOCAR AQUI");
+
             coletaAmostraService = new ColetaAmostraServiceImpl();
-            ColetaAmostra coletaAmostra = (ColetaAmostra) new Gson().fromJson(coleta, ColetaAmostra.class);
             coletaAmostraService.gravarColeta(coletaAmostra);
             return Response.ok().build();
         } catch (JsonSyntaxException e) {
             return Response.serverError().build();
-        } catch(Exception e){
+        } catch (Exception e) {
             return Response.serverError().build();
         }
 
