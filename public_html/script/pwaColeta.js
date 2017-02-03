@@ -146,18 +146,10 @@ window.onload = function () {
 //                } else {
 //                    componentDisplay = spanComponent[rowIndex];
 //                }
-                
-                var amostradorValue = components.cbAmostrador().val();
-                var lojaValue = components.cbLojas().val();
-                var unidadeVale = components.cbUnidades().val();
-                var funcionarioValue = $('#tblColeta tr .func_nome :selected')[rowIndex].text;
-                var produtoValue = $('#tblColeta tr .func_produto :selected')[rowIndex].text;
-                var atividadeValue = $('#tblColeta tr .func_atividade :selected')[rowIndex].text;
-                
-                
-                $.post(urls.POST_GRAVAR_COLETA, {});
-                
-                
+
+                gravarDados(rowIndex - 1);
+
+
                 if (buttonComponent[rowIndex] === undefined) {
                     buttonComponent[0].disabled = false;
                     buttonComponent[rowIndex - 1].disabled = true;
@@ -282,7 +274,8 @@ function checkTime(i) {
 var timeout;
 
 var zerarContagemRegressiva = function () {
-    var id = setTimeout(function () {}, 0);
+    var id = setTimeout(function () {
+    }, 0);
     while (id--) {
         clearTimeout(id);
     }
@@ -313,8 +306,8 @@ var CountDown = function () {
             CurrentTime += TimeGap;
 
             for (var x in GuiTimer) {
-                if (x.innerHTML === '01:00') {
-                    x.parentNode.parentNode.style.backgroundColor = 'red';
+                if ($.isNumeric(x) && GuiTimer[x].innerHTML === '01:00') {
+                    GuiTimer[x].parentNode.parentNode.style.backgroundColor = 'red';
                 }
             }
 
@@ -326,7 +319,9 @@ var CountDown = function () {
         var Seconds = Time.getSeconds();
 
         for (var x in GuiTimer) {
-            x.innerHTML = (Minutes < 10 ? '0' : '') + Minutes + ':' + (Seconds < 10 ? '0' : '') + Seconds;
+            if ($.isNumeric(x)) {
+                GuiTimer[x].innerHTML = (Minutes < 10 ? '0' : '') + Minutes + ':' + (Seconds < 10 ? '0' : '') + Seconds;
+            }
         }
 
     };
@@ -435,6 +430,45 @@ var carregarProdutos = function (cbProduto, cbAtividade) {
 
 };
 
+var gravarDados = function (rowIndex) {
+    var data = new Date();
+    var amostradorValue = components.cbAmostrador().find('option:selected').text();
+    var lojaValue = components.cbLojas().find('option:selected').text();
+    var unidadeVale = components.cbUnidades().find('option:selected').text();
+//  var funcionarioValue = $('#tblColeta tr .func_nome ')[rowIndex].text;
+    var produtoValue = $('#tblColeta tr .func_produto :selected')[rowIndex].text;
+    var atividadeValue = $('#tblColeta tr .func_atividade :selected')[rowIndex].text;
+    var dataColeta = (data.getMonth() + 1) + '/' + data.getDay() + '/' + data.getFullYear();
+    var horaColeta = data.getHours() + ':' + data.getMinutes() + ':' + data.getSeconds();
+    var horaReal = data.getHours() + ':' + data.getMinutes() + ':' + data.getSeconds();
+
+    var json = {
+        'amostrador': amostradorValue,
+        'loja': lojaValue,
+        'unidade': unidadeVale,
+        'data_coleta': dataColeta,
+        'hora_coleta': horaColeta,
+        'ts_sincronismo': horaReal,
+        'produto': produtoValue,
+        'atividade': atividadeValue
+    };
+
+
+    jQuery.ajax({
+        url: urls.POST_GRAVAR_COLETA,
+        type: "POST",
+        data: JSON.stringify(json),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function () {
+            console.log(arguments);
+        }
+    });
+
+//    $.post(urls.POST_GRAVAR_COLETA, json, function () {
+//        console.log(arguments);
+//    }, 'json');
+};
 
 var combosPreenchidos = function () {
 
