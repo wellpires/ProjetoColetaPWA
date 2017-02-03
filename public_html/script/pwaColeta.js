@@ -138,14 +138,7 @@ window.onload = function () {
             $(jqueryBtnAcao).click(function (e) {
                 $(jqueryBtnAcao).attr('value', 'REGISTRAR');
                 var rowIndex = $('#tblColeta tr').index(e.target.parentNode.parentNode);
-//                var componentDisplay = undefined;
-//                var spanComponent = $('#tblColeta tr span');
                 var buttonComponent = $('#tblColeta tr td button');
-//                if ($('table tr span')[rowIndex] === undefined) {
-//                    componentDisplay = spanComponent[1];
-//                } else {
-//                    componentDisplay = spanComponent[rowIndex];
-//                }
 
                 gravarDados(rowIndex - 1);
 
@@ -157,12 +150,6 @@ window.onload = function () {
                     buttonComponent[rowIndex].disabled = false;
                     buttonComponent[rowIndex - 1].disabled = true;
                 }
-
-//                if (componentDisplay.innerHTML === '05:00') {
-//                    CountDown().Start(300000, componentDisplay);
-//                }
-
-
 
             });
 
@@ -201,7 +188,11 @@ window.onload = function () {
 
             $('#tblColeta tr td button')[0].disabled = false;
 
-            CountDown().Start(70000, $('#tblColeta tr td span'));
+            CountDown().Start(10000, $('#tblColeta tr td span'));
+            $.each($('#tblColeta tr .func_nome'), function (index, object) {
+                object.disabled = true;
+            });
+
 
         } else if (components.btnIniciar().val() === TEXTO_PAUSAR) {
             components.btnIniciar().attr('value', TEXTO_INICIAR);
@@ -246,8 +237,6 @@ window.onload = function () {
         if (event.target.value === '') {
             return;
         }
-
-
 
     });
 };
@@ -305,9 +294,13 @@ var CountDown = function () {
         if (Running) {
             CurrentTime += TimeGap;
 
-            for (var x in GuiTimer) {
-                if ($.isNumeric(x) && GuiTimer[x].innerHTML === '01:00') {
-                    GuiTimer[x].parentNode.parentNode.style.backgroundColor = 'red';
+            for (var i = 0; i < GuiTimer.length; i++) {
+                if (converterMinutosParaMilis(GuiTimer[i].innerHTML) < 62000) {
+                    GuiTimer[i].parentNode.parentNode.style.backgroundColor = 'red';
+                }
+                if (converterMinutosParaMilis(GuiTimer[i].innerHTML) === 1000) {
+                    gravarDados($('#tblColeta tr').index(GuiTimer[i].parentNode.parentNode) - 1);
+                    GuiTimer[i].parentNode.parentNode.style.backgroundColor = 'white';
                 }
             }
 
@@ -318,9 +311,11 @@ var CountDown = function () {
         var Minutes = Time.getMinutes();
         var Seconds = Time.getSeconds();
 
-        for (var x in GuiTimer) {
-            if ($.isNumeric(x)) {
-                GuiTimer[x].innerHTML = (Minutes < 10 ? '0' : '') + Minutes + ':' + (Seconds < 10 ? '0' : '') + Seconds;
+        for (var i = 0; i < GuiTimer.length; i++) {
+            GuiTimer[i].innerHTML = (Minutes < 10 ? '0' : '') + Minutes + ':' + (Seconds < 10 ? '0' : '') + Seconds;
+            if (converterMinutosParaMilis(GuiTimer[i].innerHTML) === 0) {
+                GuiTimer[i].innerHTML = '05:00';
+                zerarContagemRegressiva();
             }
         }
 
@@ -352,6 +347,19 @@ var CountDown = function () {
         Start: Start
     };
 };
+
+var converterMinutosParaMilis = function (minutos) {
+
+    var regex = /:/;
+
+    if (regex.test(minutos)) {
+        var minuto = parseInt(minutos.split(regex)[0]);
+        var segundo = parseInt(minutos.split(regex)[1]);
+        return (minuto * 60000) + (segundo * 1000);
+    }
+
+};
+
 
 var carregarAmostrador = function () {
 
@@ -404,8 +412,9 @@ var carregarFuncionarios = function (id) {
         $.each(data, function (index, object) {
             $('<option>').val(object.idFuncionario).text(object.nomeFuncionario).appendTo($select);
         });
+    }).fail(function (e) {
+        console.error(e);
     });
-
 };
 
 
@@ -424,9 +433,9 @@ var carregarProdutos = function (cbProduto, cbAtividade) {
         $.each(data, function (index, object) {
             $('<option>').val(object.idProduto).text(object.atividade).appendTo(cbAtividade);
         });
-
-    });
-
+    }).fail(function (e) {
+        console.error(e);
+    });;
 
 };
 
@@ -436,8 +445,23 @@ var gravarDados = function (rowIndex) {
     var lojaValue = components.cbLojas().find('option:selected').text();
     var unidadeVale = components.cbUnidades().find('option:selected').text();
 //  var funcionarioValue = $('#tblColeta tr .func_nome ')[rowIndex].text;
-    var produtoValue = $('#tblColeta tr .func_produto :selected')[rowIndex].text;
-    var atividadeValue = $('#tblColeta tr .func_atividade :selected')[rowIndex].text;
+    var funcProduto = $('#tblColeta tr .func_produto :selected');
+    var produtoValue = null;
+    if ($(funcProduto)[rowIndex] === undefined) {
+        produtoValue = $(funcProduto).text();
+    } else {
+        produtoValue = $(funcProduto)[rowIndex].text;
+    }
+
+    var funcAtividade = $('#tblColeta tr .func_atividade :selected');
+    var atividadeValue = null;
+
+    if ($(funcAtividade)[rowIndex] === undefined) {
+        atividadeValue = $(funcAtividade).text();
+    } else {
+        atividadeValue = $(funcAtividade)[rowIndex].text;
+    }
+
     var dataColeta = (data.getMonth() + 1) + '/' + data.getDay() + '/' + data.getFullYear();
     var horaColeta = data.getHours() + ':' + data.getMinutes() + ':' + data.getSeconds();
     var horaReal = data.getHours() + ':' + data.getMinutes() + ':' + data.getSeconds();
@@ -454,7 +478,7 @@ var gravarDados = function (rowIndex) {
     };
 
 
-    jQuery.ajax({
+    $.ajax({
         url: urls.POST_GRAVAR_COLETA,
         type: "POST",
         data: JSON.stringify(json),
@@ -465,9 +489,6 @@ var gravarDados = function (rowIndex) {
         }
     });
 
-//    $.post(urls.POST_GRAVAR_COLETA, json, function () {
-//        console.log(arguments);
-//    }, 'json');
 };
 
 var combosPreenchidos = function () {
