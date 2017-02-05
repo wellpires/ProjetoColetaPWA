@@ -19,5 +19,11 @@ public class FuncionarioServiceImpl implements IFuncionarioService{
         funcionarioDAO = new FuncionarioDAOImpl();
         return funcionarioDAO.buscarFuncionarios(funcionario);
     }
+
+    @Override
+    public List<Funcionario> buscarFuncionarios() {
+        funcionarioDAO = new FuncionarioDAOImpl();
+        return funcionarioDAO.buscarFuncionarios();
+    }
     
 }

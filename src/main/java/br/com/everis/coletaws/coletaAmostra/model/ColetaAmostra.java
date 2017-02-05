@@ -25,7 +25,7 @@ public class ColetaAmostra implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_amostra")
-    private Integer idAmostra = null;
+    private Long idAmostra = null;
     
     @Column(name = "amostrador", nullable = false, length = 60)
     private String amostrador = null;
@@ -57,11 +57,11 @@ public class ColetaAmostra implements Serializable {
     @Column(name = "status_amostra", nullable = false, length = 60)
     private String statusAmostra = null;
 
-    public Integer getIdAmostra() {
+    public Long getIdAmostra() {
         return idAmostra;
     }
 
-    public void setIdAmostra(Integer idAmostra) {
+    public void setIdAmostra(Long idAmostra) {
         this.idAmostra = idAmostra;
     }
 

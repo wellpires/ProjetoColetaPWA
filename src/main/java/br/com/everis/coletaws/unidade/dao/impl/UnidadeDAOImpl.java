@@ -15,29 +15,18 @@ public class UnidadeDAOImpl extends JpaDao<Integer, Unidade> implements IUnidade
     @Override
     public List<Unidade> buscarUnidadePorLojaAmostrador(Unidade unidade) throws Exception {
         //SELECT U.id_unidade, U.unidade FROM sysnac.unidades U WHERE U.id_amostrador = 1 AND U.id_loja = 1
-        try {
-            String sqlQuery = "SELECT distinct new Unidade(U.idUnidade, U.nomeUnidade) "
-                    + "FROM " + Unidade.class.getName() + " U WHERE U.amostrador.idAmostrador = :codigoAmostrador AND U.loja.idLoja = :codigoLoja";
-            Query q = entityManager.createQuery(sqlQuery);
-            q.setParameter("codigoAmostrador", unidade.getAmostrador().getIdAmostrador());
-            q.setParameter("codigoLoja", unidade.getLoja().getIdLoja());
-            return q.getResultList();
-        } catch (Exception e) {
-            entityManager.close();
-            throw new Exception(e);
-        }
+        String sqlQuery = "SELECT distinct new Unidade(U.idUnidade, U.nomeUnidade) "
+                + "FROM " + Unidade.class.getName() + " U WHERE U.amostrador.idAmostrador = :codigoAmostrador AND U.loja.idLoja = :codigoLoja";
+        Query q = entityManager.createQuery(sqlQuery);
+        q.setParameter("codigoAmostrador", unidade.getAmostrador().getIdAmostrador());
+        q.setParameter("codigoLoja", unidade.getLoja().getIdLoja());
+        return q.getResultList();
 
     }
 
     @Override
     public List<Unidade> buscarUnidades() throws Exception {
-        try {
-            return entityManager.createQuery("FROM " + entityClass.getName()).getResultList();
-        } catch (Exception e) {
-            throw new Exception(e);
-        } finally {
-            entityManager.close();
-        }
+        return entityManager.createQuery("SELECT new Unidade(U.idUnidade, U.nomeUnidade, U.amostrador.idAmostrador, U.loja.idLoja) FROM " + entityClass.getName() + " U").getResultList();
     }
 
     @Override

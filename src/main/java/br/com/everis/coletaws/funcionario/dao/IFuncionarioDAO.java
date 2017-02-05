@@ -11,5 +11,6 @@ import java.util.List;
 public interface IFuncionarioDAO extends Dao<Integer, Funcionario> {
     
     public List<Funcionario> buscarFuncionarios(Funcionario funcionario);
+    public List<Funcionario> buscarFuncionarios();
     
 }

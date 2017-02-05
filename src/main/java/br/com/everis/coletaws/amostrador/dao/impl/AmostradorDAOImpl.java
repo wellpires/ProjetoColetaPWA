@@ -13,12 +13,7 @@ public class AmostradorDAOImpl extends JpaDao<Integer, Amostrador> implements IA
 
     @Override
     public List<Amostrador> buscarAmostradores() throws Exception {
-        try {
-            return entityManager.createQuery("FROM " + Amostrador.class.getName()).getResultList();
-        } catch (Exception e) {
-            entityManager.close();
-            throw new Exception(e);
-        }
+        return entityManager.createQuery("FROM " + Amostrador.class.getName()).getResultList();
     }
 
 }

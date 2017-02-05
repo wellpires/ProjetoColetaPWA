@@ -11,7 +11,7 @@ import javax.persistence.Query;
  *
  * @author Wellington Gonçalves Pires
  */
-public class FuncionarioDAOImpl extends  JpaDao<Integer, Funcionario> implements IFuncionarioDAO {
+public class FuncionarioDAOImpl extends JpaDao<Integer, Funcionario> implements IFuncionarioDAO {
 
     @Override
     public List<Funcionario> buscarFuncionarios(Funcionario funcionario) {
@@ -34,6 +34,14 @@ public class FuncionarioDAOImpl extends  JpaDao<Integer, Funcionario> implements
     }
 
     @Override
+    public List<Funcionario> buscarFuncionarios() {
+
+        String strQuery = "SELECT new Funcionario(F.idFuncionario, F.nomeFuncionario,F.cargo, F.unidade.idUnidade) "
+                + "FROM " + entityClass.getName() + " F";
+        return entityManager.createQuery(strQuery).getResultList();
+    }
+
+    @Override
     public void persist(Funcionario entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -47,5 +55,4 @@ public class FuncionarioDAOImpl extends  JpaDao<Integer, Funcionario> implements
     public Funcionario findById(Integer id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

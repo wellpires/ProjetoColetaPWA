@@ -1,7 +1,6 @@
 package br.com.everis.coletaws.funcionario.services;
 
 import br.com.everis.coletaws.funcionario.model.Funcionario;
-import br.com.everis.coletaws.unidade.model.Unidade;
 import java.util.List;
 
 /**
@@ -11,5 +10,6 @@ import java.util.List;
 public interface IFuncionarioService {
     
     public List<Funcionario> buscarFuncionarios(Funcionario funcionario);
+    public List<Funcionario> buscarFuncionarios();
     
 }

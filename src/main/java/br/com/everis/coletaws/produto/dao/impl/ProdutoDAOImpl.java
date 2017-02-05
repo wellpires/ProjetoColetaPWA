@@ -16,36 +16,25 @@ public class ProdutoDAOImpl extends JpaDao<Integer, Produto> implements IProduto
     @Override
     public List<Produto> buscarProdutos(Produto produto) throws Exception {
 
-        try {
-            //SELECT P.id_produto, P.produto, P.atividade FROM sysnac.produtos P WHERE P.id_loja = 2
-            String strQuery = "SELECT new Produto(P.idProduto, P.nomeProduto, P.atividade) "
-                    + "FROM " + entityClass.getName() + " P "
-                    + "WHERE P.loja.idLoja = :codigoLoja";
+        //SELECT P.id_produto, P.produto, P.atividade FROM sysnac.produtos P WHERE P.id_loja = 2
+        String strQuery = "SELECT new Produto(P.idProduto, P.nomeProduto, P.atividade) "
+                + "FROM " + entityClass.getName() + " P "
+                + "WHERE P.loja.idLoja = :codigoLoja";
 
-            Query q = entityManager.createQuery(strQuery);
-            q.setParameter("codigoLoja", produto.getLoja().getIdLoja());
+        Query q = entityManager.createQuery(strQuery);
+        q.setParameter("codigoLoja", produto.getLoja().getIdLoja());
 
-            return (ArrayList<Produto>) q.getResultList();
-        } catch (Exception e) {
-            entityManager.close();
-            throw new Exception(e);
-        }
+        return (ArrayList<Produto>) q.getResultList();
 
     }
 
     @Override
     public List<Produto> buscarProdutos() throws Exception {
 
-        try {
-            //SELECT P.id_produto, P.produto, P.atividade FROM sysnac.produtos P WHERE P.id_loja = 2
-            String strQuery = "SELECT new Produto(P.idProduto, P.nomeProduto, P.atividade), P.loja.idLoja "
-                    + "FROM " + entityClass.getName() + " P";
+        //SELECT P.id_produto, P.produto, P.atividade FROM sysnac.produtos P WHERE P.id_loja = 2
+        String strQuery = "SELECT new Produto(P.idProduto, P.nomeProduto, P.atividade, P.idLoja) FROM " + entityClass.getName() + " P";
 
-            return entityManager.createQuery(strQuery).getResultList();
-        } catch (Exception e) {
-            entityManager.close();
-            throw new Exception(e);
-        }
+        return entityManager.createQuery(strQuery).getResultList();
 
     }
 

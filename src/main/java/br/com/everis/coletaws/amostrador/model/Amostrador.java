@@ -23,16 +23,16 @@ public class Amostrador implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_amostrador")
-    private Integer idAmostrador = null;
+    private Long idAmostrador = null;
     
     @Column(name = "amostrador",nullable = false, length = 60)
     private String nomeAmostrador = null;
     
-    public Integer getIdAmostrador() {
+    public Long getIdAmostrador() {
         return idAmostrador;
     }
 
-    public void setIdAmostrador(Integer idAmostrador) {
+    public void setIdAmostrador(Long idAmostrador) {
         this.idAmostrador = idAmostrador;
     }
 

@@ -108,26 +108,26 @@ public class ColetaWS {
     @Path("/buscarFuncionarios")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
-    public Response buscarFuncionarios(@QueryParam("idAmostrador") Integer idAmostrador, @QueryParam("idLoja") Integer idLoja, @QueryParam("idUnidade") Integer idUnidade) {
+    public Response buscarFuncionarios(/*@QueryParam("idAmostrador") Long idAmostrador, @QueryParam("idLoja") Long idLoja, @QueryParam("idUnidade") Long idUnidade*/) {
 
         try {
             funcionarioService = new FuncionarioServiceImpl();
-            Unidade unidade = new Unidade();
-            unidade.setLoja(new Loja());
-            unidade.setAmostrador(new Amostrador());
-            unidade.getAmostrador().setIdAmostrador(idAmostrador);
-            unidade.getLoja().setIdLoja(idLoja);
-            unidade.setIdUnidade(idUnidade);
+//            Unidade unidade = new Unidade();
+//            unidade.setLoja(new Loja());
+//            unidade.setAmostrador(new Amostrador());
+//            unidade.getAmostrador().setIdAmostrador(idAmostrador);
+//            unidade.getLoja().setIdLoja(idLoja);
+//            unidade.setIdUnidade(idUnidade);
+//
+//            Funcionario funcionario = new Funcionario();
+//            funcionario.setUnidade(new Unidade());
+//            funcionario.getUnidade().setAmostrador(new Amostrador());
+//            funcionario.getUnidade().setLoja(new Loja());
+//            funcionario.getUnidade().setIdUnidade(idUnidade);
+//            funcionario.getUnidade().getAmostrador().setIdAmostrador(idAmostrador);
+//            funcionario.getUnidade().getLoja().setIdLoja(idLoja);
 
-            Funcionario funcionario = new Funcionario();
-            funcionario.setUnidade(new Unidade());
-            funcionario.getUnidade().setAmostrador(new Amostrador());
-            funcionario.getUnidade().setLoja(new Loja());
-            funcionario.getUnidade().setIdUnidade(idUnidade);
-            funcionario.getUnidade().getAmostrador().setIdAmostrador(idAmostrador);
-            funcionario.getUnidade().getLoja().setIdLoja(idLoja);
-
-            List<Funcionario> lstUnidade = funcionarioService.buscarFuncionarios(funcionario);
+            List<Funcionario> lstUnidade = funcionarioService.buscarFuncionarios();
             return Response.ok(new Gson().toJson(lstUnidade)).build();
         } catch (Exception e) {
             return Response.serverError().build();

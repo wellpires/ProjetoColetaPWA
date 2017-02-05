@@ -19,7 +19,7 @@ public class Loja implements Serializable {
 
     public Loja() {
     }
-    public Loja(Integer idlLoja, String nomeLoja) {
+    public Loja(Long idlLoja, String nomeLoja) {
         this.idLoja = idlLoja;
         this.nomeLoja = nomeLoja;
     }
@@ -29,16 +29,16 @@ public class Loja implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_loja")
-    private Integer idLoja = null;
+    private Long idLoja = null;
     
     @Column(name = "loja", nullable = false, length = 60)
     private String nomeLoja = null;
 
-    public Integer getIdLoja() {
+    public Long getIdLoja() {
         return idLoja;
     }
 
-    public void setIdLoja(Integer idLoja) {
+    public void setIdLoja(Long idLoja) {
         this.idLoja = idLoja;
     }
 

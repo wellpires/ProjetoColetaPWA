@@ -16,7 +16,6 @@ import javax.persistence.Table;
  *
  * @author Wellington Gonçalves Pires
  */
-
 @Entity
 @Table(name = "funcionarios")
 public class Funcionario implements Serializable {
@@ -25,32 +24,42 @@ public class Funcionario implements Serializable {
 
     public Funcionario() {
     }
-    
-    public Funcionario(Integer idFuncionario, String nomeFuncionario) {
+
+    public Funcionario(Long idFuncionario, String nomeFuncionario) {
         this.idFuncionario = idFuncionario;
         this.nomeFuncionario = nomeFuncionario;
     }
     
+    public Funcionario(Long idFuncionario, String nomeFuncionario, String cargo, Long idUnidade) {
+        this.idFuncionario = idFuncionario;
+        this.nomeFuncionario = nomeFuncionario;
+        this.cargo = cargo;
+        this.idUnidade = idUnidade;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_funcionario")
-    private Integer idFuncionario = null;
-    
+    private Long idFuncionario = null;
+
     @Column(name = "funcionario", nullable = false, length = 60)
     private String nomeFuncionario = null;
-    
+
     @Column(name = "cargo", length = 60)
     private String cargo = null;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_unidade")
     private Unidade unidade = null;
 
-    public Integer getIdFuncionario() {
+    @Column(name = "id_unidade", insertable = false, updatable = false)
+    private Long idUnidade = null;
+
+    public Long getIdFuncionario() {
         return idFuncionario;
     }
 
-    public void setIdFuncionario(Integer idFuncionario) {
+    public void setIdFuncionario(Long idFuncionario) {
         this.idFuncionario = idFuncionario;
     }
 
@@ -78,6 +87,14 @@ public class Funcionario implements Serializable {
         this.unidade = unidade;
     }
 
+    public Long getIdUnidade() {
+        return idUnidade;
+    }
+
+    public void setIdUnidade(Long idUnidade) {
+        this.idUnidade = idUnidade;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -85,6 +102,7 @@ public class Funcionario implements Serializable {
         hash = 53 * hash + Objects.hashCode(this.nomeFuncionario);
         hash = 53 * hash + Objects.hashCode(this.cargo);
         hash = 53 * hash + Objects.hashCode(this.unidade);
+        hash = 53 * hash + Objects.hashCode(this.idUnidade);
         return hash;
     }
 
@@ -112,9 +130,10 @@ public class Funcionario implements Serializable {
         if (!Objects.equals(this.unidade, other.unidade)) {
             return false;
         }
+        if (!Objects.equals(this.idUnidade, other.idUnidade)) {
+            return false;
+        }
         return true;
     }
 
-    
-    
 }

@@ -24,33 +24,42 @@ public class Produto implements Serializable {
 
     public Produto() {
     }
-    
-    public Produto(Integer idProduto, String nomeProduto, String atividade) {
+
+    public Produto(Long idProduto, String nomeProduto, String atividade) {
         this.idProduto = idProduto;
         this.nomeProduto = nomeProduto;
         this.atividade = atividade;
     }
-    
+        public Produto(Long idProduto, String nomeProduto, String atividade, Long idLoja) {
+        this.idProduto = idProduto;
+        this.nomeProduto = nomeProduto;
+        this.atividade = atividade;
+        this.idLoja = idLoja;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_produto")
-    private Integer idProduto = null;
-    
+    private Long idProduto = null;
+
     @Column(name = "produto", nullable = false, length = 60)
     private String nomeProduto = null;
-    
+
     @Column(name = "atividade", nullable = false, length = 60)
     private String atividade = null;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_loja")
     private Loja loja = null;
 
-    public Integer getIdProduto() {
+    @Column(name = "id_loja", insertable = false, updatable = false)
+    private Long idLoja = null;
+
+    public Long getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(Integer idProduto) {
+    public void setIdProduto(Long idProduto) {
         this.idProduto = idProduto;
     }
 
@@ -78,6 +87,14 @@ public class Produto implements Serializable {
         this.loja = loja;
     }
 
+    public Long getIdLoja() {
+        return idLoja;
+    }
+
+    public void setIdLoja(Long idLoja) {
+        this.idLoja = idLoja;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -85,6 +102,7 @@ public class Produto implements Serializable {
         hash = 41 * hash + Objects.hashCode(this.nomeProduto);
         hash = 41 * hash + Objects.hashCode(this.atividade);
         hash = 41 * hash + Objects.hashCode(this.loja);
+        hash = 41 * hash + Objects.hashCode(this.idLoja);
         return hash;
     }
 
@@ -112,10 +130,10 @@ public class Produto implements Serializable {
         if (!Objects.equals(this.loja, other.loja)) {
             return false;
         }
+        if (!Objects.equals(this.idLoja, other.idLoja)) {
+            return false;
+        }
         return true;
     }
-    
-    
-    
-    
+
 }

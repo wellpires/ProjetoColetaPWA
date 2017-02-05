@@ -26,22 +26,22 @@ public class Unidade implements Serializable {
     public Unidade() {
     }
 
-    public Unidade(Integer idUnidade, String nomeUnidade) {
+    public Unidade(Long idUnidade, String nomeUnidade) {
         this.idUnidade = idUnidade;
         this.nomeUnidade = nomeUnidade;
     }
 
-    public Unidade(Integer idUnidade, String nomeUnidade, Amostrador amostrador, Loja loja) {
+    public Unidade(Long idUnidade, String nomeUnidade, Long idAmostrador, Long idLoja) {
         this.idUnidade = idUnidade;
         this.nomeUnidade = nomeUnidade;
-        this.amostrador = amostrador;
-        this.loja = loja;
+        this.idAmostrador = idAmostrador;
+        this.idLoja = idLoja;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_unidade")
-    private Integer idUnidade = null;
+    private Long idUnidade = null;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_amostrador")
@@ -54,11 +54,17 @@ public class Unidade implements Serializable {
     @Column(name = "unidade", nullable = false, length = 60)
     private String nomeUnidade = null;
 
-    public Integer getIdUnidade() {
+    @Column(name = "id_amostrador", insertable = false, updatable = false)
+    private Long idAmostrador = null;
+
+    @Column(name = "id_loja", insertable = false, updatable = false)
+    private Long idLoja = null;
+
+    public Long getIdUnidade() {
         return idUnidade;
     }
 
-    public void setIdUnidade(Integer idUnidade) {
+    public void setIdUnidade(Long idUnidade) {
         this.idUnidade = idUnidade;
     }
 
@@ -86,6 +92,22 @@ public class Unidade implements Serializable {
         this.nomeUnidade = nomeUnidade;
     }
 
+    public Long getIdAmostrador() {
+        return idAmostrador;
+    }
+
+    public void setIdAmostrador(Long idAmostrador) {
+        this.idAmostrador = idAmostrador;
+    }
+
+    public Long getIdLoja() {
+        return idLoja;
+    }
+
+    public void setIdLoja(Long idLoja) {
+        this.idLoja = idLoja;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -93,6 +115,8 @@ public class Unidade implements Serializable {
         hash = 29 * hash + Objects.hashCode(this.amostrador);
         hash = 29 * hash + Objects.hashCode(this.loja);
         hash = 29 * hash + Objects.hashCode(this.nomeUnidade);
+        hash = 29 * hash + Objects.hashCode(this.idAmostrador);
+        hash = 29 * hash + Objects.hashCode(this.idLoja);
         return hash;
     }
 
@@ -118,6 +142,12 @@ public class Unidade implements Serializable {
             return false;
         }
         if (!Objects.equals(this.loja, other.loja)) {
+            return false;
+        }
+        if (!Objects.equals(this.idAmostrador, other.idAmostrador)) {
+            return false;
+        }
+        if (!Objects.equals(this.idLoja, other.idLoja)) {
             return false;
         }
         return true;
