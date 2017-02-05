@@ -1,15 +1,12 @@
 package br.com.everis.coletaws.amostrador.model;
 
-import br.com.everis.coletaws.unidade.model.Unidade;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -31,9 +28,6 @@ public class Amostrador implements Serializable {
     @Column(name = "amostrador",nullable = false, length = 60)
     private String nomeAmostrador = null;
     
-    @OneToMany(mappedBy = "amostrador")
-    private List<Unidade> unidades = null;
-
     public Integer getIdAmostrador() {
         return idAmostrador;
     }
@@ -50,20 +44,11 @@ public class Amostrador implements Serializable {
         this.nomeAmostrador = nomeAmostrador;
     }
 
-    public List<Unidade> getUnidades() {
-        return unidades;
-    }
-
-    public void setUnidades(List<Unidade> unidades) {
-        this.unidades = unidades;
-    }
-
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 97 * hash + Objects.hashCode(this.idAmostrador);
         hash = 97 * hash + Objects.hashCode(this.nomeAmostrador);
-        hash = 97 * hash + Objects.hashCode(this.unidades);
         return hash;
     }
 
@@ -83,9 +68,6 @@ public class Amostrador implements Serializable {
             return false;
         }
         if (!Objects.equals(this.idAmostrador, other.idAmostrador)) {
-            return false;
-        }
-        if (!Objects.equals(this.unidades, other.unidades)) {
             return false;
         }
         return true;

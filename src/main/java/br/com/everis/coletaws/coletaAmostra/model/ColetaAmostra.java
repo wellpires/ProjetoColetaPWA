@@ -38,15 +38,15 @@ public class ColetaAmostra implements Serializable {
     
     @Column(name = "data_coleta", nullable = false)
     @Temporal(value = TemporalType.DATE)
-    private Date data_coleta = null;
+    private Date dataColeta = null;
     
     @Column(name = "hora_coleta", nullable = false)
     @Temporal(value = TemporalType.TIME)
-    private Date hora_coleta = null;
+    private Date horaColeta = null;
     
     @Column(name = "hora_real", nullable = false)
     @Temporal(value = TemporalType.TIME)
-    private Date ts_sincronismo = null;
+    private Date horaReal = null;
 
     @Column(name = "produto", nullable = false, length = 60)
     private String produto = null;
@@ -55,7 +55,7 @@ public class ColetaAmostra implements Serializable {
     private String atividade = null;
     
     @Column(name = "status_amostra", nullable = false, length = 60)
-    private String status_amostra = null;
+    private String statusAmostra = null;
 
     public Integer getIdAmostra() {
         return idAmostra;
@@ -89,28 +89,28 @@ public class ColetaAmostra implements Serializable {
         this.unidade = unidade;
     }
 
-    public Date getData_coleta() {
-        return data_coleta;
+    public Date getDataColeta() {
+        return dataColeta;
     }
 
-    public void setData_coleta(Date data_coleta) {
-        this.data_coleta = data_coleta;
+    public void setDataColeta(Date dataColeta) {
+        this.dataColeta = dataColeta;
     }
 
-    public Date getHora_coleta() {
-        return hora_coleta;
+    public Date getHoraColeta() {
+        return horaColeta;
     }
 
-    public void setHora_coleta(Date hora_coleta) {
-        this.hora_coleta = hora_coleta;
+    public void setHoraColeta(Date horaColeta) {
+        this.horaColeta = horaColeta;
     }
 
-    public Date getTs_sincronismo() {
-        return ts_sincronismo;
+    public Date getHoraReal() {
+        return horaReal;
     }
 
-    public void setTs_sincronismo(Date ts_sincronismo) {
-        this.ts_sincronismo = ts_sincronismo;
+    public void setHoraReal(Date horaReal) {
+        this.horaReal = horaReal;
     }
 
     public String getProduto() {
@@ -129,12 +129,12 @@ public class ColetaAmostra implements Serializable {
         this.atividade = atividade;
     }
 
-    public String getStatus_amostra() {
-        return status_amostra;
+    public String getStatusAmostra() {
+        return statusAmostra;
     }
 
-    public void setStatus_amostra(String status_amostra) {
-        this.status_amostra = status_amostra;
+    public void setStatusAmostra(String statusAmostra) {
+        this.statusAmostra = statusAmostra;
     }
 
     @Override
@@ -144,12 +144,12 @@ public class ColetaAmostra implements Serializable {
         hash = 59 * hash + Objects.hashCode(this.amostrador);
         hash = 59 * hash + Objects.hashCode(this.loja);
         hash = 59 * hash + Objects.hashCode(this.unidade);
-        hash = 59 * hash + Objects.hashCode(this.data_coleta);
-        hash = 59 * hash + Objects.hashCode(this.hora_coleta);
-        hash = 59 * hash + Objects.hashCode(this.ts_sincronismo);
+        hash = 59 * hash + Objects.hashCode(this.dataColeta);
+        hash = 59 * hash + Objects.hashCode(this.horaColeta);
+        hash = 59 * hash + Objects.hashCode(this.horaReal);
         hash = 59 * hash + Objects.hashCode(this.produto);
         hash = 59 * hash + Objects.hashCode(this.atividade);
-        hash = 59 * hash + Objects.hashCode(this.status_amostra);
+        hash = 59 * hash + Objects.hashCode(this.statusAmostra);
         return hash;
     }
 
@@ -180,19 +180,19 @@ public class ColetaAmostra implements Serializable {
         if (!Objects.equals(this.atividade, other.atividade)) {
             return false;
         }
-        if (!Objects.equals(this.status_amostra, other.status_amostra)) {
+        if (!Objects.equals(this.statusAmostra, other.statusAmostra)) {
             return false;
         }
         if (!Objects.equals(this.idAmostra, other.idAmostra)) {
             return false;
         }
-        if (!Objects.equals(this.data_coleta, other.data_coleta)) {
+        if (!Objects.equals(this.dataColeta, other.dataColeta)) {
             return false;
         }
-        if (!Objects.equals(this.hora_coleta, other.hora_coleta)) {
+        if (!Objects.equals(this.horaColeta, other.horaColeta)) {
             return false;
         }
-        if (!Objects.equals(this.ts_sincronismo, other.ts_sincronismo)) {
+        if (!Objects.equals(this.horaReal, other.horaReal)) {
             return false;
         }
         return true;

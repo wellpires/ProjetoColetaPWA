@@ -20,5 +20,10 @@ public class UnidadeServiceImpl implements IUnidadeService {
         return unidadeDAO.buscarUnidadePorLojaAmostrador(unidade);
     }
 
+    @Override
+    public List<Unidade> buscarUnidades() throws Exception {
+        unidadeDAO = new UnidadeDAOImpl();
+        return unidadeDAO.buscarUnidades();
+    }
 
 }

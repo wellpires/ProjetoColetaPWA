@@ -11,5 +11,6 @@ import java.util.List;
 public interface ILojaService {
     
     public List<Loja> buscarLojas(Amostrador amostrador) throws Exception;
+    public List<Loja> buscarLojas() throws Exception;
     
 }

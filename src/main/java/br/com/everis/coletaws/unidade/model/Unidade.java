@@ -1,12 +1,9 @@
 package br.com.everis.coletaws.unidade.model;
 
 import br.com.everis.coletaws.amostrador.model.Amostrador;
-import br.com.everis.coletaws.funcionario.model.Funcionario;
 import br.com.everis.coletaws.loja.model.Loja;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -35,6 +31,13 @@ public class Unidade implements Serializable {
         this.nomeUnidade = nomeUnidade;
     }
 
+    public Unidade(Integer idUnidade, String nomeUnidade, Amostrador amostrador, Loja loja) {
+        this.idUnidade = idUnidade;
+        this.nomeUnidade = nomeUnidade;
+        this.amostrador = amostrador;
+        this.loja = loja;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_unidade")
@@ -50,9 +53,6 @@ public class Unidade implements Serializable {
 
     @Column(name = "unidade", nullable = false, length = 60)
     private String nomeUnidade = null;
-
-    @OneToMany(mappedBy = "unidade", cascade = CascadeType.ALL)
-    private List<Funcionario> funcionario = null;
 
     public Integer getIdUnidade() {
         return idUnidade;
@@ -86,14 +86,6 @@ public class Unidade implements Serializable {
         this.nomeUnidade = nomeUnidade;
     }
 
-    public List<Funcionario> getFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(List<Funcionario> funcionario) {
-        this.funcionario = funcionario;
-    }
-
     @Override
     public int hashCode() {
         int hash = 7;
@@ -101,7 +93,6 @@ public class Unidade implements Serializable {
         hash = 29 * hash + Objects.hashCode(this.amostrador);
         hash = 29 * hash + Objects.hashCode(this.loja);
         hash = 29 * hash + Objects.hashCode(this.nomeUnidade);
-        hash = 29 * hash + Objects.hashCode(this.funcionario);
         return hash;
     }
 
@@ -129,10 +120,7 @@ public class Unidade implements Serializable {
         if (!Objects.equals(this.loja, other.loja)) {
             return false;
         }
-        if (!Objects.equals(this.funcionario, other.funcionario)) {
-            return false;
-        }
         return true;
     }
-    
+
 }

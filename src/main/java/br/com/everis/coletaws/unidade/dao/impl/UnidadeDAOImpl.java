@@ -3,7 +3,6 @@ package br.com.everis.coletaws.unidade.dao.impl;
 import br.com.everis.coletaws.dao.JpaDao;
 import br.com.everis.coletaws.unidade.dao.IUnidadeDAO;
 import br.com.everis.coletaws.unidade.model.Unidade;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Query;
 
@@ -14,7 +13,7 @@ import javax.persistence.Query;
 public class UnidadeDAOImpl extends JpaDao<Integer, Unidade> implements IUnidadeDAO {
 
     @Override
-    public List<Unidade> buscarUnidadePorLojaAmostrador(Unidade unidade) throws Exception{
+    public List<Unidade> buscarUnidadePorLojaAmostrador(Unidade unidade) throws Exception {
         //SELECT U.id_unidade, U.unidade FROM sysnac.unidades U WHERE U.id_amostrador = 1 AND U.id_loja = 1
         try {
             String sqlQuery = "SELECT distinct new Unidade(U.idUnidade, U.nomeUnidade) "
@@ -28,6 +27,17 @@ public class UnidadeDAOImpl extends JpaDao<Integer, Unidade> implements IUnidade
             throw new Exception(e);
         }
 
+    }
+
+    @Override
+    public List<Unidade> buscarUnidades() throws Exception {
+        try {
+            return entityManager.createQuery("FROM " + entityClass.getName()).getResultList();
+        } catch (Exception e) {
+            throw new Exception(e);
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override

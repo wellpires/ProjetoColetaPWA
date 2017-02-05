@@ -10,5 +10,6 @@ import java.util.List;
 public interface IProdutoService {
     
     public List<Produto> buscarProdutos(Produto produto) throws Exception;
+    public List<Produto> buscarProdutos() throws Exception;
     
 }

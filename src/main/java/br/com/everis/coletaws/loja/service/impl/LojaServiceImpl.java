@@ -21,4 +21,10 @@ public class LojaServiceImpl implements ILojaService {
         return lojaDAO.buscarLojasPorAmostrador(amostrador);
     }
 
+    @Override
+    public List<Loja> buscarLojas() throws Exception {
+        lojaDAO = new LojaDAOImpl();
+        return lojaDAO.buscarLojas();
+    }
+
 }

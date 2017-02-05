@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.everis.coletaws.produto.dao.impl;
 
 import br.com.everis.coletaws.dao.JpaDao;
@@ -31,6 +26,22 @@ public class ProdutoDAOImpl extends JpaDao<Integer, Produto> implements IProduto
             q.setParameter("codigoLoja", produto.getLoja().getIdLoja());
 
             return (ArrayList<Produto>) q.getResultList();
+        } catch (Exception e) {
+            entityManager.close();
+            throw new Exception(e);
+        }
+
+    }
+
+    @Override
+    public List<Produto> buscarProdutos() throws Exception {
+
+        try {
+            //SELECT P.id_produto, P.produto, P.atividade FROM sysnac.produtos P WHERE P.id_loja = 2
+            String strQuery = "SELECT new Produto(P.idProduto, P.nomeProduto, P.atividade), P.loja.idLoja "
+                    + "FROM " + entityClass.getName() + " P";
+
+            return entityManager.createQuery(strQuery).getResultList();
         } catch (Exception e) {
             entityManager.close();
             throw new Exception(e);

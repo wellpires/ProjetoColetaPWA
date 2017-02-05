@@ -2,7 +2,6 @@ package br.com.everis.coletaws.funcionario.model;
 
 import br.com.everis.coletaws.unidade.model.Unidade;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
