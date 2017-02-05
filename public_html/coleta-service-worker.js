@@ -1,10 +1,8 @@
-
-var cacheName = 'coletaCache-v3';
+var dataCacheName = 'coletaDadosCache-v1';
+var cacheName = 'coletaCache-v1';
 var filesToCache = [
     './',
     'images/everis_favico.png',
-    'images/pause.png',
-    'images/play.png',
     'plugins/jquery-3.1.1.min.js',
     'script/pwaColeta.js',
     'script/respond.js',
@@ -14,7 +12,9 @@ var filesToCache = [
     'index.html',
     'row_coleta.html'
 ];
- 
+
+
+var ORIGEM = 'http://localhost:8080/ColetaWS/';
 
 self.addEventListener('install', function (e) {
     e.waitUntil(caches.open(cacheName).then(function (cache) {
@@ -36,14 +36,23 @@ self.addEventListener('activate', function (e) {
 });
 
 self.addEventListener('fetch', function (e) {
-    e.respondWith(caches.match(e.request).then(function (response) {
-        return response || fetch(e.response);
-    }));
-//    if (e.request.mode === 'navigate' || (e.request.method === 'GET' &&
-//            e.request.headers.get('accept').includes('text/html'))) {
-//        e.respondWith(fetch(e.request).catch(function (error) {
-//            return caches.match(cacheName);
-//        }));
-//    }
-
+    if (e.request.url.startsWith(ORIGEM)) {
+        e.respondWith(
+                fetch(e.request)
+                .then(function (response) {
+                    return caches.open(dataCacheName).then(function (cache) {
+                        cache.put(e.request.url, response.clone());
+                        console.log('[ServiceWorker] Fetched & Cached', e.request.url);
+                        return response;
+                    });
+                })
+                );
+    } 
+    else {
+        e.respondWith(
+                caches.match(e.request).then(function (response) {
+            console.log('[ServiceWorker] Fetch Only', e.request.url);
+            return response || fetch(e.request);
+        }));
+    }
 });

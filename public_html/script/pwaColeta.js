@@ -66,12 +66,14 @@ var components = function () {
 }();
 
 var urls = function () {
+    //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
     var ORIGEM = 'http://localhost:8080/ColetaWS/';
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + 'buscarAmostrador';
     var GET_BUSCAR_LOJAS = ORIGEM + 'buscarLojas';
     var GET_BUSCAR_UNIDADES = ORIGEM + 'buscarUnidades';
     var GET_BUSCAR_FUNCIONARIOS = ORIGEM + 'buscarFuncionarios';
     var GET_BUSCAR_PRODUTOS_ATIVIDADES = ORIGEM + 'buscarProdutosAtividades';
+    var GET_CARREGAR_DADOS = ORIGEM + 'carregarDados';
     var POST_GRAVAR_COLETA = ORIGEM + 'gravarColeta';
 
     return{
@@ -80,6 +82,7 @@ var urls = function () {
         GET_BUSCAR_UNIDADES: GET_BUSCAR_UNIDADES,
         GET_BUSCAR_FUNCIONARIOS: GET_BUSCAR_FUNCIONARIOS,
         GET_BUSCAR_PRODUTOS_ATIVIDADES: GET_BUSCAR_PRODUTOS_ATIVIDADES,
+        GET_CARREGAR_DADOS: GET_CARREGAR_DADOS,
         POST_GRAVAR_COLETA: POST_GRAVAR_COLETA
     };
 }();
@@ -88,7 +91,7 @@ var urls = function () {
 
 window.onload = function () {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('coleta-service-worker.js').then(function (registration) {
+        navigator.serviceWorker.register('service-worker.js').then(function (registration) {
             console.log('Service Worker registered ', registration);
         }).catch(function (e) {
             console.log('ERRO ', e);
@@ -100,7 +103,7 @@ window.onload = function () {
 
     startTime();
 
-    carregarAmostrador();
+//    carregarAmostrador();
 
     components.btnNovaLinha().click(function () {
         var rowCount = $('#tblColeta > tbody > tr').length;
@@ -239,6 +242,15 @@ window.onload = function () {
         }
 
     });
+
+    components.btnSincronizar().click(function () {
+        carregarAmostrador();
+        carregarLojas();
+        carregarProdutos();
+        carregarUnidades();
+        carregarFuncionarios();
+    });
+
 };
 
 function startTime() {
@@ -367,6 +379,7 @@ var carregarAmostrador = function () {
 
     $.get(urls.GET_BUSCAR_AMOSTRADORES, function (data) {
         $.each(data, function (index, object) {
+            salvarDados(object,'amostradores');
             $('<option>').val(object.idAmostrador).text(object.nomeAmostrador).appendTo($select);
         });
     });
@@ -376,11 +389,11 @@ var carregarAmostrador = function () {
 var carregarLojas = function () {
 
     $select = components.cbLojas();
-
+    
     $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-
-    $.get(urls.GET_BUSCAR_LOJAS, {idAmostrador: components.cbAmostrador().val()}, function (data) {
+    $.get(urls.GET_BUSCAR_LOJAS, function (data) {
         $.each(data, function (index, object) {
+            salvarDados(object,'lojas');
             $('<option>').val(object.idLoja).text(object.nomeLoja).appendTo($select);
         });
     });
@@ -392,8 +405,9 @@ var carregarUnidades = function () {
     $select = components.cbUnidades();
 
     $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-    $.get(urls.GET_BUSCAR_UNIDADES, {'idLoja': components.cbLojas().val(), 'idAmostrador': components.cbAmostrador().val()}, function (data) {
+    $.get(urls.GET_BUSCAR_UNIDADES, function (data) {
         $.each(data, function (index, object) {
+            salvarDados(object, 'unidades');
             $('<option>').val(object.idUnidade).text(object.nomeUnidade).appendTo($select);
         });
     });
@@ -404,11 +418,12 @@ var carregarFuncionarios = function (id) {
     $select = $(id);
 
     $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-    $.get(urls.GET_BUSCAR_FUNCIONARIOS, {
-        'idAmostrador': components.cbAmostrador().val(),
-        'idLoja': components.cbLojas().val(),
-        'idUnidade': components.cbUnidades().val()
-    }, function (data) {
+    $.get(urls.GET_BUSCAR_FUNCIONARIOS, function (data) {
+        
+        for(var i = 0; i < data.length; i++){
+            salvarDados(data[i], 'funcionarios');
+        }
+        
         $.each(data, function (index, object) {
             $('<option>').val(object.idFuncionario).text(object.nomeFuncionario).appendTo($select);
         });
@@ -416,7 +431,6 @@ var carregarFuncionarios = function (id) {
         console.error(e);
     });
 };
-
 
 var carregarProdutos = function (cbProduto, cbAtividade) {
 
@@ -427,6 +441,7 @@ var carregarProdutos = function (cbProduto, cbAtividade) {
     cbAtividade.find('option').remove().end().append('<option value="">Selecione</option>').val('');
     $.get(urls.GET_BUSCAR_PRODUTOS_ATIVIDADES, {'idLoja': components.cbLojas().val()}, function (data) {
         $.each(data, function (index, object) {
+            salvarDados(object, 'produtos');
             $('<option>').val(object.idProduto).text(object.nomeProduto).appendTo(cbProduto);
         });
 
@@ -435,7 +450,17 @@ var carregarProdutos = function (cbProduto, cbAtividade) {
         });
     }).fail(function (e) {
         console.error(e);
-    });;
+    });
+    ;
+
+};
+
+var carregarDados = function () {
+
+    $.get(urls.GET_CARREGAR_DADOS, function (data) {
+        console.log(data);
+        salvarDados(data);
+    });
 
 };
 

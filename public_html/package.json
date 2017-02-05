@@ -1,0 +1,13 @@
+{
+  "name": "coletapwa",
+  "version": "1.0.0",
+  "description": "Projeto que realiza a coleta de amostra de tempos",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "everis",
+  "license": "ISC",
+  "devDependencies": {
+    "sw-precache": "^4.3.0"
+  }
+}

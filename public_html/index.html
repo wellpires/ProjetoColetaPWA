@@ -8,8 +8,10 @@
         <link rel="stylesheet" href="styles/style.css">
         <link rel="stylesheet" href="styles/stylePWA.css">
         <script src="plugins/jquery-3.1.1.min.js" ></script>
+        <script src="node_modules/lovefield/dist/lovefield.min.js"></script>
         <script src="script/pwaColeta.js" ></script>
         <script src="script/respond.js"></script>
+        <script src="script/local-bd.js"></script>
     </head>
 
     <body>
@@ -55,7 +57,7 @@
         </div>
         <div style="width: 100%">
             <button id="btnNovaLinha" disabled>Nova linha</button>
-            <input id="btnSincronizar" type="button" value="Sincronizar" style="float: right;" disabled/></div>
+            <input id="btnSincronizar" type="button" value="Sincronizar" style="float: right;"/></div>
         <table class="responstable" id="tblColeta">
             <tr>
                 <th>Funcionário</th>
