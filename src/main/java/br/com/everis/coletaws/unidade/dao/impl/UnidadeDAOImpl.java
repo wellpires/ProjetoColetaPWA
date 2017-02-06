@@ -26,21 +26,28 @@ public class UnidadeDAOImpl extends JpaDao<Integer, Unidade> implements IUnidade
 
     @Override
     public List<Unidade> buscarUnidades() throws Exception {
-        return entityManager.createQuery("SELECT new Unidade(U.idUnidade, U.nomeUnidade, U.amostrador.idAmostrador, U.loja.idLoja) FROM " + entityClass.getName() + " U").getResultList();
+        try {
+            return entityManager.createQuery("SELECT new Unidade(U.idUnidade, U.nomeUnidade, U.amostrador.idAmostrador, U.loja.idLoja) FROM " + entityClass.getName() + " U").getResultList();
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
-    public void persist(Unidade entity) {
+    public void persist(Unidade entity
+    ) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void remove(Unidade entity) {
+    public void remove(Unidade entity
+    ) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Unidade findById(Integer id) {
+    public Unidade findById(Integer id
+    ) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

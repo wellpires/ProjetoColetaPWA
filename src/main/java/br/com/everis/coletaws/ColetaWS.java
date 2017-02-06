@@ -23,9 +23,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -40,12 +37,9 @@ import org.json.simple.parser.JSONParser;
  *
  * @author Wellington Gonçalves Pires
  */
-@Named
-@RequestScoped
 @Path("/")
 public class ColetaWS {
 
-    @Inject
     private IAmostradorService amostradorService;
     private ILojaService lojaService = null;
     private IUnidadeService unidadeService = null;
@@ -53,10 +47,6 @@ public class ColetaWS {
     private IProdutoService produtoService = null;
     private IColetaAmostraService coletaAmostraService = null;
 
-    public ColetaWS() {
-        JPAUtil.getEntityManaged();
-    }
-    
     @GET
     @Path("/buscarAmostrador")
     @Produces(MediaType.APPLICATION_JSON)
@@ -74,11 +64,9 @@ public class ColetaWS {
     @Path("/buscarLojas")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
-    public Response buscarLojas(/*@QueryParam("idAmostrador") Integer idAmostrador*/) {
+    public Response buscarLojas() {
         try {
             lojaService = new LojaServiceImpl();
-//            Amostrador amostrador = new Amostrador();
-//            amostrador.setIdAmostrador(idAmostrador);
             List<Loja> lstLoja = lojaService.buscarLojas();
             return Response.ok(new Gson().toJson(lstLoja)).build();
         } catch (Exception e) {
@@ -92,15 +80,9 @@ public class ColetaWS {
     @Path("/buscarUnidades")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
-    public Response buscarUnidades(/*@QueryParam("idLoja") Integer idLoja, @QueryParam("idAmostrador") Integer idAmostrador*/) {
+    public Response buscarUnidades() {
         try {
             unidadeService = new UnidadeServiceImpl();
-//            Unidade unidade = new Unidade();
-//            unidade.setLoja(new Loja());
-//            unidade.setAmostrador(new Amostrador());
-//            unidade.getAmostrador().setIdAmostrador(idAmostrador);
-//            unidade.getLoja().setIdLoja(idLoja);
-
             List<Unidade> lstUnidades = unidadeService.buscarUnidades();
             return Response.ok(new Gson().toJson(lstUnidades)).build();
         } catch (Exception e) {
@@ -113,25 +95,10 @@ public class ColetaWS {
     @Path("/buscarFuncionarios")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
-    public Response buscarFuncionarios(/*@QueryParam("idAmostrador") Long idAmostrador, @QueryParam("idLoja") Long idLoja, @QueryParam("idUnidade") Long idUnidade*/) {
+    public Response buscarFuncionarios() {
 
         try {
             funcionarioService = new FuncionarioServiceImpl();
-//            Unidade unidade = new Unidade();
-//            unidade.setLoja(new Loja());
-//            unidade.setAmostrador(new Amostrador());
-//            unidade.getAmostrador().setIdAmostrador(idAmostrador);
-//            unidade.getLoja().setIdLoja(idLoja);
-//            unidade.setIdUnidade(idUnidade);
-//
-//            Funcionario funcionario = new Funcionario();
-//            funcionario.setUnidade(new Unidade());
-//            funcionario.getUnidade().setAmostrador(new Amostrador());
-//            funcionario.getUnidade().setLoja(new Loja());
-//            funcionario.getUnidade().setIdUnidade(idUnidade);
-//            funcionario.getUnidade().getAmostrador().setIdAmostrador(idAmostrador);
-//            funcionario.getUnidade().getLoja().setIdLoja(idLoja);
-
             List<Funcionario> lstUnidade = funcionarioService.buscarFuncionarios();
             return Response.ok(new Gson().toJson(lstUnidade)).build();
         } catch (Exception e) {
@@ -144,12 +111,9 @@ public class ColetaWS {
     @Path("/buscarProdutosAtividades")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
-    public Response buscarProdutos(/*@QueryParam("idLoja") Integer idLoja*/) {
+    public Response buscarProdutos() {
         try {
             produtoService = new ProdutoServiceImpl();
-//            Produto produto = new Produto();
-//            produto.setLoja(new Loja());
-//            produto.getLoja().setIdLoja(idLoja);
             List<Produto> lstProdutos = produtoService.buscarProdutos();
 
             return Response.ok(new Gson().toJson(lstProdutos)).build();
@@ -187,7 +151,6 @@ public class ColetaWS {
         } catch (Exception e) {
             return Response.serverError().build();
         }
-
     }
 
     public IAmostradorService getAmostradorService() {

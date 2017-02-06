@@ -35,10 +35,13 @@ public class FuncionarioDAOImpl extends JpaDao<Integer, Funcionario> implements 
 
     @Override
     public List<Funcionario> buscarFuncionarios() {
-
-        String strQuery = "SELECT new Funcionario(F.idFuncionario, F.nomeFuncionario,F.cargo, F.unidade.idUnidade) "
-                + "FROM " + entityClass.getName() + " F";
-        return entityManager.createQuery(strQuery).getResultList();
+        try {
+            String strQuery = "SELECT new Funcionario(F.idFuncionario, F.nomeFuncionario,F.cargo, F.unidade.idUnidade) "
+                    + "FROM " + entityClass.getName() + " F";
+            return entityManager.createQuery(strQuery).getResultList();
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
