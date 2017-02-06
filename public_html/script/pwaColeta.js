@@ -73,7 +73,6 @@ var urls = function () {
     var GET_BUSCAR_UNIDADES = ORIGEM + 'buscarUnidades';
     var GET_BUSCAR_FUNCIONARIOS = ORIGEM + 'buscarFuncionarios';
     var GET_BUSCAR_PRODUTOS_ATIVIDADES = ORIGEM + 'buscarProdutosAtividades';
-    var GET_CARREGAR_DADOS = ORIGEM + 'carregarDados';
     var POST_GRAVAR_COLETA = ORIGEM + 'gravarColeta';
 
     return{
@@ -82,7 +81,6 @@ var urls = function () {
         GET_BUSCAR_UNIDADES: GET_BUSCAR_UNIDADES,
         GET_BUSCAR_FUNCIONARIOS: GET_BUSCAR_FUNCIONARIOS,
         GET_BUSCAR_PRODUTOS_ATIVIDADES: GET_BUSCAR_PRODUTOS_ATIVIDADES,
-        GET_CARREGAR_DADOS: GET_CARREGAR_DADOS,
         POST_GRAVAR_COLETA: POST_GRAVAR_COLETA
     };
 }();
@@ -134,8 +132,8 @@ window.onload = function () {
             var cbProduto = $('#tblColeta tr td select')[tamanhoFunci - 2];
             var cbAtividade = $('#tblColeta tr td select')[tamanhoFunci - 1];
 
-            carregarFuncionarios(cbFuncionario);
-            carregarProdutos(cbProduto, cbAtividade);
+            popularComboFuncionarios(cbFuncionario);
+            popularComboProdutosAtividades(cbProduto, cbAtividade);
 
             var jqueryBtnAcao = '#' + idBtnAcao;
             $(jqueryBtnAcao).click(function (e) {
@@ -220,7 +218,7 @@ window.onload = function () {
             return;
         }
         components.cbLojas().attr('disabled', false);
-        carregarLojas();
+        popularComboLojas();
 
     });
 
@@ -232,7 +230,7 @@ window.onload = function () {
             return;
         }
         components.cbUnidades().attr('disabled', false);
-        carregarUnidades();
+        popularComboUnidades();
     });
 
     components.cbUnidades().change(function () {
@@ -244,11 +242,38 @@ window.onload = function () {
     });
 
     components.btnSincronizar().click(function () {
-        carregarAmostrador();
-        carregarLojas();
-        carregarProdutos();
-        carregarUnidades();
-        carregarFuncionarios();
+
+        $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades()).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
+
+            var tblAmostrador = amostradores[0];
+            for (var i = 0; i < tblAmostrador.length; i++) {
+                salvarDados(tblAmostrador[i], 'amostradores');
+            }
+
+            var tblLojas = lojas[0];
+            for (var i = 0; i < tblLojas.length; i++) {
+                salvarDados(tblLojas[i], 'lojas');
+            }
+
+            var tblUnidades = unidades[0];
+            for (var i = 0; i < tblUnidades.length; i++) {
+                salvarDados(tblUnidades[i], 'unidades');
+            }
+
+            var tblFuncionarios = funcionarios[0];
+            for (var i = 0; i < tblFuncionarios.length; i++) {
+                salvarDados(tblFuncionarios[i], 'funcionarios');
+            }
+
+            var tblProdutos = produtos[0];
+            for (var i = 0; i < tblFuncionarios.length; i++) {
+                salvarDados(tblProdutos[i], 'produtos');
+            }
+
+
+            popularComboAmostrador(tblAmostrador);
+
+        });
     });
 
 };
@@ -372,97 +397,103 @@ var converterMinutosParaMilis = function (minutos) {
 
 };
 
-
-var carregarAmostrador = function () {
-
+var popularComboAmostrador = function (amostradores) {
     $select = components.cbAmostrador();
+    $.each(amostradores, function (index, object) {
+        $('<option>').val(object.idAmostrador).text(object.nomeAmostrador).appendTo($select);
+    });
+};
 
-    $.get(urls.GET_BUSCAR_AMOSTRADORES, function (data) {
-        $.each(data, function (index, object) {
-            salvarDados(object,'amostradores');
-            $('<option>').val(object.idAmostrador).text(object.nomeAmostrador).appendTo($select);
+var popularComboLojas = function () {
+
+    var codAmostrador = components.cbAmostrador().val();
+    var query = buscarDadosLojas(codAmostrador);
+    query.then(function (lojas) {
+        $select = components.cbLojas();
+        $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+        $.each(lojas, function (index, object) {
+            $('<option>').val(object.lojas.idLoja).text(object.lojas.nomeLoja).appendTo($select);
         });
     });
 
 };
 
-var carregarLojas = function () {
+var popularComboUnidades = function () {
 
-    $select = components.cbLojas();
-    
-    $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-    $.get(urls.GET_BUSCAR_LOJAS, function (data) {
-        $.each(data, function (index, object) {
-            salvarDados(object,'lojas');
-            $('<option>').val(object.idLoja).text(object.nomeLoja).appendTo($select);
-        });
-    });
+    var codAmostrador = components.cbAmostrador().val();
+    var codLoja = components.cbLojas().val();
+    var query = buscarDadosUnidades(codAmostrador, codLoja);
 
-};
-
-var carregarUnidades = function () {
-
-    $select = components.cbUnidades();
-
-    $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-    $.get(urls.GET_BUSCAR_UNIDADES, function (data) {
-        $.each(data, function (index, object) {
-            salvarDados(object, 'unidades');
+    query.then(function (unidades) {
+        $select = components.cbUnidades();
+        $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+        $.each(unidades, function (index, object) {
             $('<option>').val(object.idUnidade).text(object.nomeUnidade).appendTo($select);
         });
     });
 };
 
-var carregarFuncionarios = function (id) {
+var popularComboFuncionarios = function (cbFuncionario) {
 
-    $select = $(id);
+    var idAmostrador = components.cbAmostrador().val();
+    var idLoja = components.cbLojas().val();
+    var idUnidade = components.cbUnidades().val();
 
-    $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-    $.get(urls.GET_BUSCAR_FUNCIONARIOS, function (data) {
-        
-        for(var i = 0; i < data.length; i++){
-            salvarDados(data[i], 'funcionarios');
-        }
-        
-        $.each(data, function (index, object) {
-            $('<option>').val(object.idFuncionario).text(object.nomeFuncionario).appendTo($select);
+    var query = buscarDadosFuncionarios(idAmostrador, idLoja, idUnidade);
+
+    query.then(function (funcionarios) {
+        $select = $(cbFuncionario);
+        $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+        $.each(funcionarios, function (index, object) {
+            $('<option>').val(object.funcionarios.idFuncionario).text(object.funcionarios.nomeFuncionario).appendTo($select);
         });
-    }).fail(function (e) {
-        console.error(e);
     });
+
 };
 
-var carregarProdutos = function (cbProduto, cbAtividade) {
+var popularComboProdutosAtividades = function (cbProduto, cbAtividade) {
 
-    cbProduto = $(cbProduto);
-    cbAtividade = $(cbAtividade);
+    var idLoja = components.cbLojas().val();
 
-    cbProduto.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-    cbAtividade.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-    $.get(urls.GET_BUSCAR_PRODUTOS_ATIVIDADES, {'idLoja': components.cbLojas().val()}, function (data) {
-        $.each(data, function (index, object) {
-            salvarDados(object, 'produtos');
+    var query = buscarDadosProdutosAtividades(idLoja);
+    query.then(function (produtos) {
+        cbProduto = $(cbProduto);
+        cbAtividade = $(cbAtividade);
+
+        cbProduto.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+        cbAtividade.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+        $.each(produtos, function (index, object) {
             $('<option>').val(object.idProduto).text(object.nomeProduto).appendTo(cbProduto);
         });
 
-        $.each(data, function (index, object) {
+        $.each(produtos, function (index, object) {
             $('<option>').val(object.idProduto).text(object.atividade).appendTo(cbAtividade);
         });
-    }).fail(function (e) {
-        console.error(e);
-    });
-    ;
 
-};
-
-var carregarDados = function () {
-
-    $.get(urls.GET_CARREGAR_DADOS, function (data) {
-        console.log(data);
-        salvarDados(data);
     });
 
 };
+
+var carregarAmostrador = function () {
+    return $.get(urls.GET_BUSCAR_AMOSTRADORES);
+};
+
+var carregarLojas = function () {
+    return $.get(urls.GET_BUSCAR_LOJAS);
+};
+
+var carregarUnidades = function () {
+    return $.get(urls.GET_BUSCAR_UNIDADES);
+};
+
+var carregarFuncionarios = function () {
+    return $.get(urls.GET_BUSCAR_FUNCIONARIOS);
+};
+
+var carregarProdutosAtividades = function () {
+    return $.get(urls.GET_BUSCAR_PRODUTOS_ATIVIDADES);
+};
+
 
 var gravarDados = function (rowIndex) {
     var data = new Date();

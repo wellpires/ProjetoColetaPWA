@@ -65,14 +65,54 @@ function salvarDados(storageObj, tabela) {
         console.error(e);
     }
 }
-;
 
-function buscarDados(app) {
-    bdConfigs.schemaBuilder().connect().then(function (db) {
-        return db.select().from(db.getSchema().table('tbl_bd')).exec();
-    }).then(function (results) {
-        results.forEach(function (row) {
-            var jsonObject = JSON.parse(row['jsonBd']);
-        });
+var buscarDadosLojas = function (idAmostrador) {
+    return bdConfigs.schemaBuilder().connect().then(function (db) {
+
+        var tblLojas = db.getSchema().table('lojas');
+        var tblUnidades = db.getSchema().table('unidades');
+        var query = db.select(tblLojas.idLoja, tblLojas.nomeLoja).
+                from(tblLojas).
+                innerJoin(tblUnidades, tblUnidades.idLoja.eq(tblLojas.idLoja)).
+                where(tblUnidades.idAmostrador.eq(idAmostrador)).
+                groupBy(tblLojas.idLoja, tblLojas.nomeLoja);
+        return query.exec();
     });
-}
+};
+
+var buscarDadosUnidades = function (idAmostrador, idLoja) {
+    return bdConfigs.schemaBuilder().connect().then(function (db) {
+
+        var tblUnidades = db.getSchema().table('unidades');
+        var query = db.select(tblUnidades.idUnidade, tblUnidades.nomeUnidade).
+                from(tblUnidades).
+                where(lf.op.and(tblUnidades.idAmostrador.eq(idAmostrador), tblUnidades.idLoja.eq(idLoja))).
+                groupBy(tblUnidades.idUnidade, tblUnidades.nomeUnidade);
+        return query.exec();
+    });
+};
+
+var buscarDadosFuncionarios = function (idAmostrador, idLoja, idUnidade) {
+
+    return bdConfigs.schemaBuilder().connect().then(function (db) {
+        var tblFuncionarios = db.getSchema().table('funcionarios');
+        var tblUnidades = db.getSchema().table('unidades');
+        var query = db.select(tblFuncionarios.idFuncionario, tblFuncionarios.nomeFuncionario).
+                from(tblFuncionarios).
+                innerJoin(tblUnidades, tblUnidades.idUnidade.eq(tblFuncionarios.idUnidade)).
+                where(lf.op.and(tblUnidades.idAmostrador.eq(idAmostrador), tblUnidades.idLoja.eq(idLoja), tblUnidades.idUnidade.eq(idUnidade))).
+                groupBy(tblFuncionarios.idFuncionario, tblFuncionarios.nomeFuncionario);
+        return query.exec();
+    });
+};
+
+var buscarDadosProdutosAtividades = function (idLoja) {
+    return bdConfigs.schemaBuilder().connect().then(function (db) {
+        var tblProdutos = db.getSchema().table('produtos');
+        var query = db.select(tblProdutos.idProduto, tblProdutos.nomeProduto, tblProdutos.atividade).
+                from(tblProdutos).
+                where(tblProdutos.idLoja.eq(idLoja)).
+                groupBy(tblProdutos.idProduto, tblProdutos.nomeProduto, tblProdutos.atividade);
+        return query.exec();
+    });
+};
