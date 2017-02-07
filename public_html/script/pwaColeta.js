@@ -168,6 +168,10 @@ window.onload = function () {
 
             var jqueryBtnDeletar = '#' + deletarId;
             $(jqueryBtnDeletar).click(function () {
+                if (!confirm('Tem certeza?')) {
+                    return;
+                }
+
                 $(this).parents('tr').remove();
 
                 var rowCount = $('#tblColeta > tbody > tr').length;
@@ -343,7 +347,7 @@ var zerarContagemRegressiva = function () {
 
 var CountDown = function () {
 
-    // Length ms 
+    // Length ms
     var TimeOut = 10;
     // Interval ms
     var TimeGap = 1000;
