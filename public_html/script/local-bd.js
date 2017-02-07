@@ -57,10 +57,10 @@ var bdConfigs = function () {
 var salvarDados = function (storageObj, tabela) {
     bdConfigs.schemaBuilder().connect().then(function (db) {
         var tbl_bd = db.getSchema().table(tabela);
-        if(storageObj instanceof Array){
-            for(var i = 0; i < storageObj.length; i++){
+        if (storageObj instanceof Array) {
+            for (var i = 0; i < storageObj.length; i++) {
                 var newRow = tbl_bd.createRow(storageObj[i]);
-                db.insertOrReplace().into(tbl_bd).values([newRow]).exec();
+                db.insert().into(tbl_bd).values([newRow]).exec();
             }
             return;
         }
@@ -122,6 +122,14 @@ var buscarDadosProdutosAtividades = function (idLoja) {
                 from(tblProdutos).
                 where(tblProdutos.idLoja.eq(idLoja)).
                 groupBy(tblProdutos.idProduto, tblProdutos.nomeProduto, tblProdutos.atividade);
+        return query.exec();
+    });
+};
+
+var buscarDadosColetaAmostra = function () {
+    return bdConfigs.schemaBuilder().connect().then(function (db) {
+        var tblAmostra = db.getSchema().table('coleta_amostra');
+        var query = db.select().from(tblAmostra);
         return query.exec();
     });
 };
