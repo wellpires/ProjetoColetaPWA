@@ -11,7 +11,6 @@ import java.util.List;
  * @author Wellington Gonçalves Pires
  */
 public class AmostradorServiceImpl implements IAmostradorService {
-
     
     private IAmostradorDAO amostradorDAO;
     
@@ -20,14 +19,4 @@ public class AmostradorServiceImpl implements IAmostradorService {
         amostradorDAO = new AmostradorDAOImpl();
         return amostradorDAO.buscarAmostradores();
     }
-
-    public IAmostradorDAO getAmostradorDAO() {
-        return amostradorDAO;
-    }
-
-    public void setAmostradorDAO(IAmostradorDAO amostradorDAO) {
-        this.amostradorDAO = amostradorDAO;
-    }
-
-    
 }

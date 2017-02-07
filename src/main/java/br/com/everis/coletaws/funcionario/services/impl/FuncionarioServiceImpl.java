@@ -13,12 +13,6 @@ import java.util.List;
 public class FuncionarioServiceImpl implements IFuncionarioService{
 
     private IFuncionarioDAO funcionarioDAO = null;
-    
-    @Override
-    public List<Funcionario> buscarFuncionarios(Funcionario funcionario) {
-        funcionarioDAO = new FuncionarioDAOImpl();
-        return funcionarioDAO.buscarFuncionarios(funcionario);
-    }
 
     @Override
     public List<Funcionario> buscarFuncionarios() {

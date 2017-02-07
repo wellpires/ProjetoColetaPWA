@@ -15,12 +15,6 @@ public class ProdutoServiceImpl implements IProdutoService {
     private IProdutoDAO produtoDAO = null;
 
     @Override
-    public List<Produto> buscarProdutos(Produto produto) throws Exception {
-        produtoDAO = new ProdutoDAOImpl();
-        return produtoDAO.buscarProdutos(produto);
-    }
-
-    @Override
     public List<Produto> buscarProdutos() throws Exception {
         produtoDAO = new ProdutoDAOImpl();
         return produtoDAO.buscarProdutos();

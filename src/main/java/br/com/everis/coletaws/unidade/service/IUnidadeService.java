@@ -9,7 +9,6 @@ import java.util.List;
  */
 public interface IUnidadeService {
     
-    public List<Unidade> buscarUnidades(Unidade unidade) throws Exception;
     public List<Unidade> buscarUnidades() throws Exception;
     
 }

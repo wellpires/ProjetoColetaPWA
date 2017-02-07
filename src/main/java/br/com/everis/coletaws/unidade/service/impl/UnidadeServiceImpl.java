@@ -13,12 +13,6 @@ import java.util.List;
 public class UnidadeServiceImpl implements IUnidadeService {
 
     private IUnidadeDAO unidadeDAO = null;
-    
-    @Override
-    public List<Unidade> buscarUnidades(Unidade unidade) throws Exception {
-        unidadeDAO = new UnidadeDAOImpl();
-        return unidadeDAO.buscarUnidadePorLojaAmostrador(unidade);
-    }
 
     @Override
     public List<Unidade> buscarUnidades() throws Exception {

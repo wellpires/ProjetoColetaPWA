@@ -18,7 +18,6 @@ import br.com.everis.coletaws.produto.service.impl.ProdutoServiceImpl;
 import br.com.everis.coletaws.unidade.model.Unidade;
 import br.com.everis.coletaws.unidade.service.IUnidadeService;
 import br.com.everis.coletaws.unidade.service.impl.UnidadeServiceImpl;
-import br.com.everis.coletaws.utils.JPAUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.text.SimpleDateFormat;
@@ -30,6 +29,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -74,8 +74,6 @@ public class ColetaWS {
         }
     }
 
-    
-    
     @GET
     @Path("/buscarUnidades")
     @Produces(MediaType.APPLICATION_JSON)
@@ -128,23 +126,27 @@ public class ColetaWS {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response gravarColeta(String coleta) {
         try {
-            JSONObject json = (JSONObject) new JSONParser().parse(coleta);
-            SimpleDateFormat sdf = new SimpleDateFormat("d/M/yyyy");
-            SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm:ss");
-
-            ColetaAmostra coletaAmostra = new ColetaAmostra();
-            coletaAmostra.setAmostrador(json.get("amostrador").toString());
-            coletaAmostra.setLoja(json.get("loja").toString());
-            coletaAmostra.setUnidade(json.get("unidade").toString());
-            coletaAmostra.setDataColeta(sdf.parse(json.get("data_coleta").toString()));
-            coletaAmostra.setHoraColeta(sdfHora.parse(json.get("hora_coleta").toString()));
-            coletaAmostra.setHoraReal(sdfHora.parse(json.get("ts_sincronismo").toString()));
-            coletaAmostra.setProduto(json.get("produto").toString());
-            coletaAmostra.setAtividade(json.get("atividade").toString());
-            coletaAmostra.setStatusAmostra("EU NAO SEI O QUE COLOCAR AQUI");
-
             coletaAmostraService = new ColetaAmostraServiceImpl();
-            coletaAmostraService.gravarColeta(coletaAmostra);
+            JSONArray json = (JSONArray) new JSONParser().parse(coleta);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            SimpleDateFormat sdfHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+            for (Object object : json) {
+                ColetaAmostra coletaAmostra = new ColetaAmostra();
+                JSONObject jsonObject = ((JSONObject)object);
+                coletaAmostra.setAmostrador(jsonObject.get("amostrador").toString());
+                coletaAmostra.setLoja(jsonObject.get("loja").toString());
+                coletaAmostra.setUnidade(jsonObject.get("unidade").toString());
+                coletaAmostra.setDataColeta(sdf.parse(jsonObject.get("dataColeta").toString()));
+                coletaAmostra.setHoraColeta(sdfHora.parse(jsonObject.get("horaColeta").toString()));
+                coletaAmostra.setHoraReal(sdfHora.parse(jsonObject.get("horaReal").toString()));
+                coletaAmostra.setProduto(jsonObject.get("produto").toString());
+                coletaAmostra.setAtividade(jsonObject.get("atividade").toString());
+                coletaAmostra.setStatusAmostra("EU NAO SEI O QUE COLOCAR AQUI");
+                
+                coletaAmostraService.gravarColeta(coletaAmostra);
+            }
+
             return Response.ok().build();
         } catch (JsonSyntaxException e) {
             return Response.serverError().build();

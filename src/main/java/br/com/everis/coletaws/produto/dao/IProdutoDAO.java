@@ -10,7 +10,6 @@ import java.util.List;
  */
 public interface IProdutoDAO extends Dao<Integer, Produto> {
     
-    public List<Produto> buscarProdutos(Produto produto) throws Exception;
     public List<Produto> buscarProdutos() throws Exception;
     
 }

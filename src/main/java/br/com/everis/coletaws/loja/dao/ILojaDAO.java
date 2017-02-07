@@ -12,7 +12,6 @@ import java.util.List;
  */
 public interface ILojaDAO extends Dao<Integer, Loja> {
     
-    public List<Loja> buscarLojasPorAmostrador(Amostrador amostrador) throws Exception;
     public List<Loja> buscarLojas() throws Exception;
     
 }

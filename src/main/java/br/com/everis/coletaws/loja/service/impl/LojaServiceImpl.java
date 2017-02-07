@@ -14,12 +14,6 @@ import java.util.List;
 public class LojaServiceImpl implements ILojaService {
 
     private ILojaDAO lojaDAO = null;
-    
-    @Override
-    public List<Loja> buscarLojas(Amostrador amostrador) throws Exception {
-        lojaDAO = new LojaDAOImpl();
-        return lojaDAO.buscarLojasPorAmostrador(amostrador);
-    }
 
     @Override
     public List<Loja> buscarLojas() throws Exception {

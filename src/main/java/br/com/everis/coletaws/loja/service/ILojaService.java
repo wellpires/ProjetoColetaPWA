@@ -1,6 +1,5 @@
 package br.com.everis.coletaws.loja.service;
 
-import br.com.everis.coletaws.amostrador.model.Amostrador;
 import br.com.everis.coletaws.loja.model.Loja;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import java.util.List;
  */
 public interface ILojaService {
     
-    public List<Loja> buscarLojas(Amostrador amostrador) throws Exception;
     public List<Loja> buscarLojas() throws Exception;
     
 }

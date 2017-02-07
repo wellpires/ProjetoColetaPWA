@@ -9,7 +9,6 @@ import java.util.List;
  */
 public interface IFuncionarioService {
     
-    public List<Funcionario> buscarFuncionarios(Funcionario funcionario);
     public List<Funcionario> buscarFuncionarios();
     
 }
