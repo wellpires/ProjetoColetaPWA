@@ -270,47 +270,41 @@ window.onload = function () {
 
     components.btnSincronizar().click(function () {
 
-        $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades(), apagarDados('coleta_amostra')).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
-            $.when(sincronizarColetaAmostraComServidor()).then(function () {
-                $.when(apagarDados('amostradores')).then(function () {
-                    $.when(apagarDados('lojas')).then(function () {
-                        $.when(apagarDados('produtos')).then(function () {
-                            $.when(apagarDados('unidades')).then(function () {
-                                $.when(apagarDados('funcionarios')).then(function () {
-                                    var tblAmostrador = amostradores[0];
-                                    var nomeTblAmostrador = 'amostradores';
-                                    for (var i = 0; i < tblAmostrador.length; i++) {
-                                        salvarDados(tblAmostrador[i], nomeTblAmostrador);
-                                    }
+        $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades()).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
+            $.when(sincronizarColetaAmostraComServidor()).then(function (data) {
+                $.when(gravarColeta(data)).then(function () {
+                    $.when(apagarDados()).then(function () {
+                        var tblAmostrador = amostradores[0];
+                        var nomeTblAmostrador = 'amostradores';
+                        for (var i = 0; i < tblAmostrador.length; i++) {
+                            salvarDados(tblAmostrador[i], nomeTblAmostrador);
+                        }
 
-                                    var tblLojas = lojas[0];
-                                    var nomeTblLojas = 'lojas';
-                                    for (var i = 0; i < tblLojas.length; i++) {
-                                        salvarDados(tblLojas[i], nomeTblLojas);
-                                    }
+                        var tblLojas = lojas[0];
+                        var nomeTblLojas = 'lojas';
+                        for (var i = 0; i < tblLojas.length; i++) {
+                            salvarDados(tblLojas[i], nomeTblLojas);
+                        }
 
-                                    var tblUnidades = unidades[0];
-                                    var nomeTblUnidades = 'unidades';
-                                    for (var i = 0; i < tblUnidades.length; i++) {
-                                        salvarDados(tblUnidades[i], nomeTblUnidades);
-                                    }
+                        var tblUnidades = unidades[0];
+                        var nomeTblUnidades = 'unidades';
+                        for (var i = 0; i < tblUnidades.length; i++) {
+                            salvarDados(tblUnidades[i], nomeTblUnidades);
+                        }
 
-                                    var tblFuncionarios = funcionarios[0];
-                                    var nomeTblFuncionarios = 'funcionarios';
-                                    for (var i = 0; i < tblFuncionarios.length; i++) {
-                                        salvarDados(tblFuncionarios[i], nomeTblFuncionarios);
-                                    }
+                        var tblFuncionarios = funcionarios[0];
+                        var nomeTblFuncionarios = 'funcionarios';
+                        for (var i = 0; i < tblFuncionarios.length; i++) {
+                            salvarDados(tblFuncionarios[i], nomeTblFuncionarios);
+                        }
 
-                                    var tblProdutos = produtos[0];
-                                    var nomeTblProdutos = 'produtos';
-                                    for (var i = 0; i < tblFuncionarios.length; i++) {
-                                        salvarDados(tblProdutos[i], nomeTblProdutos);
-                                    }
+                        var tblProdutos = produtos[0];
+                        var nomeTblProdutos = 'produtos';
+                        for (var i = 0; i < tblFuncionarios.length; i++) {
+                            salvarDados(tblProdutos[i], nomeTblProdutos);
+                        }
 
-                                    popularComboAmostrador(tblAmostrador);
-                                });
-                            });
-                        });
+                        popularComboAmostrador(tblAmostrador);
                     });
                 });
             });
@@ -547,19 +541,20 @@ var carregarProdutosAtividades = function () {
 };
 
 var sincronizarColetaAmostraComServidor = function () {
-    var query = buscarDadosColetaAmostra();
+    return buscarDadosColetaAmostra();
+};
 
-    query.then(function (rows) {
-        if (rows.length === 0)
-            return;
-        $.ajax({
-            url: urls.POST_GRAVAR_COLETA,
-            type: "POST",
-            data: JSON.stringify(rows),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8"
-        });
+var gravarColeta = function (data) {
+    if (data.length === 0)
+        return;
+    $.ajax({
+        url: urls.POST_GRAVAR_COLETA,
+        type: "post",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: "json"
     });
+    
 };
 
 var gravarDados = function (rowIndex) {
