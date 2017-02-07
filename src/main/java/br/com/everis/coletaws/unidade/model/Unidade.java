@@ -60,6 +60,9 @@ public class Unidade implements Serializable {
     @Column(name = "id_loja", insertable = false, updatable = false)
     private Long idLoja = null;
 
+    @Column(name = "segmento", nullable = false, length = 60)
+    private String segmento = null;
+
     public Long getIdUnidade() {
         return idUnidade;
     }
@@ -106,6 +109,14 @@ public class Unidade implements Serializable {
 
     public void setIdLoja(Long idLoja) {
         this.idLoja = idLoja;
+    }
+
+    public String getSegmento() {
+        return segmento;
+    }
+
+    public void setSegmento(String segmento) {
+        this.segmento = segmento;
     }
 
     @Override
