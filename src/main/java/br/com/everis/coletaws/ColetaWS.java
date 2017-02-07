@@ -123,7 +123,7 @@ public class ColetaWS {
     @POST
     @Path("/gravarColeta")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
     public Response gravarColeta(String coleta) {
         try {
             coletaAmostraService = new ColetaAmostraServiceImpl();
