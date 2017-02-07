@@ -69,10 +69,14 @@ var salvarDados = function (storageObj, tabela) {
     });
 };
 
-var apagarDados = function (tabela) {
+var apagarDados = function () {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
-        var tbl = db.getSchema().table(tabela);
-        return db.delete().from(tbl).exec();
+        db.delete().from(db.getSchema().table('amostradores')).exec();
+        db.delete().from(db.getSchema().table('lojas')).exec();
+        db.delete().from(db.getSchema().table('produtos')).exec();
+        db.delete().from(db.getSchema().table('unidades')).exec();
+        db.delete().from(db.getSchema().table('funcionarios')).exec();
+        db.delete().from(db.getSchema().table('coleta_amostra')).exec();
     });
 };
 
@@ -103,7 +107,6 @@ var buscarDadosUnidades = function (idAmostrador, idLoja) {
 
 var buscarDadosFuncionarios = function (idAmostrador, idLoja, idUnidade) {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
-        console.log('INICIANDO A BUSCA DE FUNCIONARIOS');
         var tblFuncionarios = db.getSchema().table('funcionarios');
         var tblUnidades = db.getSchema().table('unidades');
         var query = db.select(tblFuncionarios.idFuncionario, tblFuncionarios.nomeFuncionario).
