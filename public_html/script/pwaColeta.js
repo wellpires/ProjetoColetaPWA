@@ -192,6 +192,20 @@ window.onload = function () {
         }
 
         if (components.btnIniciar().val() === TEXTO_INICIAR) {
+
+            var funcionarios = $('#tblColeta tr td select.func_nome');
+            var cont = 0;
+            for (var i = 0; i < funcionarios.length; i++) {
+                if (funcionarios[i].value === '') {
+                    cont++;
+                }
+            }
+
+            if (cont > 0) {
+                alert('Favor selecione os funcionários');
+                return;
+            }
+
             components.btnIniciar().attr('value', TEXTO_PAUSAR);
             components.btnParar().attr('disabled', false);
             components.cbAmostrador().attr('disabled', true);
@@ -209,17 +223,16 @@ window.onload = function () {
 
 
         } else if (components.btnIniciar().val() === TEXTO_PAUSAR) {
-            components.btnIniciar().attr('value', TEXTO_INICIAR);
-            $('#tblColeta tr td button').attr('disabled', true);
-            components.btnParar().attr("disabled", true);
-            components.btnSincronizar().attr('disabled', false);
-//            zerarContagemRegressiva();
-            $('#tblColeta tr td span').each(function (index, comp) {
-                comp.innerHTML = '05:00';
-            });
-
+            pausarParar(TEXTO_INICIAR);
         }
+    });
 
+    components.btnParar().click(function () {
+        if (!confirm('Tem certeza?')) {
+            return;
+        }
+        gravarDados();
+        pausarParar(TEXTO_INICIAR);
     });
 
     components.cbAmostrador().change(function (event) {
@@ -257,7 +270,7 @@ window.onload = function () {
 
     components.btnSincronizar().click(function () {
 
-        $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades()).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
+        $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades(), apagarDados('coleta_amostra')).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
             $.when(sincronizarColetaAmostraComServidor()).then(function () {
                 $.when(apagarDados('amostradores')).then(function () {
                     $.when(apagarDados('lojas')).then(function () {
@@ -295,18 +308,14 @@ window.onload = function () {
                                     }
 
                                     popularComboAmostrador(tblAmostrador);
-
                                 });
-
                             });
                         });
                     });
                 });
             });
         });
-
     });
-
 };
 
 function startTime() {
@@ -397,6 +406,7 @@ var CountDown = function () {
 
     var Pause = function () {
         Running = false;
+        TimeOut = 301000;
     };
 
     var Resume = function () {
@@ -620,3 +630,17 @@ var combosPreenchidos = function () {
 
 };
 
+var pausarParar = function (TEXTO_INICIAR) {
+    components.btnIniciar().attr('value', TEXTO_INICIAR);
+    $('#tblColeta tr td button').attr('disabled', true);
+    components.btnParar().attr("disabled", true);
+    components.btnSincronizar().attr('disabled', false);
+    zerarContagemRegressiva();
+    startTime();
+    $('#tblColeta tr td span').each(function (index, comp) {
+        comp.innerHTML = '05:00';
+        $(comp).parent().parent().css('background-color', '');
+        $('#tblColeta tr td select.func_produto')[index].value = '';
+        $('#tblColeta tr td select.func_atividade')[index].value = '';
+    });
+};

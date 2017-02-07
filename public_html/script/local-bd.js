@@ -72,7 +72,7 @@ var salvarDados = function (storageObj, tabela) {
 var apagarDados = function (tabela) {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
         var tbl = db.getSchema().table(tabela);
-        db.delete().from(tbl).exec();
+        return db.delete().from(tbl).exec();
     });
 };
 
