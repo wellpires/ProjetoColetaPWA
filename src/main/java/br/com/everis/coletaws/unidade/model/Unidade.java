@@ -60,7 +60,7 @@ public class Unidade implements Serializable {
     @Column(name = "id_loja", insertable = false, updatable = false)
     private Long idLoja = null;
 
-    @Column(name = "segmento", nullable = false, length = 60)
+    @Column(name = "segmento", length = 60)
     private String segmento = null;
 
     public Long getIdUnidade() {
