@@ -88,6 +88,7 @@ var urls = function () {
 //====================================================================================================
 
 window.onload = function () {
+
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js').then(function (registration) {
             console.log('Service Worker registered ', registration);
@@ -100,8 +101,6 @@ window.onload = function () {
     var TEXTO_PAUSAR = 'PAUSAR';
 
     startTime();
-
-//    carregarAmostrador();
 
     components.btnNovaLinha().click(function () {
         var rowCount = $('#tblColeta > tbody > tr').length;
@@ -132,8 +131,7 @@ window.onload = function () {
             var cbProduto = $('#tblColeta tr td select')[tamanhoFunci - 2];
             var cbAtividade = $('#tblColeta tr td select')[tamanhoFunci - 1];
 
-            popularComboFuncionarios(cbFuncionario);
-            popularComboProdutosAtividades(cbProduto, cbAtividade);
+            popularComboFuncionarios(cbFuncionario, cbProduto, cbAtividade);
 
             var jqueryBtnAcao = '#' + idBtnAcao;
             $(jqueryBtnAcao).click(function (e) {
@@ -243,36 +241,51 @@ window.onload = function () {
 
     components.btnSincronizar().click(function () {
 
-        $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades()).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
+        $.when(apagarDados('amostradores')).then(function () {
+            $.when(apagarDados('lojas')).then(function () {
+                $.when(apagarDados('produtos')).then(function () {
+                    $.when(apagarDados('unidades')).then(function () {
+                        $.when(apagarDados('funcionarios')).then(function () {
+                            $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades()).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
 
-            var tblAmostrador = amostradores[0];
-            for (var i = 0; i < tblAmostrador.length; i++) {
-                salvarDados(tblAmostrador[i], 'amostradores');
-            }
+                                var tblAmostrador = amostradores[0];
+                                var nomeTblAmostrador = 'amostradores';
+                                for (var i = 0; i < tblAmostrador.length; i++) {
+                                    salvarDados(tblAmostrador[i], nomeTblAmostrador);
+                                }
 
-            var tblLojas = lojas[0];
-            for (var i = 0; i < tblLojas.length; i++) {
-                salvarDados(tblLojas[i], 'lojas');
-            }
+                                var tblLojas = lojas[0];
+                                var nomeTblLojas = 'lojas';
+                                for (var i = 0; i < tblLojas.length; i++) {
+                                    salvarDados(tblLojas[i], nomeTblLojas);
+                                }
 
-            var tblUnidades = unidades[0];
-            for (var i = 0; i < tblUnidades.length; i++) {
-                salvarDados(tblUnidades[i], 'unidades');
-            }
+                                var tblUnidades = unidades[0];
+                                var nomeTblUnidades = 'unidades';
+                                for (var i = 0; i < tblUnidades.length; i++) {
+                                    salvarDados(tblUnidades[i], nomeTblUnidades);
+                                }
 
-            var tblFuncionarios = funcionarios[0];
-            for (var i = 0; i < tblFuncionarios.length; i++) {
-                salvarDados(tblFuncionarios[i], 'funcionarios');
-            }
+                                var tblFuncionarios = funcionarios[0];
+                                var nomeTblFuncionarios = 'funcionarios';
+                                for (var i = 0; i < tblFuncionarios.length; i++) {
+                                    salvarDados(tblFuncionarios[i], nomeTblFuncionarios);
+                                }
 
-            var tblProdutos = produtos[0];
-            for (var i = 0; i < tblFuncionarios.length; i++) {
-                salvarDados(tblProdutos[i], 'produtos');
-            }
+                                var tblProdutos = produtos[0];
+                                var nomeTblProdutos = 'produtos';
+                                for (var i = 0; i < tblFuncionarios.length; i++) {
+                                    salvarDados(tblProdutos[i], nomeTblProdutos);
+                                }
 
+                                popularComboAmostrador(tblAmostrador);
 
-            popularComboAmostrador(tblAmostrador);
+                            });
 
+                        });
+                    });
+                });
+            });
         });
     });
 
@@ -336,8 +349,11 @@ var CountDown = function () {
                     GuiTimer[i].parentNode.parentNode.style.backgroundColor = 'red';
                 }
                 if (converterMinutosParaMilis(GuiTimer[i].innerHTML) === 1000) {
-                    gravarDados($('#tblColeta tr').index(GuiTimer[i].parentNode.parentNode) - 1);
+                    if (i === 1) {
+                        gravarDados();
+                    }
                     GuiTimer[i].parentNode.parentNode.style.backgroundColor = 'white';
+
                 }
             }
 
@@ -351,8 +367,11 @@ var CountDown = function () {
         for (var i = 0; i < GuiTimer.length; i++) {
             GuiTimer[i].innerHTML = (Minutes < 10 ? '0' : '') + Minutes + ':' + (Seconds < 10 ? '0' : '') + Seconds;
             if (converterMinutosParaMilis(GuiTimer[i].innerHTML) === 0) {
-                GuiTimer[i].innerHTML = '05:00';
-                zerarContagemRegressiva();
+//                GuiTimer[i].innerHTML = '05:00';
+                TimeOut = 300000;
+//                Pause();
+                Resume();
+                UpdateTimer();
             }
         }
 
@@ -368,14 +387,19 @@ var CountDown = function () {
 
     var Start = function (Timeout, componentDisplay) {
         Running = true;
-        if (!firstTime) {
-            GuiTimer = componentDisplay;
-            TimeOut = Timeout;
-            CurrentTime = (new Date()).getTime();
-            EndTime = (new Date()).getTime() + TimeOut;
-            firstTime = true;
-            UpdateTimer();
-        }
+        GuiTimer = componentDisplay;
+        TimeOut = Timeout;
+        CurrentTime = (new Date()).getTime();
+        EndTime = (new Date()).getTime() + TimeOut;
+        UpdateTimer();
+    };
+
+    var keep = function (Timeout) {
+        Running = true;
+        TimeOut = Timeout;
+        CurrentTime = (new Date()).getTime();
+        EndTime = (new Date()).getTime() + TimeOut;
+        UpdateTimer();
     };
 
     return {
@@ -399,6 +423,7 @@ var converterMinutosParaMilis = function (minutos) {
 
 var popularComboAmostrador = function (amostradores) {
     $select = components.cbAmostrador();
+    $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
     $.each(amostradores, function (index, object) {
         $('<option>').val(object.idAmostrador).text(object.nomeAmostrador).appendTo($select);
     });
@@ -433,20 +458,19 @@ var popularComboUnidades = function () {
     });
 };
 
-var popularComboFuncionarios = function (cbFuncionario) {
+var popularComboFuncionarios = function (cbFuncionario, cbProduto, cbAtividade) {
 
     var idAmostrador = components.cbAmostrador().val();
     var idLoja = components.cbLojas().val();
     var idUnidade = components.cbUnidades().val();
 
-    var query = buscarDadosFuncionarios(idAmostrador, idLoja, idUnidade);
-
-    query.then(function (funcionarios) {
+    $.when(buscarDadosFuncionarios(idAmostrador, idLoja, idUnidade)).then(function (funcionarios) {
         $select = $(cbFuncionario);
         $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-        $.each(funcionarios, function (index, object) {
-            $('<option>').val(object.funcionarios.idFuncionario).text(object.funcionarios.nomeFuncionario).appendTo($select);
+        $.each(funcionarios[0], function (index, object) {
+            $('<option>').val(object.idFuncionario).text(object.nomeFuncionario).appendTo($select);
         });
+        popularComboProdutosAtividades(cbProduto, cbAtividade);
     });
 
 };
@@ -496,54 +520,68 @@ var carregarProdutosAtividades = function () {
 
 
 var gravarDados = function (rowIndex) {
-    var data = new Date();
     var amostradorValue = components.cbAmostrador().find('option:selected').text();
     var lojaValue = components.cbLojas().find('option:selected').text();
     var unidadeVale = components.cbUnidades().find('option:selected').text();
 //  var funcionarioValue = $('#tblColeta tr .func_nome ')[rowIndex].text;
     var funcProduto = $('#tblColeta tr .func_produto :selected');
     var produtoValue = null;
-    if ($(funcProduto)[rowIndex] === undefined) {
-        produtoValue = $(funcProduto).text();
-    } else {
-        produtoValue = $(funcProduto)[rowIndex].text;
+    var arrayJson = [];
+
+    //MARACUTAIA MONSTRA! CRIANÇAS, NÃO REPITAM ISSO EM CASA!
+    var init = 0;
+    var limit = funcProduto.length;
+    if (rowIndex !== undefined) {
+        init = rowIndex;
+        limit = rowIndex + 1;
     }
 
-    var funcAtividade = $('#tblColeta tr .func_atividade :selected');
-    var atividadeValue = null;
 
-    if ($(funcAtividade)[rowIndex] === undefined) {
-        atividadeValue = $(funcAtividade).text();
-    } else {
-        atividadeValue = $(funcAtividade)[rowIndex].text;
-    }
+    for (var i = init; i < limit; i++) {
 
-    var dataColeta = (data.getMonth() + 1) + '/' + data.getDay() + '/' + data.getFullYear();
-    var horaColeta = data.getHours() + ':' + data.getMinutes() + ':' + data.getSeconds();
-    var horaReal = data.getHours() + ':' + data.getMinutes() + ':' + data.getSeconds();
-
-    var json = {
-        'amostrador': amostradorValue,
-        'loja': lojaValue,
-        'unidade': unidadeVale,
-        'data_coleta': dataColeta,
-        'hora_coleta': horaColeta,
-        'ts_sincronismo': horaReal,
-        'produto': produtoValue,
-        'atividade': atividadeValue
-    };
-
-
-    $.ajax({
-        url: urls.POST_GRAVAR_COLETA,
-        type: "POST",
-        data: JSON.stringify(json),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function () {
-            console.log(arguments);
+        if ($(funcProduto)[i] === undefined) {
+            produtoValue = $(funcProduto).text();
+        } else {
+            produtoValue = $(funcProduto)[i].text;
         }
-    });
+
+        var funcAtividade = $('#tblColeta tr .func_atividade :selected');
+        var atividadeValue = null;
+
+        if ($(funcAtividade)[i] === undefined) {
+            atividadeValue = $(funcAtividade).text();
+        } else {
+            atividadeValue = $(funcAtividade)[i].text;
+        }
+
+        var json = {
+            'amostrador': amostradorValue,
+            'loja': lojaValue,
+            'unidade': unidadeVale,
+            'dataColeta': new Date(),
+            'horaColeta': new Date(),
+            'horaReal': new Date(),
+            'produto': produtoValue,
+            'atividade': atividadeValue,
+            'statusAmostra': ''
+        };
+
+        arrayJson.push(json);
+
+    }
+
+    salvarDados(arrayJson, 'coleta_amostra');
+
+//    $.ajax({
+//        url: urls.POST_GRAVAR_COLETA,
+//        type: "POST",
+//        data: JSON.stringify(json),
+//        dataType: "json",
+//        contentType: "application/json; charset=utf-8",
+//        success: function () {
+//            console.log(arguments);
+//        }
+//    });
 
 };
 

@@ -43,7 +43,7 @@ var bdConfigs = function () {
                 addColumn('produto', lf.Type.STRING).
                 addColumn('atividade', lf.Type.STRING).
                 addColumn('statusAmostra', lf.Type.STRING).
-                addPrimaryKey(['idAmostra']);
+                addPrimaryKey(['idAmostra'], true);
 
         return schemaConfig;
     };
@@ -54,21 +54,30 @@ var bdConfigs = function () {
 
 }();
 
-function salvarDados(storageObj, tabela) {
-    try {
-        bdConfigs.schemaBuilder().connect().then(function (db) {
-            var tbl_bd = db.getSchema().table(tabela);
-            var newRow = tbl_bd.createRow(storageObj);
-            return db.insertOrReplace().into(tbl_bd).values([newRow]).exec();
-        });
-    } catch (e) {
-        console.error(e);
-    }
-}
+var salvarDados = function (storageObj, tabela) {
+    bdConfigs.schemaBuilder().connect().then(function (db) {
+        var tbl_bd = db.getSchema().table(tabela);
+        if(storageObj instanceof Array){
+            for(var i = 0; i < storageObj.length; i++){
+                var newRow = tbl_bd.createRow(storageObj[i]);
+                db.insertOrReplace().into(tbl_bd).values([newRow]).exec();
+            }
+            return;
+        }
+        var newRow = tbl_bd.createRow(storageObj);
+        return db.insertOrReplace().into(tbl_bd).values([newRow]).exec();
+    });
+};
+
+var apagarDados = function (tabela) {
+    return bdConfigs.schemaBuilder().connect().then(function (db) {
+        var tbl = db.getSchema().table(tabela);
+        db.delete().from(tbl).exec();
+    });
+};
 
 var buscarDadosLojas = function (idAmostrador) {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
-
         var tblLojas = db.getSchema().table('lojas');
         var tblUnidades = db.getSchema().table('unidades');
         var query = db.select(tblLojas.idLoja, tblLojas.nomeLoja).
@@ -93,8 +102,8 @@ var buscarDadosUnidades = function (idAmostrador, idLoja) {
 };
 
 var buscarDadosFuncionarios = function (idAmostrador, idLoja, idUnidade) {
-
     return bdConfigs.schemaBuilder().connect().then(function (db) {
+        console.log('INICIANDO A BUSCA DE FUNCIONARIOS');
         var tblFuncionarios = db.getSchema().table('funcionarios');
         var tblUnidades = db.getSchema().table('unidades');
         var query = db.select(tblFuncionarios.idFuncionario, tblFuncionarios.nomeFuncionario).
