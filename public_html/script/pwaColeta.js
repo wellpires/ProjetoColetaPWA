@@ -164,6 +164,15 @@ window.onload = function () {
                     buttonComponent[rowIndex - 1].disabled = true;
                 }
 
+                $('#tblColeta td select.func_produto')[rowIndex - 1].value = '';
+                $('#tblColeta td select.func_atividade')[rowIndex - 1].value = '';
+
+                if (rowIndex === $('#tblColeta tr').length - 1) {
+                    zerarContagemRegressiva();
+                    startTime();
+                    CountDown().Start(301000, $('#tblColeta tr td span'));
+                }
+
             });
 
             var jqueryBtnDeletar = '#' + deletarId;
@@ -247,6 +256,7 @@ window.onload = function () {
         components.cbUnidades().attr('disabled', !combosPreenchidos());
         components.cbLojas().val('');
         components.cbUnidades().val('');
+        apagarTabela();
         if (event.target.value === '') {
             return;
         }
@@ -259,6 +269,7 @@ window.onload = function () {
         components.btnNovaLinha().attr('disabled', !combosPreenchidos());
         components.cbUnidades().attr('disabled', !combosPreenchidos());
         components.cbUnidades().val('');
+        apagarTabela();
         if (event.target.value === '') {
             return;
         }
@@ -268,6 +279,7 @@ window.onload = function () {
 
     components.cbUnidades().change(function () {
         components.btnNovaLinha().attr('disabled', !combosPreenchidos());
+        apagarTabela();
         if (event.target.value === '') {
             return;
         }
@@ -275,9 +287,19 @@ window.onload = function () {
     });
 
     components.btnSincronizar().click(function () {
-        if(!confirm('Tem certeza?')){
+        if (!confirm('Tem certeza?')) {
             return;
         }
+
+        if (!navigator.onLine) {
+            buscarDadosAmostrador().then(function (rows) {
+                if (rows.length === 0)
+                    return;
+                popularComboAmostrador(rows);
+            });
+            return;
+        }
+
         $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades()).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
             $.when(sincronizarColetaAmostraComServidor()).then(function (data) {
                 $.when(gravarColeta(data)).then(function () {
@@ -650,11 +672,18 @@ var pausarParar = function (TEXTO_INICIAR) {
     });
 };
 
- var resetCb = function () {
-        components.cbAmostrador().attr("disabled", false);
-        components.cbLojas().attr("disabled", true);
-        components.cbUnidades().attr("disabled", true);
-        components.cbAmostrador().val('');
-        components.cbUnidades().val('');
-        components.cbLojas().val('');
-    };
+var resetCb = function () {
+    components.cbAmostrador().attr("disabled", false);
+    components.cbLojas().attr("disabled", true);
+    components.cbUnidades().attr("disabled", true);
+    components.cbAmostrador().val('');
+    components.cbUnidades().val('');
+    components.cbLojas().val('');
+    apagarTabela();
+};
+
+var apagarTabela = function(){
+    $.each($('#tblColeta select').parent().parent().parent(), function(index, object){
+        object.remove()
+    });
+};

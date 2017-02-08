@@ -8,7 +8,7 @@ goog.exportPath_ = function(name, opt_object, opt_objectToExportTo) {
   var parts = name.split("."), cur = opt_objectToExportTo || goog.global;
   parts[0] in cur || !cur.execScript || cur.execScript("var " + parts[0]);
   for (var part;parts.length && (part = parts.shift());) {
-    !parts.length && goog.isDef(opt_object) ? cur[part] = opt_object : cur = cur[part] ? cur[part] : cur[part] = {};
+    !parts.length && goog.isDef(opt_object) ? cur[part] = opt_object : cur = cur[part] && Object.prototype.hasOwnProperty.call(cur, part) ? cur[part] : cur[part] = {};
   }
 };
 goog.define = function(name, defaultValue) {
@@ -105,6 +105,7 @@ goog.abstractMethod = function() {
   throw Error("unimplemented abstract method");
 };
 goog.addSingletonGetter = function(ctor) {
+  ctor.instance_ = void 0;
   ctor.getInstance = function() {
     if (ctor.instance_) {
       return ctor.instance_;
@@ -271,6 +272,29 @@ goog.DEPENDENCIES_ENABLED && (goog.dependencies_ = {loadFlags:{}, nameToPath:{},
 }, goog.getPathFromDeps_ = function(rule) {
   return rule in goog.dependencies_.nameToPath ? goog.dependencies_.nameToPath[rule] : null;
 }, goog.findBasePath_(), goog.global.CLOSURE_NO_DEPS || goog.importScript_(goog.basePath + "deps.js"));
+goog.hasBadLetScoping = null;
+goog.useSafari10Workaround_ = function() {
+  if (null == goog.hasBadLetScoping) {
+    var result;
+    try {
+      result = !!eval('"use strict";let x = 1; function f() { return typeof x; };f() == "number";');
+    } catch (e) {
+      result = !1;
+    }
+    goog.hasBadLetScoping = result;
+  }
+  return goog.hasBadLetScoping;
+};
+goog.workaroundSafari10EvalBug = function(moduleDef) {
+  var srcUrlRE = /\/\/# sourceURL.*\n/g, srcMapUrlRE = /\/\/# sourceMappingURL.*\n/g, srcUrlLine = goog.getLastREMatch_(moduleDef, srcUrlRE), srcMapUrlLine = goog.getLastREMatch_(moduleDef, srcMapUrlRE);
+  moduleDef = moduleDef.replace(srcUrlRE, "");
+  moduleDef = moduleDef.replace(srcMapUrlRE, "");
+  return moduleDef = "(function(){" + moduleDef + "\n;})();\n" + srcMapUrlLine + srcUrlLine;
+};
+goog.getLastREMatch_ = function(str, re) {
+  var matches = str.match(re);
+  return matches ? matches[matches.length - 1] : "";
+};
 goog.loadModule = function(moduleDef) {
   var previousState = goog.moduleLoaderState_;
   try {
@@ -280,7 +304,7 @@ goog.loadModule = function(moduleDef) {
       exports = moduleDef.call(void 0, {});
     } else {
       if (goog.isString(moduleDef)) {
-        exports = goog.loadModuleFromSource_.call(void 0, moduleDef);
+        goog.useSafari10Workaround_ && (moduleDef = goog.workaroundSafari10EvalBug(moduleDef)), exports = goog.loadModuleFromSource_.call(void 0, moduleDef);
       } else {
         throw Error("Invalid module definition");
       }
@@ -289,7 +313,7 @@ goog.loadModule = function(moduleDef) {
     if (!goog.isString(moduleName) || !moduleName) {
       throw Error('Invalid module name "' + moduleName + '"');
     }
-    goog.moduleLoaderState_.declareLegacyNamespace ? goog.constructNamespace_(moduleName, exports) : goog.SEAL_MODULE_EXPORTS && Object.seal && goog.isObject(exports) && Object.seal(exports);
+    goog.moduleLoaderState_.declareLegacyNamespace ? goog.constructNamespace_(moduleName, exports) : goog.SEAL_MODULE_EXPORTS && Object.seal && "object" == typeof exports && null != exports && Object.seal(exports);
     goog.loadedModules_[moduleName] = exports;
   } finally {
     goog.moduleLoaderState_ = previousState;
@@ -9553,7 +9577,7 @@ lf.query.getFromListForOuterJoin_ = function(query, stripValueInfo) {
   }), predicateString = retrievedNodes.map(lf.query.joinPredicateToSql_), fromList = lf.query.getTableNameToSql_(query.from[0]), i = 1;i < query.from.length;i++) {
     var fromName = lf.query.getTableNameToSql_(query.from[i]), fromList = query.outerJoinPredicates.has(retrievedNodes[predicateString.length - i].getId()) ? fromList + (" LEFT OUTER JOIN " + fromName) : fromList + (" INNER JOIN " + fromName), fromList = fromList + (" ON (" + predicateString[predicateString.length - i] + ")");
   }
-  var leftChild = query.where.getChildAt(0);
+  var node$jscomp$0 = query.where, leftChild = 0 < node$jscomp$0.getChildCount() ? node$jscomp$0.getChildAt(0) : node$jscomp$0;
   leftChild instanceof lf.pred.JoinPredicate || (fromList += " WHERE " + lf.query.parseSearchCondition_(leftChild, stripValueInfo));
   return fromList;
 };
@@ -11353,6 +11377,9 @@ lf.DiffCalculator.prototype.detectColumns_ = function() {
 };
 lf.DiffCalculator.prototype.comparator_ = function(left, right) {
   return this.columns_.every(function(column) {
+    if (column.getType() == lf.Type.OBJECT || column.getType() == lf.Type.ARRAY_BUFFER) {
+      return left.getField(column) === right.getField(column);
+    }
     var evalFn = this.evalRegistry_.getEvaluator(column.getType(), lf.eval.Type.EQ);
     return evalFn(left.getField(column), right.getField(column));
   }, this);

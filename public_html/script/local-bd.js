@@ -80,6 +80,15 @@ var apagarDados = function () {
     });
 };
 
+var buscarDadosAmostrador = function () {
+    return bdConfigs.schemaBuilder().connect().then(function (db) {
+        var tblAmostradores = db.getSchema().table('amostradores');
+        var query = db.select(tblAmostradores.idAmostrador, tblAmostradores.nomeAmostrador).
+                from(tblAmostradores);
+        return query.exec();
+    });
+}
+
 var buscarDadosLojas = function (idAmostrador) {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
         var tblLojas = db.getSchema().table('lojas');

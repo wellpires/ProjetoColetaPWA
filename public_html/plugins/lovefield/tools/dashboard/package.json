@@ -1,0 +1,14 @@
+{
+  "name": "lovefield-dashboard",
+  "version": "0.0.1",
+  "description": "Performance monitoring dashboard for Lovefield",
+  "devDependencies": {
+    "cordova": "^5.3.3",
+    "d3": "^3.5.5",
+    "fs-extra": "^0.18.2",
+    "gulp": "^3.9.0",
+    "gulp-gjslint": "^0.1.4",
+    "gulp-webserver": "^0.9.0",
+    "nopt": "^2.2.1"
+  }
+}
