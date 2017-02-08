@@ -252,7 +252,7 @@ self.addEventListener('fetch', function(event) {
 
 // Runtime cache configuration, using the sw-toolbox library.
 
-toolbox.router.get(/^http:\/\/localhost:8080\/ColetaWS/, toolbox.networkFirst, {"cache":{"name":"coletaDadosCache-v1"}});
+toolbox.router.get(/^https:\/\/coletaWS.mybluemix.net/, toolbox.networkFirst, {"cache":{"name":"coletaDadosCache-v1"}});
 
 
 

@@ -67,7 +67,7 @@ var components = function () {
 
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
-    var ORIGEM = 'http://localhost:8080/ColetaWS/';
+    var ORIGEM = 'https://coletaWS.mybluemix.net/';
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + 'buscarAmostrador';
     var GET_BUSCAR_LOJAS = ORIGEM + 'buscarLojas';
     var GET_BUSCAR_UNIDADES = ORIGEM + 'buscarUnidades';
@@ -89,13 +89,13 @@ var urls = function () {
 
 window.onload = function () {
 
-    // if ('serviceWorker' in navigator) {
-    //     navigator.serviceWorker.register('service-worker.js').then(function (registration) {
-    //         console.log('Service Worker registered ', registration);
-    //     }).catch(function (e) {
-    //         console.log('ERRO ', e);
-    //     });
-    // }
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+            console.log('Service Worker registered ', registration);
+        }).catch(function (e) {
+            console.log('ERRO ', e);
+        });
+    }
 
     var TEXTO_INICIAR = 'INICIAR';
     var TEXTO_PAUSAR = 'PAUSAR';
@@ -220,7 +220,7 @@ window.onload = function () {
 
             $('#tblColeta tr td button')[0].disabled = false;
 
-            CountDown().Start(10000, $('#tblColeta tr td span'));
+            CountDown().Start(300000, $('#tblColeta tr td span'));
             $.each($('#tblColeta tr .func_nome'), function (index, object) {
                 object.disabled = true;
             });
@@ -273,7 +273,9 @@ window.onload = function () {
     });
 
     components.btnSincronizar().click(function () {
-
+        if(!confirm('Tem certeza?')){
+            return;
+        }
         $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades()).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
             $.when(sincronizarColetaAmostraComServidor()).then(function (data) {
                 $.when(gravarColeta(data)).then(function () {
@@ -308,7 +310,9 @@ window.onload = function () {
                             salvarDados(tblProdutos[i], nomeTblProdutos);
                         }
 
-                        popularComboAmostrador(tblAmostrador);
+                        if (!$('#tblCabecalho tr td #select_amostrador')[0].disabled) {
+                            popularComboAmostrador(tblAmostrador);
+                        }
                     });
                 });
             });

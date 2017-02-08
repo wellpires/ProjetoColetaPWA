@@ -13,7 +13,7 @@ gulp.task('generate-sw', function() {
     ],
     stripPrefix: './',
     runtimeCaching: [{
-      urlPattern: /^http:\/\/localhost:8080\/ColetaWS/,
+      urlPattern: /^https:\/\/coletaWS.mybluemix.net/,
       handler: 'networkFirst',
       options: {
         cache: {
