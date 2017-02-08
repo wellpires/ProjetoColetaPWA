@@ -89,13 +89,13 @@ var urls = function () {
 
 window.onload = function () {
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js').then(function (registration) {
-            console.log('Service Worker registered ', registration);
-        }).catch(function (e) {
-            console.log('ERRO ', e);
-        });
-    }
+    // if ('serviceWorker' in navigator) {
+    //     navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+    //         console.log('Service Worker registered ', registration);
+    //     }).catch(function (e) {
+    //         console.log('ERRO ', e);
+    //     });
+    // }
 
     var TEXTO_INICIAR = 'INICIAR';
     var TEXTO_PAUSAR = 'PAUSAR';
@@ -558,7 +558,7 @@ var gravarColeta = function (data) {
         contentType: "application/json",
         dataType: "json"
     });
-    
+
 };
 
 var gravarDados = function (rowIndex) {
