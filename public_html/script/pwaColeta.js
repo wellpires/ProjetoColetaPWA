@@ -235,6 +235,8 @@ window.onload = function () {
         if (!confirm('Tem certeza?')) {
             return;
         }
+
+        resetCb();
         gravarDados();
         pausarParar(TEXTO_INICIAR);
     });
@@ -647,3 +649,12 @@ var pausarParar = function (TEXTO_INICIAR) {
         $('#tblColeta tr td select.func_atividade')[index].value = '';
     });
 };
+
+ var resetCb = function () {
+        components.cbAmostrador().attr("disabled", false);
+        components.cbLojas().attr("disabled", true);
+        components.cbUnidades().attr("disabled", true);
+        components.cbAmostrador().val('');
+        components.cbUnidades().val('');
+        components.cbLojas().val('');
+    };
