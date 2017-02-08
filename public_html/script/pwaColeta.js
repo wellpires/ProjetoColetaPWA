@@ -67,7 +67,7 @@ var components = function () {
 
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
-    var ORIGEM = 'http://localhost:8080/ColetaWS/';
+    var ORIGEM = 'http://138.197.89.141:8080/ColetaWS/';
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + 'buscarAmostrador';
     var GET_BUSCAR_LOJAS = ORIGEM + 'buscarLojas';
     var GET_BUSCAR_UNIDADES = ORIGEM + 'buscarUnidades';
