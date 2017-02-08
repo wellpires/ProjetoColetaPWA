@@ -43,7 +43,6 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules
 jspm_packages
 
 # Optional npm cache directory
@@ -63,26 +62,3 @@ jspm_packages
 
 # dotenv environment variables file
 .env
-
-
-<<<<<<< HEAD
-# End of https://www.gitignore.io/api/node,netbeans
-=======
-### Java ###
-*.class
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-# End of https://www.gitignore.io/api/netbeans,java,maven
->>>>>>> origin/master
