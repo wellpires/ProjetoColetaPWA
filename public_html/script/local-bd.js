@@ -87,7 +87,7 @@ var buscarDadosAmostrador = function () {
                 from(tblAmostradores);
         return query.exec();
     });
-}
+};
 
 var buscarDadosLojas = function (idAmostrador) {
     return bdConfigs.schemaBuilder().connect().then(function (db) {

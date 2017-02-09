@@ -85,7 +85,7 @@ var urls = function () {
     };
 }();
 
-//====================================================================================================
+//==============================================================================
 
 window.onload = function () {
 
@@ -283,7 +283,6 @@ window.onload = function () {
         if (event.target.value === '') {
             return;
         }
-
     });
 
     components.btnSincronizar().click(function () {
