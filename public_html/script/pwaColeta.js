@@ -224,7 +224,7 @@ window.onload = function () {
             components.cbAmostrador().attr('disabled', true);
             components.cbLojas().attr('disabled', true);
             components.cbUnidades().attr('disabled', true);
-            components.btnNovaLinha().attr('disabled', false);
+            components.btnNovaLinha().attr('disabled', true);
             components.btnSincronizar().attr('disabled', true);
 
             $('#tblColeta tr td button')[0].disabled = false;
@@ -237,6 +237,8 @@ window.onload = function () {
 
         } else if (components.btnIniciar().val() === TEXTO_PAUSAR) {
             pausarParar(TEXTO_INICIAR);
+            components.btnParar().attr("disabled", false);
+            components.btnNovaLinha().attr("disabled", false);
         }
     });
 
@@ -248,6 +250,7 @@ window.onload = function () {
         resetCb();
         gravarDados();
         pausarParar(TEXTO_INICIAR);
+        components.btnIniciar().attr("disabled", true);
     });
 
     components.cbAmostrador().change(function (event) {
