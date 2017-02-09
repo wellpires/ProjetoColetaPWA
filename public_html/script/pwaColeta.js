@@ -308,33 +308,23 @@ window.onload = function () {
                     $.when(apagarDados()).then(function () {
                         var tblAmostrador = amostradores[0];
                         var nomeTblAmostrador = 'amostradores';
-                        for (var i = 0; i < tblAmostrador.length; i++) {
-                            salvarDados(tblAmostrador[i], nomeTblAmostrador);
-                        }
+                        salvarDados(tblAmostrador, nomeTblAmostrador);
 
                         var tblLojas = lojas[0];
                         var nomeTblLojas = 'lojas';
-                        for (var i = 0; i < tblLojas.length; i++) {
-                            salvarDados(tblLojas[i], nomeTblLojas);
-                        }
+                        salvarDados(tblLojas, nomeTblLojas);
 
                         var tblUnidades = unidades[0];
                         var nomeTblUnidades = 'unidades';
-                        for (var i = 0; i < tblUnidades.length; i++) {
-                            salvarDados(tblUnidades[i], nomeTblUnidades);
-                        }
+                        salvarDados(tblUnidades, nomeTblUnidades);
 
                         var tblFuncionarios = funcionarios[0];
                         var nomeTblFuncionarios = 'funcionarios';
-                        for (var i = 0; i < tblFuncionarios.length; i++) {
-                            salvarDados(tblFuncionarios[i], nomeTblFuncionarios);
-                        }
+                        salvarDados(tblFuncionarios, nomeTblFuncionarios);
 
                         var tblProdutos = produtos[0];
                         var nomeTblProdutos = 'produtos';
-                        for (var i = 0; i < tblFuncionarios.length; i++) {
-                            salvarDados(tblProdutos[i], nomeTblProdutos);
-                        }
+                        salvarDados(tblProdutos, nomeTblProdutos);
 
                         if (!$('#tblCabecalho tr td #select_amostrador')[0].disabled) {
                             popularComboAmostrador(tblAmostrador);
@@ -684,8 +674,8 @@ var resetCb = function () {
     apagarTabela();
 };
 
-var apagarTabela = function(){
-    $.each($('#tblColeta select').parent().parent().parent(), function(index, object){
+var apagarTabela = function () {
+    $.each($('#tblColeta select').parent().parent().parent(), function (index, object) {
         object.remove()
     });
 };

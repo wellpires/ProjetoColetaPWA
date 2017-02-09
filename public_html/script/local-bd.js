@@ -64,8 +64,6 @@ var salvarDados = function (storageObj, tabela) {
             }
             return;
         }
-        var newRow = tbl_bd.createRow(storageObj);
-        return db.insertOrReplace().into(tbl_bd).values([newRow]).exec();
     });
 };
 
