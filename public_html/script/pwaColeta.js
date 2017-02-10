@@ -480,6 +480,7 @@ var popularComboLojas = function () {
     var codAmostrador = components.cbAmostrador().val();
     var query = buscarDadosLojas(codAmostrador);
     query.then(function (lojas) {
+        components.cbLojas().attr('disabled', false);
         $select = components.cbLojas();
         $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
         $.each(lojas, function (index, object) {
@@ -496,6 +497,7 @@ var popularComboUnidades = function () {
     var query = buscarDadosUnidades(codAmostrador, codLoja);
 
     query.then(function (unidades) {
+        components.cbUnidades().attr('disabled', false);
         $select = components.cbUnidades();
         $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
         $.each(unidades, function (index, object) {
