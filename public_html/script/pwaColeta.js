@@ -173,6 +173,10 @@ window.onload = function () {
                     CountDown().Start(301000, $('#tblColeta tr td span'));
                 }
 
+                if(($('#tblColeta tr').length - 1) === 1){
+                    e.target.disabled = false;
+                }
+
             });
 
             var jqueryBtnDeletar = '#' + deletarId;
@@ -396,7 +400,10 @@ var CountDown = function () {
                     if (i === 1) {
                         gravarDados();
                     }
+
                     GuiTimer[i].parentNode.parentNode.style.backgroundColor = 'white';
+                    $(GuiTimer[i].parentNode.parentNode.children[3].children).attr('disabled', true);
+                    $(GuiTimer[0].parentNode.parentNode.children[3].children).attr('disabled', false);
 
                 }
             }
