@@ -9,6 +9,8 @@
     <class>br.com.everis.coletaws.unidade.model.Unidade</class>
     <class>br.com.everis.coletaws.funcionario.model.Funcionario</class>
     <class>br.com.everis.coletaws.atividade.model.Atividade</class>
+    <class>br.com.everis.coletaws.lojaprodutoatividade.model.LojaProdutosAtividade</class>
+    <class>br.com.everis.coletaws.lojaprodutoatividade.model.LojaProdutoAtividadePK</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

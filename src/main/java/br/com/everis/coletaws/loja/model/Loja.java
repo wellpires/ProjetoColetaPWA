@@ -1,12 +1,15 @@
 package br.com.everis.coletaws.loja.model;
 
+import br.com.everis.coletaws.produto.model.Produto;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -19,18 +22,19 @@ public class Loja implements Serializable {
 
     public Loja() {
     }
+
     public Loja(Long idlLoja, String nomeLoja) {
         this.idLoja = idlLoja;
         this.nomeLoja = nomeLoja;
     }
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_loja")
     private Long idLoja = null;
-    
+
     @Column(name = "loja", nullable = false, length = 60)
     private String nomeLoja = null;
 
@@ -52,9 +56,9 @@ public class Loja implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.idLoja);
-        hash = 67 * hash + Objects.hashCode(this.nomeLoja);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.idLoja);
+        hash = 29 * hash + Objects.hashCode(this.nomeLoja);
         return hash;
     }
 
@@ -78,4 +82,7 @@ public class Loja implements Serializable {
         }
         return true;
     }
+
+   
+
 }
