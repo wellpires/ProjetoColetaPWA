@@ -3,6 +3,9 @@ package br.com.everis.coletaws;
 import br.com.everis.coletaws.amostrador.model.Amostrador;
 import br.com.everis.coletaws.amostrador.services.IAmostradorService;
 import br.com.everis.coletaws.amostrador.services.impl.AmostradorServiceImpl;
+import br.com.everis.coletaws.atividade.model.Atividade;
+import br.com.everis.coletaws.atividade.service.IAtividadeService;
+import br.com.everis.coletaws.atividade.service.impl.AtividadeServiceImpl;
 import br.com.everis.coletaws.coletaAmostra.model.ColetaAmostra;
 import br.com.everis.coletaws.coletaAmostra.service.IColetaAmostraService;
 import br.com.everis.coletaws.coletaAmostra.service.impl.ColetaAmostraServiceImpl;
@@ -12,6 +15,10 @@ import br.com.everis.coletaws.funcionario.services.impl.FuncionarioServiceImpl;
 import br.com.everis.coletaws.loja.model.Loja;
 import br.com.everis.coletaws.loja.service.ILojaService;
 import br.com.everis.coletaws.loja.service.impl.LojaServiceImpl;
+import br.com.everis.coletaws.lojaprodutoatividade.model.LojaProdutoAtividadePK;
+import br.com.everis.coletaws.lojaprodutoatividade.model.LojaProdutosAtividade;
+import br.com.everis.coletaws.lojaprodutoatividade.service.ILojaProdutoAtividadePKService;
+import br.com.everis.coletaws.lojaprodutoatividade.service.impl.LojaProdutoAtividadePKServiceImpl;
 import br.com.everis.coletaws.produto.model.Produto;
 import br.com.everis.coletaws.produto.service.IProdutoService;
 import br.com.everis.coletaws.produto.service.impl.ProdutoServiceImpl;
@@ -22,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -46,6 +54,8 @@ public class ColetaWS {
     private IFuncionarioService funcionarioService = null;
     private IProdutoService produtoService = null;
     private IColetaAmostraService coletaAmostraService = null;
+    private IAtividadeService atividadeService = null;
+    private ILojaProdutoAtividadePKService lojaProdutoAtividadePKService = null;
 
     @GET
     @Path("/buscarAmostrador")
@@ -106,7 +116,7 @@ public class ColetaWS {
     }
 
     @GET
-    @Path("/buscarProdutosAtividades")
+    @Path("/buscarProdutos")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.TEXT_PLAIN)
     public Response buscarProdutos() {
@@ -120,6 +130,44 @@ public class ColetaWS {
         }
     }
 
+    @GET
+    @Path("/buscarAtividades")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response buscarAtividades() {
+        try {
+            atividadeService = new AtividadeServiceImpl();
+            List<Atividade> lstAtividades = atividadeService.buscarAtividades();
+            return Response.ok(new Gson().toJson(lstAtividades)).build();
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
+    }
+
+    @GET
+    @Path("/buscarLojasProdutosAtividades")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response buscarLojasProdutosAtividades() {
+        try {
+            lojaProdutoAtividadePKService = new LojaProdutoAtividadePKServiceImpl();
+            List<LojaProdutosAtividade> lstLojaProdutoAtividades = lojaProdutoAtividadePKService.buscarLojaProdutoAtividade();
+
+            JSONArray jsonArray = new JSONArray();
+            for (LojaProdutosAtividade lpa : lstLojaProdutoAtividades) {
+                JSONObject item = new JSONObject();
+                item.put("idLoja", lpa.getLojaProdutoAtividadePK().getLoja().getIdLoja());
+                item.put("idProduto", lpa.getLojaProdutoAtividadePK().getProduto().getIdProduto());
+                item.put("idAtividade", lpa.getLojaProdutoAtividadePK().getAtividade().getIdAtividade());
+                jsonArray.add(item);
+            }
+
+            return Response.ok(new Gson().toJson(jsonArray)).build();
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
+    }
+
     @POST
     @Path("/gravarColeta")
     @Produces(MediaType.APPLICATION_JSON)
@@ -128,12 +176,12 @@ public class ColetaWS {
         try {
             coletaAmostraService = new ColetaAmostraServiceImpl();
             JSONArray json = (JSONArray) new JSONParser().parse(coleta);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            SimpleDateFormat sdfHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", new Locale("pt", "BR"));
+            SimpleDateFormat sdfHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", new Locale("pt", "BR"));
 
             for (Object object : json) {
                 ColetaAmostra coletaAmostra = new ColetaAmostra();
-                JSONObject jsonObject = ((JSONObject)object);
+                JSONObject jsonObject = ((JSONObject) object);
                 coletaAmostra.setAmostrador(jsonObject.get("amostrador").toString());
                 coletaAmostra.setLoja(jsonObject.get("loja").toString());
                 coletaAmostra.setUnidade(jsonObject.get("unidade").toString());
@@ -143,7 +191,7 @@ public class ColetaWS {
                 coletaAmostra.setProduto(jsonObject.get("produto").toString());
                 coletaAmostra.setAtividade(jsonObject.get("atividade").toString());
                 coletaAmostra.setStatusAmostra("EU NAO SEI O QUE COLOCAR AQUI");
-                
+
                 coletaAmostraService.gravarColeta(coletaAmostra);
             }
 

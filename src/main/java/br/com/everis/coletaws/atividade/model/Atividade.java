@@ -19,6 +19,15 @@ public class Atividade implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Atividade() {
+
+    }
+
+    public Atividade(Long idAtividade, String nomeAtividade) {
+        this.idAtividade = idAtividade;
+        this.nomeAtividade = nomeAtividade;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_atividade")

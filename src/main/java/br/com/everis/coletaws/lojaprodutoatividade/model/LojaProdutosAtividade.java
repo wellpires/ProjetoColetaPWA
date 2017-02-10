@@ -22,7 +22,10 @@ import javax.persistence.Table;
 public class LojaProdutosAtividade implements Serializable{
     private static final long serialVersionUID = 1L;
  
-    
+    public LojaProdutosAtividade(){
+        
+    }
+
     private LojaProdutoAtividadePK lojaProdutoAtividadePK = new LojaProdutoAtividadePK();
 
     @EmbeddedId

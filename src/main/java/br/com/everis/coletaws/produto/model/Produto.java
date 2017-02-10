@@ -1,19 +1,12 @@
 package br.com.everis.coletaws.produto.model;
 
-import br.com.everis.coletaws.atividade.model.Atividade;
-import br.com.everis.coletaws.loja.model.Loja;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**

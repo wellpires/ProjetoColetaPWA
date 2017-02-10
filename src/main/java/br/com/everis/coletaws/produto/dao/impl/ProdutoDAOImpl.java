@@ -15,11 +15,10 @@ public class ProdutoDAOImpl extends JpaDao<Integer, Produto> implements IProduto
     public List<Produto> buscarProdutos() throws Exception {
         try {
             //SELECT P.id_produto, P.produto, P.atividade FROM sysnac.produtos P WHERE P.id_loja = 2
-            String strQuery = "SELECT new Produto(P.idProduto, P.nomeProduto, P.atividade, P.idLoja) FROM " + entityClass.getName() + " P";
+            String strQuery = "SELECT new Produto(P.idProduto, P.nomeProduto) FROM " + entityClass.getName() + " P";
             return entityManager.createQuery(strQuery).getResultList();
         } finally {
             entityManager.close();
         }
     }
-
 }
