@@ -62,8 +62,8 @@ var salvarDados = function (storageObj, tabela) {
                 var newRow = tbl_bd.createRow(storageObj[i]);
                 db.insert().into(tbl_bd).values([newRow]).exec();
             }
-            return;
         }
+        console.log('GRAVOU AS INFORMAÇÕES NO BANCO DE DADOS LOCAL NA TABELA ' + tabela + ' 5');
     });
 };
 
@@ -88,7 +88,10 @@ var buscarDadosAmostrador = function () {
 };
 
 var buscarDadosLojas = function (idAmostrador) {
+
+    console.log('COMEÇOU A BUSCA DE DADOS DO COMBO LOJA 6');
     return bdConfigs.schemaBuilder().connect().then(function (db) {
+        console.log('ENTROU NO PRIMEIRO CALLBACK PARA BUSCAR A LOJA 7');
         var tblLojas = db.getSchema().table('lojas');
         var tblUnidades = db.getSchema().table('unidades');
         var query = db.select(tblLojas.idLoja, tblLojas.nomeLoja).
