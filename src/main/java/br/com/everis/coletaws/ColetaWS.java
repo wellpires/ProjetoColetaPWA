@@ -15,7 +15,6 @@ import br.com.everis.coletaws.funcionario.services.impl.FuncionarioServiceImpl;
 import br.com.everis.coletaws.loja.model.Loja;
 import br.com.everis.coletaws.loja.service.ILojaService;
 import br.com.everis.coletaws.loja.service.impl.LojaServiceImpl;
-import br.com.everis.coletaws.lojaprodutoatividade.model.LojaProdutoAtividadePK;
 import br.com.everis.coletaws.lojaprodutoatividade.model.LojaProdutosAtividade;
 import br.com.everis.coletaws.lojaprodutoatividade.service.ILojaProdutoAtividadePKService;
 import br.com.everis.coletaws.lojaprodutoatividade.service.impl.LojaProdutoAtividadePKServiceImpl;
@@ -37,6 +36,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.glassfish.jersey.internal.Errors.ErrorMessage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -164,7 +164,7 @@ public class ColetaWS {
 
             return Response.ok(new Gson().toJson(jsonArray)).build();
         } catch (Exception e) {
-            return Response.serverError().build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
         }
     }
 
@@ -190,7 +190,7 @@ public class ColetaWS {
                 coletaAmostra.setHoraReal(sdfHora.parse(jsonObject.get("horaReal").toString()));
                 coletaAmostra.setProduto(jsonObject.get("produto").toString());
                 coletaAmostra.setAtividade(jsonObject.get("atividade").toString());
-                coletaAmostra.setStatusAmostra("EU NAO SEI O QUE COLOCAR AQUI");
+                coletaAmostra.setStatusAmostra("OK");
 
                 coletaAmostraService.gravarColeta(coletaAmostra);
             }
