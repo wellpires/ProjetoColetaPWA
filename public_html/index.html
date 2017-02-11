@@ -60,7 +60,7 @@
                         <td>
                             <input id="btnIniciar" type="button" value="INICIAR" disabled/>
                             <div style=" margin-top: 20px">
-                            <input id="btnParar" type="button" value="PARAR" disabled/>
+                                <input id="btnParar" type="button" value="PARAR" disabled/>
                             </div>
                         </td>
                         <td style="width:15%">
@@ -78,10 +78,16 @@
                 <th>Funcionário</th>
                 <th>Produto</th>
                 <th>Atividade</th>
-                <th style="width: 10%">nbsp</th>
+                <th style="width: 10%">&nbsp</th>
                 <th style="width: 5%">Tempo</th>
                 <th style="width: 10%">Ação</th>
             </tr>
         </table>
+        
+        <div id="fade"></div>
+        <div id="modal">
+            <img id="loader" src="images/ajax-loader.gif" />
+            <span id="status"></span>
+        </div>
     </body>
 </html>

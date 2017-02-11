@@ -48,6 +48,10 @@ var components = function () {
         return $('#btnSincronizar');
     };
 
+    var spanStatus = function () {
+        return $('#status');
+    };
+
     return{
         divFuncInfo: func_info,
         btnNovaLinha: btnNovaLinha,
@@ -60,19 +64,23 @@ var components = function () {
         cbAmostrador: cbAmostrador,
         cbLojas: cbLojas,
         cbUnidades: cbUnidades,
-        btnSincronizar: btnSincronizar
+        btnSincronizar: btnSincronizar,
+        spanStatus: spanStatus
     };
 
 }();
 
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
+//    var ORIGEM = 'http://localhost:8080/ColetaWS/';
     var ORIGEM = 'https://coletaWS.mybluemix.net/';
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + 'buscarAmostrador';
     var GET_BUSCAR_LOJAS = ORIGEM + 'buscarLojas';
     var GET_BUSCAR_UNIDADES = ORIGEM + 'buscarUnidades';
     var GET_BUSCAR_FUNCIONARIOS = ORIGEM + 'buscarFuncionarios';
-    var GET_BUSCAR_PRODUTOS_ATIVIDADES = ORIGEM + 'buscarProdutosAtividades';
+    var GET_BUSCAR_PRODUTOS = ORIGEM + 'buscarProdutos';
+    var GET_BUSCAR_ATIVIDADES = ORIGEM + 'buscarAtividades';
+    var GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES = ORIGEM + 'buscarLojasProdutosAtividades';
     var POST_GRAVAR_COLETA = ORIGEM + 'gravarColeta';
 
     return{
@@ -80,8 +88,10 @@ var urls = function () {
         GET_BUSCAR_LOJAS: GET_BUSCAR_LOJAS,
         GET_BUSCAR_UNIDADES: GET_BUSCAR_UNIDADES,
         GET_BUSCAR_FUNCIONARIOS: GET_BUSCAR_FUNCIONARIOS,
-        GET_BUSCAR_PRODUTOS_ATIVIDADES: GET_BUSCAR_PRODUTOS_ATIVIDADES,
-        POST_GRAVAR_COLETA: POST_GRAVAR_COLETA
+        GET_BUSCAR_PRODUTOS: GET_BUSCAR_PRODUTOS,
+        GET_BUSCAR_ATIVIDADES: GET_BUSCAR_ATIVIDADES,
+        POST_GRAVAR_COLETA: POST_GRAVAR_COLETA,
+        GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES: GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES
     };
 }();
 
@@ -131,7 +141,7 @@ window.onload = function () {
             var cbProduto = $('#tblColeta tr td select')[tamanhoFunci - 2];
             var cbAtividade = $('#tblColeta tr td select')[tamanhoFunci - 1];
 
-            popularComboFuncionarios(cbFuncionario, cbProduto, cbAtividade);
+            popularComboFuncionarios(cbFuncionario, cbProduto);
 
             var jqueryBtnAcao = '#' + idBtnAcao;
             $(jqueryBtnAcao).click(function (e) {
@@ -173,7 +183,7 @@ window.onload = function () {
                     CountDown().Start(301000, $('#tblColeta tr td span'));
                 }
 
-                if(($('#tblColeta tr').length - 1) === 1){
+                if (($('#tblColeta tr').length - 1) === 1) {
                     e.target.disabled = false;
                 }
 
@@ -198,6 +208,10 @@ window.onload = function () {
                 if (rowCount < 6) {
                     components.btnNovaLinha().attr("disabled", false);
                 }
+            });
+
+            $(cbProduto).change(function (e) {
+                popularComboAtividades(cbAtividade, e.target.value);
             });
 
         });
@@ -267,7 +281,6 @@ window.onload = function () {
         if (event.target.value === '') {
             return;
         }
-        components.cbLojas().attr('disabled', false);
         popularComboLojas();
 
     });
@@ -296,7 +309,7 @@ window.onload = function () {
         if (!confirm('Tem certeza?')) {
             return;
         }
-
+        openModal();
         if (!navigator.onLine) {
             buscarDadosAmostrador().then(function (rows) {
                 if (rows.length === 0)
@@ -305,34 +318,54 @@ window.onload = function () {
             });
             return;
         }
-
-        $.when(carregarAmostrador(), carregarLojas(), carregarUnidades(), carregarFuncionarios(), carregarProdutosAtividades()).then(function (amostradores, lojas, unidades, funcionarios, produtos) {
-            $.when(sincronizarColetaAmostraComServidor()).then(function (data) {
-                $.when(gravarColeta(data)).then(function () {
-                    $.when(apagarDados()).then(function () {
-                        var tblAmostrador = amostradores[0];
-                        var nomeTblAmostrador = 'amostradores';
-                        salvarDados(tblAmostrador, nomeTblAmostrador);
-
-                        var tblLojas = lojas[0];
-                        var nomeTblLojas = 'lojas';
-                        salvarDados(tblLojas, nomeTblLojas);
-
-                        var tblUnidades = unidades[0];
-                        var nomeTblUnidades = 'unidades';
-                        salvarDados(tblUnidades, nomeTblUnidades);
-
-                        var tblFuncionarios = funcionarios[0];
-                        var nomeTblFuncionarios = 'funcionarios';
-                        salvarDados(tblFuncionarios, nomeTblFuncionarios);
-
-                        var tblProdutos = produtos[0];
-                        var nomeTblProdutos = 'produtos';
-                        salvarDados(tblProdutos, nomeTblProdutos);
-
-                        if (!$('#tblCabecalho tr td #select_amostrador')[0].disabled) {
-                            popularComboAmostrador(tblAmostrador);
-                        }
+        carregarAmostrador().done(function (amostradores) {
+            carregarLojas().done(function (lojas) {
+                carregarUnidades().done(function (unidades) {
+                    carregarFuncionarios().done(function (funcionarios) {
+                        carregarProdutos().done(function (produtos) {
+                            carregarAtividades().done(function (atividades) {
+                                carregarLojasProdutosAtividades().done(function (lojasProdutosAtividades) {
+                                    sincronizarColetaAmostraComServidor().then(function (data) {
+                                        gravarColeta(data).always(function () {
+                                            $.when(apagarDados()).then(function () {
+                                                var tblAmostrador = amostradores;
+                                                var nomeTblAmostrador = 'amostradores';
+                                                salvarDados(tblAmostrador, nomeTblAmostrador).then(function () {
+                                                    var tblLojas = lojas;
+                                                    var nomeTblLojas = 'lojas';
+                                                    salvarDados(tblLojas, nomeTblLojas).then(function () {
+                                                        var tblUnidades = unidades;
+                                                        var nomeTblUnidades = 'unidades';
+                                                        salvarDados(tblUnidades, nomeTblUnidades).then(function () {
+                                                            var tblFuncionarios = funcionarios;
+                                                            var nomeTblFuncionarios = 'funcionarios';
+                                                            salvarDados(tblFuncionarios, nomeTblFuncionarios).then(function () {
+                                                                var tblProdutos = produtos;
+                                                                var nomeTblProdutos = 'produtos';
+                                                                salvarDados(tblProdutos, nomeTblProdutos).then(function () {
+                                                                    var tblAtividade = atividades;
+                                                                    var nomeTblAtividades = 'atividades';
+                                                                    salvarDados(tblAtividade, nomeTblAtividades).then(function () {
+                                                                        var tblLojasProdutoAtividades = lojasProdutosAtividades;
+                                                                        var nomeLojasProdutoAtividades = 'lojas_produtos_atividades';
+                                                                        salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades).then(function () {
+                                                                            if (!$('#tblCabecalho tr td #select_amostrador')[0].disabled) {
+                                                                                popularComboAmostrador(tblAmostrador);
+                                                                                closeModal();
+                                                                            }
+                                                                        });
+                                                                    });
+                                                                });
+                                                            });
+                                                        });
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
             });
@@ -487,6 +520,7 @@ var popularComboLojas = function () {
     var codAmostrador = components.cbAmostrador().val();
     var query = buscarDadosLojas(codAmostrador);
     query.then(function (lojas) {
+        lojas = retirarObjetosRepetidos(lojas);
         components.cbLojas().attr('disabled', false);
         $select = components.cbLojas();
         $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
@@ -513,7 +547,7 @@ var popularComboUnidades = function () {
     });
 };
 
-var popularComboFuncionarios = function (cbFuncionario, cbProduto, cbAtividade) {
+var popularComboFuncionarios = function (cbFuncionario, cbProduto) {
 
     var idAmostrador = components.cbAmostrador().val();
     var idLoja = components.cbLojas().val();
@@ -525,32 +559,35 @@ var popularComboFuncionarios = function (cbFuncionario, cbProduto, cbAtividade) 
         $.each(funcionarios[0], function (index, object) {
             $('<option>').val(object.idFuncionario).text(object.nomeFuncionario).appendTo($select);
         });
-        popularComboProdutosAtividades(cbProduto, cbAtividade);
+        popularComboProdutos(cbProduto);
     });
 
 };
 
-var popularComboProdutosAtividades = function (cbProduto, cbAtividade) {
+var popularComboProdutos = function (cbProduto) {
 
     var idLoja = components.cbLojas().val();
 
-    var query = buscarDadosProdutosAtividades(idLoja);
-    query.then(function (produtos) {
+    $.when(buscarDadosProdutos(idLoja)).then(function (produtos) {
         cbProduto = $(cbProduto);
-        cbAtividade = $(cbAtividade);
-
         cbProduto.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-        cbAtividade.find('option').remove().end().append('<option value="">Selecione</option>').val('');
         $.each(produtos, function (index, object) {
-            $('<option>').val(object.idProduto).text(object.nomeProduto).appendTo(cbProduto);
+            $('<option>').val(object.produtos.idProduto).text(object.produtos.nomeProduto).appendTo(cbProduto);
         });
-
-        $.each(produtos, function (index, object) {
-            $('<option>').val(object.idProduto).text(object.atividade).appendTo(cbAtividade);
-        });
-
     });
+};
 
+var popularComboAtividades = function (cbAtividades, idProduto) {
+
+    var idLoja = components.cbLojas().val();
+    $.when(buscarDadosAtividades(idLoja, idProduto)).then(function (atividades) {
+        cbAtividades = $(cbAtividades);
+        cbAtividades.attr('disabled', false);
+        cbAtividades.find('option').remove().end().append('<option value="">Selecione</option>').val('');
+        $.each(atividades, function (index, object) {
+            $('<option>').val(object.atividades.idAtividade).text(object.atividades.nomeAtividade).appendTo(cbAtividades);
+        });
+    });
 };
 
 var carregarAmostrador = function () {
@@ -569,8 +606,16 @@ var carregarFuncionarios = function () {
     return $.get(urls.GET_BUSCAR_FUNCIONARIOS);
 };
 
-var carregarProdutosAtividades = function () {
-    return $.get(urls.GET_BUSCAR_PRODUTOS_ATIVIDADES);
+var carregarProdutos = function () {
+    return $.get(urls.GET_BUSCAR_PRODUTOS);
+};
+
+var carregarAtividades = function () {
+    return $.get(urls.GET_BUSCAR_ATIVIDADES);
+};
+
+var carregarLojasProdutosAtividades = function () {
+    return $.get(urls.GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES);
 };
 
 var sincronizarColetaAmostraComServidor = function () {
@@ -578,9 +623,7 @@ var sincronizarColetaAmostraComServidor = function () {
 };
 
 var gravarColeta = function (data) {
-    if (data.length === 0)
-        return;
-    $.ajax({
+    return $.ajax({
         url: urls.POST_GRAVAR_COLETA,
         type: "post",
         data: JSON.stringify(data),
@@ -685,6 +728,30 @@ var resetCb = function () {
 
 var apagarTabela = function () {
     $.each($('#tblColeta select').parent().parent().parent(), function (index, object) {
-        object.remove()
+        object.remove();
     });
+};
+
+var retirarObjetosRepetidos = function (array) {
+    var results = [];
+    var idsSeen = {};
+    var idSeenValue = {};
+    for (var i = 0, len = array.length, id; i < len; ++i) {
+        id = array[i].lojas.idLoja;
+        if (idsSeen[id] !== idSeenValue) {
+            results.push(array[i]);
+            idsSeen[id] = idSeenValue;
+        }
+    }
+    return results;
+};
+
+var openModal = function () {
+    $('#modal').css('display', 'block');
+    $('#fade').css('display', 'block');
+};
+
+var closeModal = function () {
+    $('#modal').css('display', 'none');
+    $('#fade').css('display', 'none');
 };
