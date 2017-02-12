@@ -16,6 +16,11 @@ var bdConfigs = function () {
                 addColumn('nomeProduto', lf.Type.STRING).
                 addPrimaryKey(['idProduto']);
 
+        schemaConfig.createTable('atividades').
+                addColumn('idAtividade', lf.Type.INTEGER).
+                addColumn('nomeAtividade', lf.Type.STRING).
+                addPrimaryKey(['idAtividade']);
+
         schemaConfig.createTable('unidades').
                 addColumn('idUnidade', lf.Type.INTEGER).
                 addColumn('nomeUnidade', lf.Type.STRING).
@@ -29,11 +34,6 @@ var bdConfigs = function () {
 //                addColumn('cargo', lf.Type.STRING). --> SERÁ ADICIONADO EM UMA VERSÃO FUTURA
                 addColumn('idUnidade', lf.Type.INTEGER).
                 addPrimaryKey(['idFuncionario']);
-
-        schemaConfig.createTable('atividades').
-                addColumn('idAtividade', lf.Type.INTEGER).
-                addColumn('nomeAtividade', lf.Type.STRING).
-                addPrimaryKey(['idAtividade']);
 
         schemaConfig.createTable('lojas_produtos_atividades').
                 addColumn('codTeste', lf.Type.INTEGER).
@@ -67,9 +67,6 @@ var salvarDados = function (storageObj, tabela) {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
         var tbl_bd = db.getSchema().table(tabela);
         if (storageObj instanceof Array) {
-//            for (var i = 0; i < storageObj.length; i++) {
-//                manyRows.push(tbl_bd.createRow(storageObj[i]));
-//            }
             var rows = storageObj.map(function (obj) {
                 return tbl_bd.createRow(obj);
             });
@@ -78,17 +75,6 @@ var salvarDados = function (storageObj, tabela) {
         return db.insert().into(tbl_bd).values(rows).exec();
     });
 };
-//var salvarDados = function (storageObj, tabela) {
-//    bdConfigs.schemaBuilder().connect().then(function (db) {
-//        var tbl_bd = db.getSchema().table(tabela);
-//        if (storageObj instanceof Array) {
-//            for (var i = 0; i < storageObj.length; i++) {
-//                var newRow = tbl_bd.createRow(storageObj[i]);
-//                db.insert().into(tbl_bd).values([newRow]).exec();
-//            }
-//        }
-//    });
-//};
 
 var apagarDados = function () {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
@@ -139,12 +125,9 @@ var buscarDadosUnidades = function (idAmostrador, idLoja) {
 var buscarDadosFuncionarios = function (idUnidade) {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
         var tblFuncionarios = db.getSchema().table('funcionarios');
-        var tblUnidades = db.getSchema().table('unidades');
         var query = db.select(tblFuncionarios.idFuncionario, tblFuncionarios.nomeFuncionario).
                 from(tblFuncionarios).
-                innerJoin(tblUnidades, tblUnidades.idUnidade.eq(tblFuncionarios.idUnidade)).
-                where(lf.op.and(tblUnidades.idUnidade.eq(idUnidade))).
-                groupBy(tblFuncionarios.idFuncionario, tblFuncionarios.nomeFuncionario);
+                where(tblFuncionarios.idUnidade.eq(idUnidade));
         return query.exec();
     });
 };

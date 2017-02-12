@@ -315,9 +315,11 @@ window.onload = function () {
                 if (rows.length === 0)
                     return;
                 popularComboAmostrador(rows);
+                closeModal();
             });
             return;
         }
+        components.spanStatus().text('CARREGANDO DADOS DO SERVIDOR...');
         carregarAmostrador().done(function (amostradores) {
             carregarLojas().done(function (lojas) {
                 carregarUnidades().done(function (unidades) {
@@ -325,6 +327,7 @@ window.onload = function () {
                         carregarProdutos().done(function (produtos) {
                             carregarAtividades().done(function (atividades) {
                                 carregarLojasProdutosAtividades().done(function (lojasProdutosAtividades) {
+                                    components.spanStatus().text('FINALIZANDO...');
                                     sincronizarColetaAmostraComServidor().then(function (data) {
                                         gravarColeta(data).always(function () {
                                             $.when(apagarDados()).then(function () {
@@ -549,14 +552,12 @@ var popularComboUnidades = function () {
 
 var popularComboFuncionarios = function (cbFuncionario, cbProduto) {
 
-    var idAmostrador = components.cbAmostrador().val();
-    var idLoja = components.cbLojas().val();
     var idUnidade = components.cbUnidades().val();
 
-    $.when(buscarDadosFuncionarios(idAmostrador, idLoja, idUnidade)).then(function (funcionarios) {
+    buscarDadosFuncionarios(idUnidade).then(function (funcionarios) {
         $select = $(cbFuncionario);
         $select.find('option').remove().end().append('<option value="">Selecione</option>').val('');
-        $.each(funcionarios[0], function (index, object) {
+        $.each(funcionarios, function (index, object) {
             $('<option>').val(object.idFuncionario).text(object.nomeFuncionario).appendTo($select);
         });
         popularComboProdutos(cbProduto);
