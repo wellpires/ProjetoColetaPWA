@@ -311,11 +311,15 @@ window.onload = function () {
         }
         openModal();
         if (!navigator.onLine) {
+            alert('Você está offline. Nenhum dados será carregado ou gravado no servidor.');
             buscarDadosAmostrador().then(function (rows) {
                 if (rows.length === 0)
                     return;
                 popularComboAmostrador(rows);
                 closeModal();
+            }).catch(function () {
+                components.spanStatus().text('Erro ao conectar no banco de dados local.');
+                errorModal();
             });
             return;
         }
@@ -356,22 +360,67 @@ window.onload = function () {
                                                                                 popularComboAmostrador(tblAmostrador);
                                                                                 closeModal();
                                                                             }
+                                                                        }).catch(function () {
+                                                                            components.spanStatus().text('ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.');
+                                                                            errorModal();
                                                                         });
+                                                                    }).catch(function () {
+                                                                        components.spanStatus().text('ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.');
+                                                                        errorModal();
                                                                     });
+                                                                }).catch(function () {
+                                                                    components.spanStatus().text('ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.');
+                                                                    errorModal();
                                                                 });
+                                                            }).catch(function () {
+                                                                components.spanStatus().text('ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.');
+                                                                errorModal();
                                                             });
+                                                        }).catch(function () {
+                                                            components.spanStatus().text('ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.');
+                                                            errorModal();
                                                         });
+                                                    }).catch(function () {
+                                                        components.spanStatus().text('ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.');
+                                                        errorModal();
                                                     });
+                                                }).catch(function () {
+                                                    components.spanStatus().text('ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.');
+                                                    errorModal();
                                                 });
                                             });
                                         });
+                                    }).catch(function () {
+                                        components.spanStatus().text('ERRO AO CARREGAR DADOS DO BANCO LOCAL.');
+                                        errorModal();
                                     });
+                                }).fail(function (e) {
+                                    components.spanStatus().text('ERRO AO CARREGAR DADOS DO SERVIDOR.');
+                                    errorModal();
                                 });
+                            }).fail(function (e) {
+                                components.spanStatus().text('ERRO AO CARREGAR ATIVIDADES DO SERVIDOR.');
+                                errorModal();
                             });
+                        }).fail(function (e) {
+                            components.spanStatus().text('ERRO AO CARREGAR PRODUTOS DO SERVIDOR.');
+                            errorModal();
                         });
+                    }).fail(function (e) {
+                        components.spanStatus().text('ERRO AO CARREGAR FUNCIONÁRIOS DO SERVIDOR.');
+                        errorModal();
                     });
+                }).fail(function (e) {
+                    components.spanStatus().text('ERRO AO CARREGAR UNIDADES DO SERVIDOR.');
+                    errorModal();
                 });
+            }).fail(function (e) {
+                components.spanStatus().text('ERRO AO CARREGAR LOJAS DO SERVIDOR.');
+                errorModal();
             });
+        }).fail(function (e) {
+            components.spanStatus().text('ERRO AO CARREGAR AMOSTRADOR DO SERVIDOR.');
+            errorModal();
         });
     });
 };
@@ -755,4 +804,22 @@ var openModal = function () {
 var closeModal = function () {
     $('#modal').css('display', 'none');
     $('#fade').css('display', 'none');
+};
+
+
+var infoModal = function () {
+    $('#modal').css({'border': '3px solid #ababab',
+        'box-shadow': '1px 1px 10px #ababab'});
+};
+
+var errorModal = function () {
+    var $div2 = $("#modal");
+    if ($div2.data("active")) {
+        return;
+    }
+    $div2.css({'border': '3px solid #f73b3b',
+                'box-shadow': '1px 1px 10px #f73b3b'});
+    setTimeout(function () {
+        closeModal();
+    }, 5000);
 };
