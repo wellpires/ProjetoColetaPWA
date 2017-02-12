@@ -8,18 +8,21 @@
         <link rel="stylesheet" href="styles/style.css">
         <link rel="stylesheet" href="styles/stylePWA.css">
 
-        <link rel="apple-touch-icon" href="touch-icon-60.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="touch-icon-60.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="touch-icon-76.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="touch-icon-120.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="touch-icon-152.png">
-        <link rel="apple-touch-icon" sizes="167x167" href="touch-icon-167.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="touch-icon-180.png">
-        <link rel="apple-touch-startup-image" href="/touch-icon-120.png">
+        <link rel="apple-touch-icon" href="images/touch-icon-60.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="images/touch-icon-60.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="images/touch-icon-76.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="images/touch-icon-120.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="images/touch-icon-152.png">
+        <link rel="apple-touch-icon" sizes="167x167" href="images/touch-icon-167.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="images/touch-icon-180.png">
+        <link rel="apple-touch-startup-image" href="images/touch-icon-120.png">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="white">
         <meta name="apple-mobile-web-app-title" content="NAC - Ferramenta de Coleta de Tempos">
-
+        <!-- manifest and meta theme color -->
+        <link rel="manifest" href="manifest.json">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        
         <script src="plugins/jquery-3.1.1.min.js" ></script>
         <script src="plugins/lovefield/dist/lovefield.min.js"></script>
         <script src="script/pwaColeta.js" ></script>
@@ -83,7 +86,7 @@
                 <th style="width: 10%">&nbsp</th>
             </tr>
         </table>
-        
+
         <div id="fade"></div>
         <div id="modal">
             <img id="loader" src="images/ajax-loader.gif" /><br/>

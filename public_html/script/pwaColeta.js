@@ -313,8 +313,10 @@ window.onload = function () {
         if (!navigator.onLine) {
             alert('Você está offline. Nenhum dados será carregado ou gravado no servidor.');
             buscarDadosAmostrador().then(function (rows) {
-                if (rows.length === 0)
+                if (rows.length === 0) {
+                    closeModal();
                     return;
+                }
                 popularComboAmostrador(rows);
                 closeModal();
             }).catch(function () {
@@ -818,7 +820,7 @@ var errorModal = function () {
         return;
     }
     $div2.css({'border': '3px solid #f73b3b',
-                'box-shadow': '1px 1px 10px #f73b3b'});
+        'box-shadow': '1px 1px 10px #f73b3b'});
     setTimeout(function () {
         closeModal();
     }, 5000);
