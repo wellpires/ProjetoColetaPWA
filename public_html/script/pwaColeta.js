@@ -113,18 +113,19 @@ window.onload = function () {
     startTime();
 
     components.btnNovaLinha().click(function () {
-        var rowCount = $('#tblColeta > tbody > tr').length;
-
-        if (rowCount === 1) {
-            components.btnIniciar().attr("disabled", false);
-        }
-
-        if (rowCount > 7) {
-            $(this).attr("disabled", true);
-            return;
-        }
-
         $.get('row_coleta.html', function (data) {
+            
+            var rowCount = $('#tblColeta tr').length;
+
+            if (rowCount === 1) {
+                components.btnIniciar().attr('disabled', 'false');
+            }
+
+            if (rowCount === 8) {
+                components.btnNovaLinha().attr('disabled', 'true');
+                return;
+            }
+            
             $('#tblColeta > tbody:last-child').append(data);
             var randomId = parseInt(Math.random() * 1000);
             var divId = 'idDiv' + randomId;
@@ -197,7 +198,7 @@ window.onload = function () {
 
                 $(this).parents('tr').remove();
 
-                var rowCount = $('#tblColeta > tbody > tr').length;
+                var rowCount = $('#tblColeta tr').length;
                 if (rowCount === 1) {
                     components.btnIniciar().attr("disabled", true);
                     components.btnParar().attr("disabled", true);
@@ -205,7 +206,7 @@ window.onload = function () {
                     components.btnNovaLinha().attr("disabled", false);
                     zerarContagemRegressiva();
                 }
-                if (rowCount < 6) {
+                if (rowCount === 7) {
                     components.btnNovaLinha().attr("disabled", false);
                 }
             });
@@ -247,8 +248,13 @@ window.onload = function () {
 
             $('#tblColeta tr td button')[0].disabled = false;
 
+//            5 segundos para teste
+//            CountDown().Start(5000, $('#tblColeta tr td span'));
             CountDown().Start(300000, $('#tblColeta tr td span'));
             $.each($('#tblColeta tr .func_nome'), function (index, object) {
+                object.disabled = true;
+            });
+            $.each($('#tblColeta tr td input'), function (index, object) {
                 object.disabled = true;
             });
 
@@ -257,6 +263,9 @@ window.onload = function () {
             pausarParar(TEXTO_INICIAR);
             components.btnParar().attr("disabled", false);
             components.btnNovaLinha().attr("disabled", false);
+            $.each($('#tblColeta tr td input'), function (index, object) {
+                object.disabled = false;
+            });
         }
     });
 
@@ -265,9 +274,9 @@ window.onload = function () {
             return;
         }
 
-        resetCb();
         gravarDados();
         pausarParar(TEXTO_INICIAR);
+        resetCb();
         components.btnIniciar().attr("disabled", true);
     });
 
@@ -457,99 +466,6 @@ var zerarContagemRegressiva = function () {
     }
 };
 
-var CountDown = function () {
-
-    // Length ms
-    var TimeOut = 10;
-    // Interval ms
-    var TimeGap = 1000;
-
-    var CurrentTime = (new Date()).getTime();
-    var EndTime = (new Date()).getTime() + TimeOut;
-
-    var GuiTimer = null;
-
-    var Running = false;
-
-    var UpdateTimer = function () {
-        // Run till timeout
-        if (CurrentTime + TimeGap < EndTime) {
-            timeout = setTimeout(UpdateTimer, TimeGap);
-        }
-        // Countdown if running
-        if (Running) {
-            CurrentTime += TimeGap;
-
-            for (var i = 0; i < GuiTimer.length; i++) {
-                if (converterMinutosParaMilis(GuiTimer[i].innerHTML) < 62000) {
-                    GuiTimer[i].parentNode.parentNode.style.backgroundColor = 'red';
-                }
-                if (converterMinutosParaMilis(GuiTimer[i].innerHTML) === 1000) {
-                    if (i === 1) {
-                        gravarDados();
-                    }
-
-                    GuiTimer[i].parentNode.parentNode.style.backgroundColor = 'white';
-                    $(GuiTimer[i].parentNode.parentNode.children[3].children).attr('disabled', true);
-                    $(GuiTimer[0].parentNode.parentNode.children[3].children).attr('disabled', false);
-
-                }
-            }
-
-        }
-        // Update Gui
-        var Time = new Date();
-        Time.setTime(EndTime - CurrentTime);
-        var Minutes = Time.getMinutes();
-        var Seconds = Time.getSeconds();
-
-        for (var i = 0; i < GuiTimer.length; i++) {
-            GuiTimer[i].innerHTML = (Minutes < 10 ? '0' : '') + Minutes + ':' + (Seconds < 10 ? '0' : '') + Seconds;
-            if (converterMinutosParaMilis(GuiTimer[i].innerHTML) === 0) {
-                $($('#tblColeta tr td select.func_produto')[i]).val('');
-                $($('#tblColeta tr td select.func_atividade')[i]).val('');
-                GuiTimer[i].innerHTML = '05:00';
-                if (i === (GuiTimer.length - 1)) {
-                    keep(301000);
-                }
-            }
-        }
-
-    };
-
-    var Pause = function () {
-        Running = false;
-        TimeOut = 301000;
-    };
-
-    var Resume = function () {
-        Running = true;
-    };
-
-    var Start = function (Timeout, componentDisplay) {
-        Running = true;
-        GuiTimer = componentDisplay;
-        TimeOut = Timeout;
-        CurrentTime = (new Date()).getTime();
-        EndTime = (new Date()).getTime() + TimeOut;
-        UpdateTimer();
-    };
-
-    var keep = function (Timeout) {
-        Running = true;
-        TimeOut = Timeout;
-        CurrentTime = (new Date()).getTime();
-        EndTime = (new Date()).getTime() + TimeOut;
-        UpdateTimer();
-    };
-
-    return {
-        Pause: Pause,
-        Resume: Resume,
-        Start: Start
-    };
-};
-
 var converterMinutosParaMilis = function (minutos) {
 
     var regex = /:/;
@@ -686,7 +602,7 @@ var gravarColeta = function (data) {
 
 };
 
-var gravarDados = function (rowIndex) {
+var gravarDados = function (rowIndex, limiteItens) {
     var amostradorValue = components.cbAmostrador().find('option:selected').text();
     var lojaValue = components.cbLojas().find('option:selected').text();
     var unidadeVale = components.cbUnidades().find('option:selected').text();
@@ -700,6 +616,9 @@ var gravarDados = function (rowIndex) {
     if (rowIndex !== undefined) {
         init = rowIndex;
         limit = rowIndex + 1;
+    }
+    if (limiteItens !== undefined) {
+        limit = limiteItens;
     }
 
 
@@ -728,7 +647,7 @@ var gravarDados = function (rowIndex) {
         } else {
             funcValue = $(func)[i].text;
         }
-        
+
 
         var json = {
             'amostrador': amostradorValue,
@@ -740,7 +659,7 @@ var gravarDados = function (rowIndex) {
             'produto': produtoValue,
             'atividade': atividadeValue,
             'statusAmostra': '',
-            'funcionario' : funcValue
+            'funcionario': funcValue
         };
         arrayJson.push(json);
 
