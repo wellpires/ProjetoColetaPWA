@@ -191,7 +191,9 @@ public class ColetaWS {
                 coletaAmostra.setProduto(jsonObject.get("produto").toString());
                 coletaAmostra.setAtividade(jsonObject.get("atividade").toString());
                 coletaAmostra.setStatusAmostra("OK");
-
+                if(jsonObject.get("funcionario") != null){
+                    coletaAmostra.setFuncionario(jsonObject.get("funcionario").toString());
+                }
                 coletaAmostraService.gravarColeta(coletaAmostra);
             }
 

@@ -21,39 +21,42 @@ import javax.persistence.TemporalType;
 public class ColetaAmostra implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_amostra")
     private Long idAmostra = null;
-    
+
+    @Column(name = "funcionario", length = 60)
+    private String funcionario = null;
+
     @Column(name = "amostrador", nullable = false, length = 60)
     private String amostrador = null;
-    
+
     @Column(name = "loja", nullable = false, length = 60)
     private String loja = null;
-    
+
     @Column(name = "unidade", nullable = false, length = 60)
     private String unidade = null;
-    
+
     @Column(name = "data_coleta", nullable = false)
     @Temporal(value = TemporalType.DATE)
     private Date dataColeta = null;
-    
+
     @Column(name = "hora_coleta", nullable = false)
     @Temporal(value = TemporalType.TIME)
     private Date horaColeta = null;
-    
+
     @Column(name = "hora_real", nullable = false)
     @Temporal(value = TemporalType.TIME)
     private Date horaReal = null;
 
     @Column(name = "produto", nullable = false, length = 60)
     private String produto = null;
-    
+
     @Column(name = "atividade", nullable = false, length = 60)
     private String atividade = null;
-    
+
     @Column(name = "status_amostra", nullable = false, length = 60)
     private String statusAmostra = null;
 
@@ -137,10 +140,19 @@ public class ColetaAmostra implements Serializable {
         this.statusAmostra = statusAmostra;
     }
 
+    public String getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(String funcionario) {
+        this.funcionario = funcionario;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 59 * hash + Objects.hashCode(this.idAmostra);
+        hash = 59 * hash + Objects.hashCode(this.funcionario);
         hash = 59 * hash + Objects.hashCode(this.amostrador);
         hash = 59 * hash + Objects.hashCode(this.loja);
         hash = 59 * hash + Objects.hashCode(this.unidade);
@@ -166,6 +178,9 @@ public class ColetaAmostra implements Serializable {
         }
         final ColetaAmostra other = (ColetaAmostra) obj;
         if (!Objects.equals(this.amostrador, other.amostrador)) {
+            return false;
+        }
+        if (!Objects.equals(this.funcionario, other.funcionario)) {
             return false;
         }
         if (!Objects.equals(this.loja, other.loja)) {
@@ -197,7 +212,4 @@ public class ColetaAmostra implements Serializable {
         }
         return true;
     }
-
-    
-    
 }
