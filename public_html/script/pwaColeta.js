@@ -310,6 +310,7 @@ window.onload = function () {
             return;
         }
         openModal();
+        infoModal();
         if (!navigator.onLine) {
             alert('Você está offline. Nenhum dados será carregado ou gravado no servidor.');
             buscarDadosAmostrador().then(function (rows) {
@@ -689,7 +690,6 @@ var gravarDados = function (rowIndex) {
     var amostradorValue = components.cbAmostrador().find('option:selected').text();
     var lojaValue = components.cbLojas().find('option:selected').text();
     var unidadeVale = components.cbUnidades().find('option:selected').text();
-//  var funcionarioValue = $('#tblColeta tr .func_nome ')[rowIndex].text;
     var funcProduto = $('#tblColeta tr .func_produto :selected');
     var produtoValue = null;
     var arrayJson = [];
@@ -720,6 +720,16 @@ var gravarDados = function (rowIndex) {
             atividadeValue = $(funcAtividade)[i].text;
         }
 
+        var func = $('#tblColeta tr .func_nome :selected');
+        var funcValue = null;
+
+        if ($(func)[i] === undefined) {
+            funcValue = $(func).text();
+        } else {
+            funcValue = $(func)[i].text;
+        }
+        
+
         var json = {
             'amostrador': amostradorValue,
             'loja': lojaValue,
@@ -729,9 +739,9 @@ var gravarDados = function (rowIndex) {
             'horaReal': new Date(),
             'produto': produtoValue,
             'atividade': atividadeValue,
-            'statusAmostra': ''
+            'statusAmostra': '',
+            'funcionario' : funcValue
         };
-
         arrayJson.push(json);
 
     }

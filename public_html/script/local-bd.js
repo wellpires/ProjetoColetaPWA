@@ -53,6 +53,7 @@ var bdConfigs = function () {
                 addColumn('produto', lf.Type.STRING).
                 addColumn('atividade', lf.Type.STRING).
                 addColumn('statusAmostra', lf.Type.STRING).
+                addColumn('funcionario', lf.Type.STRING).
                 addPrimaryKey(['idAmostra'], true);
 
         return schemaConfig;
