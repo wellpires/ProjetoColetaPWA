@@ -1,27 +1,9 @@
 var gulp = require('gulp');
-var browserSync = require('browser-sync');
-var reload = browserSync.reload;
-var sass = require('gulp-sass');
-var autoprefixer = require('gulp-autoprefixer');
-var minifyCss = require('gulp-clean-css');
-var rename = require('gulp-rename');
-var del = require('del');
 var swPrecache = require('sw-precache');
 
-gulp.task('sass', function () {
-  return gulp
-    .src('./scss/*.scss')
-    .pipe(sass())
-    .pipe(autoprefixer())
-    .pipe(gulp.dest('./scss/'))
-    .pipe(minifyCss({}))
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest('./scss/'));
-});
-
-gulp.task('generate-sw', function() {
-  var swOptions = {
-    staticFileGlobs: [
+gulp.task('generate-sw', function () {
+    var swOptions = {
+        staticFileGlobs: [
             './*.html',
             './images/*.{png,svg,gif,jpg}',
             './script/*.js',
@@ -42,35 +24,18 @@ gulp.task('generate-sw', function() {
             './plugins/lovefield/spac/*.js',
             './plugins/lovefield/*.{js, yml}'
         ],
-    stripPrefix: '.',
-    runtimeCaching: [{
-      urlPattern: /^https:\/\/publicdata-weather\.firebaseio\.com/,
-      handler: 'networkFirst',
-      options: {
-        cache: {
-          name: 'coletaDadosCache-v4'
-        }
-      }
-    }]
-  };
-  return swPrecache.write('./service-worker.js', swOptions);
+        stripPrefix: './',
+        runtimeCaching: [{
+                urlPattern: /^https:\/\/coletaWS.mybluemix.net/,
+                handler: 'networkFirst',
+                options: {
+                    cache: {
+                        name: 'coletaDadosCache-v1'
+                    }
+                }
+            }]
+    };
+    return swPrecache.write('./service-worker.js', swOptions);
 });
 
-gulp.task('serve', ['generate-sw'], function() {
-  gulp.watch('./scss/*.scss', ['sass']);
-  browserSync({
-    notify: false,
-    logPrefix: 'coletaAmostra',
-    server: ['.'],
-    open: false
-  });
-  gulp.watch([
-    './*.html',
-    './script/*.js',
-    './styles/*.css',
-    '!./service-worker.js',
-    '!./gulpfile.js'
-  ], ['generate-sw'], browserSync.reload);
-});
-
-gulp.task('default', ['serve']);
+gulp.task('default', ['generate-sw']);
