@@ -1,6 +1,5 @@
 package br.com.everis.coletaws.unidade.model;
 
-import br.com.everis.coletaws.amostrador.model.Amostrador;
 import br.com.everis.coletaws.loja.model.Loja;
 import java.io.Serializable;
 import java.util.Objects;
@@ -31,10 +30,9 @@ public class Unidade implements Serializable {
         this.nomeUnidade = nomeUnidade;
     }
 
-    public Unidade(Long idUnidade, String nomeUnidade, Long idAmostrador, Long idLoja) {
+    public Unidade(Long idUnidade, String nomeUnidade, Long idLoja) {
         this.idUnidade = idUnidade;
         this.nomeUnidade = nomeUnidade;
-        this.idAmostrador = idAmostrador;
         this.idLoja = idLoja;
     }
 
@@ -44,18 +42,11 @@ public class Unidade implements Serializable {
     private Long idUnidade = null;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_amostrador")
-    private Amostrador amostrador = null;
-
-    @ManyToOne(optional = false)
     @JoinColumn(name = "id_loja")
     private Loja loja = null;
 
     @Column(name = "unidade", nullable = false, length = 60)
     private String nomeUnidade = null;
-
-    @Column(name = "id_amostrador", insertable = false, updatable = false)
-    private Long idAmostrador = null;
 
     @Column(name = "id_loja", insertable = false, updatable = false)
     private Long idLoja = null;
@@ -69,14 +60,6 @@ public class Unidade implements Serializable {
 
     public void setIdUnidade(Long idUnidade) {
         this.idUnidade = idUnidade;
-    }
-
-    public Amostrador getAmostrador() {
-        return amostrador;
-    }
-
-    public void setAmostrador(Amostrador amostrador) {
-        this.amostrador = amostrador;
     }
 
     public Loja getLoja() {
@@ -93,14 +76,6 @@ public class Unidade implements Serializable {
 
     public void setNomeUnidade(String nomeUnidade) {
         this.nomeUnidade = nomeUnidade;
-    }
-
-    public Long getIdAmostrador() {
-        return idAmostrador;
-    }
-
-    public void setIdAmostrador(Long idAmostrador) {
-        this.idAmostrador = idAmostrador;
     }
 
     public Long getIdLoja() {
@@ -123,10 +98,8 @@ public class Unidade implements Serializable {
     public int hashCode() {
         int hash = 7;
         hash = 29 * hash + Objects.hashCode(this.idUnidade);
-        hash = 29 * hash + Objects.hashCode(this.amostrador);
         hash = 29 * hash + Objects.hashCode(this.loja);
         hash = 29 * hash + Objects.hashCode(this.nomeUnidade);
-        hash = 29 * hash + Objects.hashCode(this.idAmostrador);
         hash = 29 * hash + Objects.hashCode(this.idLoja);
         return hash;
     }
@@ -149,13 +122,7 @@ public class Unidade implements Serializable {
         if (!Objects.equals(this.idUnidade, other.idUnidade)) {
             return false;
         }
-        if (!Objects.equals(this.amostrador, other.amostrador)) {
-            return false;
-        }
         if (!Objects.equals(this.loja, other.loja)) {
-            return false;
-        }
-        if (!Objects.equals(this.idAmostrador, other.idAmostrador)) {
             return false;
         }
         if (!Objects.equals(this.idLoja, other.idLoja)) {
@@ -163,5 +130,4 @@ public class Unidade implements Serializable {
         }
         return true;
     }
-
 }

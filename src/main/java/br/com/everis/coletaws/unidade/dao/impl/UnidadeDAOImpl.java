@@ -14,10 +14,9 @@ public class UnidadeDAOImpl extends JpaDao<Integer, Unidade> implements IUnidade
     @Override
     public List<Unidade> buscarUnidades() throws Exception {
         try {
-            return entityManager.createQuery("SELECT new Unidade(U.idUnidade, U.nomeUnidade, U.amostrador.idAmostrador, U.loja.idLoja) FROM " + entityClass.getName() + " U").getResultList();
+            return entityManager.createQuery("SELECT new Unidade(U.idUnidade, U.nomeUnidade, U.loja.idLoja) FROM " + entityClass.getName() + " U").getResultList();
         } finally {
             entityManager.close();
         }
     }
-
 }

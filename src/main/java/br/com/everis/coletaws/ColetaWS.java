@@ -3,6 +3,9 @@ package br.com.everis.coletaws;
 import br.com.everis.coletaws.amostrador.model.Amostrador;
 import br.com.everis.coletaws.amostrador.services.IAmostradorService;
 import br.com.everis.coletaws.amostrador.services.impl.AmostradorServiceImpl;
+import br.com.everis.coletaws.amostradoreslojasunidades.model.AmostradoresLojasUnidades;
+import br.com.everis.coletaws.amostradoreslojasunidades.service.IAmostradoresLojasUnidadesService;
+import br.com.everis.coletaws.amostradoreslojasunidades.service.impl.AmostradoresLojasUnidadesServiceImpl;
 import br.com.everis.coletaws.atividade.model.Atividade;
 import br.com.everis.coletaws.atividade.service.IAtividadeService;
 import br.com.everis.coletaws.atividade.service.impl.AtividadeServiceImpl;
@@ -36,7 +39,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.glassfish.jersey.internal.Errors.ErrorMessage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -56,6 +58,7 @@ public class ColetaWS {
     private IColetaAmostraService coletaAmostraService = null;
     private IAtividadeService atividadeService = null;
     private ILojaProdutoAtividadePKService lojaProdutoAtividadePKService = null;
+    private IAmostradoresLojasUnidadesService amostradoresLojasUnidadesService = null;
 
     @GET
     @Path("/buscarAmostrador")
@@ -168,6 +171,32 @@ public class ColetaWS {
         }
     }
 
+    @GET
+    @Path("/buscarAmostradoresLojasUnidades")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response buscarAmostradoresLojasUnidades() {
+        try {
+
+            amostradoresLojasUnidadesService = new AmostradoresLojasUnidadesServiceImpl();
+            List<AmostradoresLojasUnidades> lstAmostradoresLojasUnidades = amostradoresLojasUnidadesService.buscarAmostradoresLojasUnidades();
+
+            JSONArray jsonArray = new JSONArray();
+            for (AmostradoresLojasUnidades alu : lstAmostradoresLojasUnidades) {
+                JSONObject item = new JSONObject();
+                item.put("idAmostrador", alu.getAmostradoresLojasUnidadesPK().getAmostrador().getIdAmostrador());
+                item.put("idLoja", alu.getAmostradoresLojasUnidadesPK().getLoja().getIdLoja());
+                item.put("idUnidade", alu.getAmostradoresLojasUnidadesPK().getUnidade().getIdUnidade());
+                jsonArray.add(item);
+            }
+
+            return Response.ok(new Gson().toJson(jsonArray)).build();
+
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
+    }
+
     @POST
     @Path("/gravarColeta")
     @Produces(MediaType.APPLICATION_JSON)
@@ -191,7 +220,7 @@ public class ColetaWS {
                 coletaAmostra.setProduto(jsonObject.get("produto").toString());
                 coletaAmostra.setAtividade(jsonObject.get("atividade").toString());
                 coletaAmostra.setStatusAmostra("OK");
-                if(jsonObject.get("funcionario") != null){
+                if (jsonObject.get("funcionario") != null) {
                     coletaAmostra.setFuncionario(jsonObject.get("funcionario").toString());
                 }
                 coletaAmostraService.gravarColeta(coletaAmostra);
@@ -204,13 +233,4 @@ public class ColetaWS {
             return Response.serverError().build();
         }
     }
-
-    public IAmostradorService getAmostradorService() {
-        return amostradorService;
-    }
-
-    public void setAmostradorService(IAmostradorService amostradorService) {
-        this.amostradorService = amostradorService;
-    }
-
 }
