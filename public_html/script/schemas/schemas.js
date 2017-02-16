@@ -25,7 +25,6 @@ coletaSchema.db.getSchemaBuilder = function () {
     ds.createTable('unidades').
             addColumn('idUnidade', lf.Type.INTEGER).
             addColumn('nomeUnidade', lf.Type.STRING).
-            addColumn('idAmostrador', lf.Type.INTEGER).
             addColumn('idLoja', lf.Type.INTEGER).
             addPrimaryKey(['idUnidade']);
 
@@ -37,11 +36,16 @@ coletaSchema.db.getSchemaBuilder = function () {
             addPrimaryKey(['idFuncionario']);
 
     ds.createTable('lojas_produtos_atividades').
-            addColumn('codTeste', lf.Type.INTEGER).
             addColumn('idLoja', lf.Type.INTEGER).
             addColumn('idProduto', lf.Type.INTEGER).
             addColumn('idAtividade', lf.Type.INTEGER).
-            addPrimaryKey(['codTeste'], true);
+            addPrimaryKey(['idLoja','idProduto','idAtividade']);
+
+    ds.createTable('amostradores_lojas_unidades').
+            addColumn('idAmostrador', lf.Type.INTEGER).
+            addColumn('idLoja', lf.Type.INTEGER).
+            addColumn('idUnidade', lf.Type.INTEGER).
+            addPrimaryKey(['idAmostrador', 'idLoja', 'idUnidade']);
 
     ds.createTable('coleta_amostra').
             addColumn('idAmostra', lf.Type.INTEGER).

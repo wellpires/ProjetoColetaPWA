@@ -91,9 +91,9 @@ var urls = function () {
         GET_BUSCAR_FUNCIONARIOS: GET_BUSCAR_FUNCIONARIOS,
         GET_BUSCAR_PRODUTOS: GET_BUSCAR_PRODUTOS,
         GET_BUSCAR_ATIVIDADES: GET_BUSCAR_ATIVIDADES,
-        POST_GRAVAR_COLETA: POST_GRAVAR_COLETA,
         GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES: GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES,
-        GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES: GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES
+        GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES: GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES,
+        POST_GRAVAR_COLETA: POST_GRAVAR_COLETA
     };
 }();
 
@@ -277,7 +277,6 @@ window.onload = function () {
             return;
         }
 
-//        gravarDados();
         pausarParar(TEXTO_INICIAR);
         resetCb();
         components.btnIniciar().attr("disabled", true);
@@ -324,7 +323,7 @@ window.onload = function () {
         openModal();
         infoModal();
         if (!navigator.onLine) {
-            alert("Você está offline. Nenhum dados será carregado ou gravado no servidor.");
+            alert("Você está offline. Nenhum dado será carregado ou gravado no servidor.");
             buscarDadosAmostrador().then(function (rows) {
                 if (rows.length === 0) {
                     closeModal();
@@ -346,41 +345,53 @@ window.onload = function () {
                         carregarProdutos().done(function (produtos) {
                             carregarAtividades().done(function (atividades) {
                                 carregarLojasProdutosAtividades().done(function (lojasProdutosAtividades) {
-                                    components.spanStatus().text("FINALIZANDO...");
-                                    sincronizarColetaAmostraComServidor().then(function (data) {
-                                        gravarColeta(data).always(function () {
-                                            console.log(arguments);
-                                            apagarDados()
-                                            var tblAmostrador = amostradores;
-                                            var nomeTblAmostrador = "amostradores";
-                                            salvarDados(tblAmostrador, nomeTblAmostrador);
-                                            var tblLojas = lojas;
-                                            var nomeTblLojas = "lojas";
-                                            salvarDados(tblLojas, nomeTblLojas)
-                                            var tblUnidades = unidades;
-                                            var nomeTblUnidades = "unidades";
-                                            salvarDados(tblUnidades, nomeTblUnidades)
-                                            var tblFuncionarios = funcionarios;
-                                            var nomeTblFuncionarios = "funcionarios";
-                                            salvarDados(tblFuncionarios, nomeTblFuncionarios)
-                                            var tblProdutos = produtos;
-                                            var nomeTblProdutos = "produtos";
-                                            salvarDados(tblProdutos, nomeTblProdutos)
-                                            var tblAtividade = atividades;
-                                            var nomeTblAtividades = "atividades";
-                                            salvarDados(tblAtividade, nomeTblAtividades)
-                                            var tblLojasProdutoAtividades = lojasProdutosAtividades;
-                                            var nomeLojasProdutoAtividades = "lojas_produtos_atividades";
-                                            salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades)
-                                            if (!$("#tblCabecalho tr td #select_amostrador")[0].disabled) {
-                                                popularComboAmostrador(tblAmostrador);
-                                                closeModal();
-                                            }
-
+                                    carregarAmostradoresLojasUnidades().done(function (amostradoresLojasUnidades) {
+                                        components.spanStatus().text("FINALIZANDO...");
+                                        buscarDadosColetaAmostra().then(function (data) {
+                                            gravarColeta(data).always(function () {
+                                                console.log(arguments);
+                                                apagarDados();
+                                                var tblAmostrador = amostradores;
+                                                var nomeTblAmostrador = "amostradores";
+                                                salvarDados(tblAmostrador, nomeTblAmostrador);
+                                                
+                                                var tblLojas = lojas;
+                                                var nomeTblLojas = "lojas";
+                                                salvarDados(tblLojas, nomeTblLojas);
+                                                
+                                                var tblUnidades = unidades;
+                                                var nomeTblUnidades = "unidades";
+                                                salvarDados(tblUnidades, nomeTblUnidades);
+                                                
+                                                var tblFuncionarios = funcionarios;
+                                                var nomeTblFuncionarios = "funcionarios";
+                                                salvarDados(tblFuncionarios, nomeTblFuncionarios);
+                                                
+                                                var tblProdutos = produtos;
+                                                var nomeTblProdutos = "produtos";
+                                                salvarDados(tblProdutos, nomeTblProdutos);
+                                                
+                                                var tblAtividade = atividades;
+                                                var nomeTblAtividades = "atividades";
+                                                salvarDados(tblAtividade, nomeTblAtividades);
+                                                
+                                                var tblLojasProdutoAtividades = lojasProdutosAtividades;
+                                                var nomeLojasProdutoAtividades = "lojas_produtos_atividades";
+                                                salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades);
+                                                
+                                                var tblAmostradoresLojasUnidades = amostradoresLojasUnidades;
+                                                var nomeAmostradoresLojasUnidades = "amostradores_lojas_unidades";
+                                                salvarDados(tblAmostradoresLojasUnidades, nomeAmostradoresLojasUnidades);
+                                                
+                                                if (!$("#tblCabecalho tr td #select_amostrador")[0].disabled) {
+                                                    popularComboAmostrador(tblAmostrador);
+                                                    closeModal();
+                                                }
+                                            });
+                                        }).catch(function () {
+                                            components.spanStatus().text("ERRO AO CARREGAR DADOS DO BANCO LOCAL.");
+                                            errorModal();
                                         });
-                                    }).catch(function () {
-                                        components.spanStatus().text("ERRO AO CARREGAR DADOS DO BANCO LOCAL.");
-                                        errorModal();
                                     });
                                 }).fail(function (e) {
                                     components.spanStatus().text("ERRO AO CARREGAR DADOS DO SERVIDOR.");
@@ -489,7 +500,7 @@ var popularComboUnidades = function () {
         $select = components.cbUnidades();
         $select.find("option").remove().end().append("<option value=\"\">Selecione</option>").val("");
         $.each(unidades, function (index, object) {
-            $("<option>").val(object.idUnidade).text(object.nomeUnidade).appendTo($select);
+            $("<option>").val(object.unidades.idUnidade).text(object.unidades.nomeUnidade).appendTo($select);
         });
     });
 };
@@ -563,15 +574,16 @@ var carregarLojasProdutosAtividades = function () {
     return $.get(urls.GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES);
 };
 
-var sincronizarColetaAmostraComServidor = function () {
-    return buscarDadosColetaAmostra();
+var carregarAmostradoresLojasUnidades = function () {
+    return $.get(urls.GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES);
 };
 
 var gravarColeta = function (data) {
+    var json = JSON.stringify(data);
     return $.ajax({
         url: urls.POST_GRAVAR_COLETA,
         type: "post",
-        data: JSON.stringify(data),
+        data: json,
         contentType: "application/json",
         dataType: "json"
     });

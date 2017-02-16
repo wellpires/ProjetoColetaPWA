@@ -38,6 +38,7 @@ var apagarDados = function () {
     db.delete().from(db.getSchema().table('atividades')).exec();
     db.delete().from(db.getSchema().table('lojas_produtos_atividades')).exec();
     db.delete().from(db.getSchema().table('coleta_amostra')).exec();
+    db.delete().from(db.getSchema().table('amostradores_lojas_unidades')).exec();
 };
 
 var buscarDadosAmostrador = function () {
@@ -49,20 +50,22 @@ var buscarDadosAmostrador = function () {
 
 var buscarDadosLojas = function (idAmostrador) {
     var tblLojas = db.getSchema().table('lojas');
-    var tblUnidades = db.getSchema().table('unidades');
+    var tblAmostradoresLojasUnidades = db.getSchema().table('amostradores_lojas_unidades');
     var query = db.select(tblLojas.idLoja, tblLojas.nomeLoja).
             from(tblLojas).
-            innerJoin(tblUnidades, tblUnidades.idLoja.eq(tblLojas.idLoja)).
-            where(tblUnidades.idAmostrador.eq(idAmostrador)).
+            innerJoin(tblAmostradoresLojasUnidades, tblAmostradoresLojasUnidades.idLoja.eq(tblLojas.idLoja)).
+            where(tblAmostradoresLojasUnidades.idAmostrador.eq(idAmostrador)).
             groupBy(tblLojas.idLoja);
     return query.exec();
 };
 
 var buscarDadosUnidades = function (idAmostrador, idLoja) {
     var tblUnidades = db.getSchema().table('unidades');
+    var tblAmostradoresLojasUnidades = db.getSchema().table('amostradores_lojas_unidades');
     var query = db.select(tblUnidades.idUnidade, tblUnidades.nomeUnidade).
             from(tblUnidades).
-            where(lf.op.and(tblUnidades.idAmostrador.eq(idAmostrador), tblUnidades.idLoja.eq(idLoja))).
+            innerJoin(tblAmostradoresLojasUnidades, tblAmostradoresLojasUnidades.idUnidade.eq(tblUnidades.idUnidade)).
+            where(lf.op.and(tblAmostradoresLojasUnidades.idAmostrador.eq(idAmostrador), tblAmostradoresLojasUnidades.idLoja.eq(idLoja))).
             groupBy(tblUnidades.idUnidade, tblUnidades.nomeUnidade);
     return query.exec();
 };
