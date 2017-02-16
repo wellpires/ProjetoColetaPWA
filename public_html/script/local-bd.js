@@ -24,7 +24,6 @@ var bdConfigs = function () {
         schemaConfig.createTable('unidades').
                 addColumn('idUnidade', lf.Type.INTEGER).
                 addColumn('nomeUnidade', lf.Type.STRING).
-                addColumn('idAmostrador', lf.Type.INTEGER).
                 addColumn('idLoja', lf.Type.INTEGER).
                 addPrimaryKey(['idUnidade']);
 
@@ -40,6 +39,13 @@ var bdConfigs = function () {
                 addColumn('idLoja', lf.Type.INTEGER).
                 addColumn('idProduto', lf.Type.INTEGER).
                 addColumn('idAtividade', lf.Type.INTEGER).
+                addPrimaryKey(['codTeste'], true);
+
+        schemaConfig.createTable('amostradores_lojas_unidades').
+                addColumn('codTeste', lf.Type.INTEGER).
+                addColumn('idAmostrador', lf.Type.INTEGER).
+                addColumn('idLoja', lf.Type.INTEGER).
+                addColumn('idUnidade', lf.Type.INTEGER).
                 addPrimaryKey(['codTeste'], true);
 
         schemaConfig.createTable('coleta_amostra').
@@ -86,6 +92,7 @@ var apagarDados = function () {
         db.delete().from(db.getSchema().table('funcionarios')).exec();
         db.delete().from(db.getSchema().table('atividades')).exec();
         db.delete().from(db.getSchema().table('lojas_produtos_atividades')).exec();
+        db.delete().from(db.getSchema().table('amostradores_lojas_unidades')).exec();
         db.delete().from(db.getSchema().table('coleta_amostra')).exec();
     });
 };
@@ -102,11 +109,11 @@ var buscarDadosAmostrador = function () {
 var buscarDadosLojas = function (idAmostrador) {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
         var tblLojas = db.getSchema().table('lojas');
-        var tblUnidades = db.getSchema().table('unidades');
+        var tblAmostradoresLojasUnidades = db.getSchema().table('amostradores_lojas_unidades');
         var query = db.select(tblLojas.idLoja, tblLojas.nomeLoja).
                 from(tblLojas).
-                innerJoin(tblUnidades, tblUnidades.idLoja.eq(tblLojas.idLoja)).
-                where(tblUnidades.idAmostrador.eq(idAmostrador)).
+                innerJoin(tblAmostradoresLojasUnidades, tblAmostradoresLojasUnidades.idLoja.eq(tblLojas.idLoja)).
+                where(tblAmostradoresLojasUnidades.idAmostrador.eq(idAmostrador)).
                 groupBy(tblLojas.idLoja);
         return query.exec();
     });
@@ -115,9 +122,11 @@ var buscarDadosLojas = function (idAmostrador) {
 var buscarDadosUnidades = function (idAmostrador, idLoja) {
     return bdConfigs.schemaBuilder().connect().then(function (db) {
         var tblUnidades = db.getSchema().table('unidades');
+        var tblAmostradoresLojasUnidades = db.getSchema().table('amostradores_lojas_unidades');
         var query = db.select(tblUnidades.idUnidade, tblUnidades.nomeUnidade).
                 from(tblUnidades).
-                where(lf.op.and(tblUnidades.idAmostrador.eq(idAmostrador), tblUnidades.idLoja.eq(idLoja))).
+                innerJoin(tblAmostradoresLojasUnidades, tblAmostradoresLojasUnidades.idUnidade.eq(tblUnidades.idUnidade)).
+                where(lf.op.and(tblAmostradoresLojasUnidades.idAmostrador.eq(idAmostrador), tblAmostradoresLojasUnidades.idLoja.eq(idLoja))).
                 groupBy(tblUnidades.idUnidade, tblUnidades.nomeUnidade);
         return query.exec();
     });

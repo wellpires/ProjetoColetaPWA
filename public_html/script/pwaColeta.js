@@ -72,8 +72,8 @@ var components = function () {
 
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
-//    var ORIGEM = "http://localhost:8080/ColetaWS/";
-    var ORIGEM = "https://coletaWS.mybluemix.net/";
+    var ORIGEM = "http://localhost:8080/ColetaWS/";
+//    var ORIGEM = "https://coletaWS.mybluemix.net/";
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + "buscarAmostrador";
     var GET_BUSCAR_LOJAS = ORIGEM + "buscarLojas";
     var GET_BUSCAR_UNIDADES = ORIGEM + "buscarUnidades";
@@ -81,6 +81,7 @@ var urls = function () {
     var GET_BUSCAR_PRODUTOS = ORIGEM + "buscarProdutos";
     var GET_BUSCAR_ATIVIDADES = ORIGEM + "buscarAtividades";
     var GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES = ORIGEM + "buscarLojasProdutosAtividades";
+    var GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES = ORIGEM + "buscarAmostradoresLojasUnidades";
     var POST_GRAVAR_COLETA = ORIGEM + "gravarColeta";
 
     return{
@@ -91,7 +92,8 @@ var urls = function () {
         GET_BUSCAR_PRODUTOS: GET_BUSCAR_PRODUTOS,
         GET_BUSCAR_ATIVIDADES: GET_BUSCAR_ATIVIDADES,
         POST_GRAVAR_COLETA: POST_GRAVAR_COLETA,
-        GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES: GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES
+        GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES: GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES,
+        GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES: GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES
     };
 }();
 
@@ -275,7 +277,6 @@ window.onload = function () {
             return;
         }
 
-//        gravarDados();
         pausarParar(TEXTO_INICIAR);
         resetCb();
         components.btnIniciar().attr("disabled", true);
@@ -344,36 +345,45 @@ window.onload = function () {
                         carregarProdutos().done(function (produtos) {
                             carregarAtividades().done(function (atividades) {
                                 carregarLojasProdutosAtividades().done(function (lojasProdutosAtividades) {
-                                    components.spanStatus().text("FINALIZANDO...");
-                                    sincronizarColetaAmostraComServidor().then(function (data) {
-                                        gravarColeta(data).always(function () {
-                                            console.log(arguments);
-                                            $.when(apagarDados()).then(function () {
-                                                var tblAmostrador = amostradores;
-                                                var nomeTblAmostrador = "amostradores";
-                                                salvarDados(tblAmostrador, nomeTblAmostrador).then(function () {
-                                                    var tblLojas = lojas;
-                                                    var nomeTblLojas = "lojas";
-                                                    salvarDados(tblLojas, nomeTblLojas).then(function () {
-                                                        var tblUnidades = unidades;
-                                                        var nomeTblUnidades = "unidades";
-                                                        salvarDados(tblUnidades, nomeTblUnidades).then(function () {
-                                                            var tblFuncionarios = funcionarios;
-                                                            var nomeTblFuncionarios = "funcionarios";
-                                                            salvarDados(tblFuncionarios, nomeTblFuncionarios).then(function () {
-                                                                var tblProdutos = produtos;
-                                                                var nomeTblProdutos = "produtos";
-                                                                salvarDados(tblProdutos, nomeTblProdutos).then(function () {
-                                                                    var tblAtividade = atividades;
-                                                                    var nomeTblAtividades = "atividades";
-                                                                    salvarDados(tblAtividade, nomeTblAtividades).then(function () {
-                                                                        var tblLojasProdutoAtividades = lojasProdutosAtividades;
-                                                                        var nomeLojasProdutoAtividades = "lojas_produtos_atividades";
-                                                                        salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades).then(function () {
-                                                                            if (!$("#tblCabecalho tr td #select_amostrador")[0].disabled) {
-                                                                                popularComboAmostrador(tblAmostrador);
-                                                                                closeModal();
-                                                                            }
+                                    carregarAmostradoresLojasUnidades().done(function (amostradoresLojasUnidades) {
+                                        components.spanStatus().text("FINALIZANDO...");
+                                        sincronizarColetaAmostraComServidor().then(function (data) {
+                                            gravarColeta(data).always(function () {
+                                                console.log(arguments);
+                                                $.when(apagarDados()).then(function () {
+                                                    var tblAmostrador = amostradores;
+                                                    var nomeTblAmostrador = "amostradores";
+                                                    salvarDados(tblAmostrador, nomeTblAmostrador).then(function () {
+                                                        var tblLojas = lojas;
+                                                        var nomeTblLojas = "lojas";
+                                                        salvarDados(tblLojas, nomeTblLojas).then(function () {
+                                                            var tblUnidades = unidades;
+                                                            var nomeTblUnidades = "unidades";
+                                                            salvarDados(tblUnidades, nomeTblUnidades).then(function () {
+                                                                var tblFuncionarios = funcionarios;
+                                                                var nomeTblFuncionarios = "funcionarios";
+                                                                salvarDados(tblFuncionarios, nomeTblFuncionarios).then(function () {
+                                                                    var tblProdutos = produtos;
+                                                                    var nomeTblProdutos = "produtos";
+                                                                    salvarDados(tblProdutos, nomeTblProdutos).then(function () {
+                                                                        var tblAtividade = atividades;
+                                                                        var nomeTblAtividades = "atividades";
+                                                                        salvarDados(tblAtividade, nomeTblAtividades).then(function () {
+                                                                            var tblLojasProdutoAtividades = lojasProdutosAtividades;
+                                                                            var nomeLojasProdutoAtividades = "lojas_produtos_atividades";
+                                                                            salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades).then(function () {
+                                                                                var tblAmostradoresLojasUnidades = amostradoresLojasUnidades;
+                                                                                var nomeAmostradoresLojasUnidades = "amostradores_lojas_unidades";
+                                                                                salvarDados(tblAmostradoresLojasUnidades, nomeAmostradoresLojasUnidades).then(function () {
+                                                                                    if (!$("#tblCabecalho tr td #select_amostrador")[0].disabled) {
+                                                                                        popularComboAmostrador(tblAmostrador);
+                                                                                        closeModal();
+                                                                                    }
+                                                                                });
+                                                                            }).catch(function () {
+                                                                                components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
+                                                                                errorModal();
+                                                                            });
                                                                         }).catch(function () {
                                                                             components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
                                                                             errorModal();
@@ -398,16 +408,13 @@ window.onload = function () {
                                                         components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
                                                         errorModal();
                                                     });
-                                                }).catch(function () {
-                                                    components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                    errorModal();
                                                 });
                                             });
+                                        }).catch(function () {
+                                            components.spanStatus().text("ERRO AO CARREGAR DADOS DO BANCO LOCAL.");
+                                            errorModal();
                                         });
-                                    }).catch(function () {
-                                        components.spanStatus().text("ERRO AO CARREGAR DADOS DO BANCO LOCAL.");
-                                        errorModal();
-                                    });
+                                    })
                                 }).fail(function (e) {
                                     components.spanStatus().text("ERRO AO CARREGAR DADOS DO SERVIDOR.");
                                     errorModal();
@@ -515,7 +522,7 @@ var popularComboUnidades = function () {
         $select = components.cbUnidades();
         $select.find("option").remove().end().append("<option value=\"\">Selecione</option>").val("");
         $.each(unidades, function (index, object) {
-            $("<option>").val(object.idUnidade).text(object.nomeUnidade).appendTo($select);
+            $("<option>").val(object.unidades.idUnidade).text(object.unidades.nomeUnidade).appendTo($select);
         });
     });
 };
@@ -587,6 +594,10 @@ var carregarAtividades = function () {
 
 var carregarLojasProdutosAtividades = function () {
     return $.get(urls.GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES);
+};
+
+var carregarAmostradoresLojasUnidades = function () {
+    return $.get(urls.GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES);
 };
 
 var sincronizarColetaAmostraComServidor = function () {
