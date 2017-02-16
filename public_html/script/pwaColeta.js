@@ -72,8 +72,8 @@ var components = function () {
 
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
-//    var ORIGEM = "http://localhost:8080/ColetaWS/";
-    var ORIGEM = "https://coletaWS.mybluemix.net/";
+    var ORIGEM = "http://localhost:8080/ColetaWS/";
+//    var ORIGEM = "https://coletaWS.mybluemix.net/";
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + "buscarAmostrador";
     var GET_BUSCAR_LOJAS = ORIGEM + "buscarLojas";
     var GET_BUSCAR_UNIDADES = ORIGEM + "buscarUnidades";
@@ -81,6 +81,7 @@ var urls = function () {
     var GET_BUSCAR_PRODUTOS = ORIGEM + "buscarProdutos";
     var GET_BUSCAR_ATIVIDADES = ORIGEM + "buscarAtividades";
     var GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES = ORIGEM + "buscarLojasProdutosAtividades";
+    var GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES = ORIGEM + "buscarAmostradoresLojasUnidades";
     var POST_GRAVAR_COLETA = ORIGEM + "gravarColeta";
 
     return{
@@ -91,7 +92,8 @@ var urls = function () {
         GET_BUSCAR_PRODUTOS: GET_BUSCAR_PRODUTOS,
         GET_BUSCAR_ATIVIDADES: GET_BUSCAR_ATIVIDADES,
         POST_GRAVAR_COLETA: POST_GRAVAR_COLETA,
-        GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES: GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES
+        GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES: GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES,
+        GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES: GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES
     };
 }();
 
@@ -348,61 +350,33 @@ window.onload = function () {
                                     sincronizarColetaAmostraComServidor().then(function (data) {
                                         gravarColeta(data).always(function () {
                                             console.log(arguments);
-                                            $.when(apagarDados()).then(function () {
-                                                var tblAmostrador = amostradores;
-                                                var nomeTblAmostrador = "amostradores";
-                                                salvarDados(tblAmostrador, nomeTblAmostrador).then(function () {
-                                                    var tblLojas = lojas;
-                                                    var nomeTblLojas = "lojas";
-                                                    salvarDados(tblLojas, nomeTblLojas).then(function () {
-                                                        var tblUnidades = unidades;
-                                                        var nomeTblUnidades = "unidades";
-                                                        salvarDados(tblUnidades, nomeTblUnidades).then(function () {
-                                                            var tblFuncionarios = funcionarios;
-                                                            var nomeTblFuncionarios = "funcionarios";
-                                                            salvarDados(tblFuncionarios, nomeTblFuncionarios).then(function () {
-                                                                var tblProdutos = produtos;
-                                                                var nomeTblProdutos = "produtos";
-                                                                salvarDados(tblProdutos, nomeTblProdutos).then(function () {
-                                                                    var tblAtividade = atividades;
-                                                                    var nomeTblAtividades = "atividades";
-                                                                    salvarDados(tblAtividade, nomeTblAtividades).then(function () {
-                                                                        var tblLojasProdutoAtividades = lojasProdutosAtividades;
-                                                                        var nomeLojasProdutoAtividades = "lojas_produtos_atividades";
-                                                                        salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades).then(function () {
-                                                                            if (!$("#tblCabecalho tr td #select_amostrador")[0].disabled) {
-                                                                                popularComboAmostrador(tblAmostrador);
-                                                                                closeModal();
-                                                                            }
-                                                                        }).catch(function () {
-                                                                            components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                                            errorModal();
-                                                                        });
-                                                                    }).catch(function () {
-                                                                        components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                                        errorModal();
-                                                                    });
-                                                                }).catch(function () {
-                                                                    components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                                    errorModal();
-                                                                });
-                                                            }).catch(function () {
-                                                                components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                                errorModal();
-                                                            });
-                                                        }).catch(function () {
-                                                            components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                            errorModal();
-                                                        });
-                                                    }).catch(function () {
-                                                        components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                        errorModal();
-                                                    });
-                                                }).catch(function () {
-                                                    components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                    errorModal();
-                                                });
-                                            });
+                                            apagarDados()
+                                            var tblAmostrador = amostradores;
+                                            var nomeTblAmostrador = "amostradores";
+                                            salvarDados(tblAmostrador, nomeTblAmostrador);
+                                            var tblLojas = lojas;
+                                            var nomeTblLojas = "lojas";
+                                            salvarDados(tblLojas, nomeTblLojas)
+                                            var tblUnidades = unidades;
+                                            var nomeTblUnidades = "unidades";
+                                            salvarDados(tblUnidades, nomeTblUnidades)
+                                            var tblFuncionarios = funcionarios;
+                                            var nomeTblFuncionarios = "funcionarios";
+                                            salvarDados(tblFuncionarios, nomeTblFuncionarios)
+                                            var tblProdutos = produtos;
+                                            var nomeTblProdutos = "produtos";
+                                            salvarDados(tblProdutos, nomeTblProdutos)
+                                            var tblAtividade = atividades;
+                                            var nomeTblAtividades = "atividades";
+                                            salvarDados(tblAtividade, nomeTblAtividades)
+                                            var tblLojasProdutoAtividades = lojasProdutosAtividades;
+                                            var nomeLojasProdutoAtividades = "lojas_produtos_atividades";
+                                            salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades)
+                                            if (!$("#tblCabecalho tr td #select_amostrador")[0].disabled) {
+                                                popularComboAmostrador(tblAmostrador);
+                                                closeModal();
+                                            }
+
                                         });
                                     }).catch(function () {
                                         components.spanStatus().text("ERRO AO CARREGAR DADOS DO BANCO LOCAL.");
