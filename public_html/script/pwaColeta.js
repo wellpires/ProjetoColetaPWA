@@ -72,8 +72,8 @@ var components = function () {
 
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
-    var ORIGEM = "http://localhost:8080/ColetaWS/";
-//    var ORIGEM = "https://coletaWS.mybluemix.net/";
+//    var ORIGEM = "http://localhost:8080/ColetaWS/";
+    var ORIGEM = "https://coletaWS.mybluemix.net/";
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + "buscarAmostrador";
     var GET_BUSCAR_LOJAS = ORIGEM + "buscarLojas";
     var GET_BUSCAR_UNIDADES = ORIGEM + "buscarUnidades";
@@ -116,7 +116,7 @@ window.onload = function () {
     startTime();
 
     components.btnNovaLinha().click(function () {
-        $.get("row_coleta.html", function (data) {
+        $.get("row_coleta.html").then(function (data) {
 
             var rowCount = $("#tblColeta tr").length;
 
@@ -192,6 +192,7 @@ window.onload = function () {
                 }
 
             });
+
 
             var jqueryBtnDeletar = "#" + deletarId;
             $(jqueryBtnDeletar).click(function () {
@@ -354,35 +355,35 @@ window.onload = function () {
                                                 var tblAmostrador = amostradores;
                                                 var nomeTblAmostrador = "amostradores";
                                                 salvarDados(tblAmostrador, nomeTblAmostrador);
-                                                
+
                                                 var tblLojas = lojas;
                                                 var nomeTblLojas = "lojas";
                                                 salvarDados(tblLojas, nomeTblLojas);
-                                                
+
                                                 var tblUnidades = unidades;
                                                 var nomeTblUnidades = "unidades";
                                                 salvarDados(tblUnidades, nomeTblUnidades);
-                                                
+
                                                 var tblFuncionarios = funcionarios;
                                                 var nomeTblFuncionarios = "funcionarios";
                                                 salvarDados(tblFuncionarios, nomeTblFuncionarios);
-                                                
+
                                                 var tblProdutos = produtos;
                                                 var nomeTblProdutos = "produtos";
                                                 salvarDados(tblProdutos, nomeTblProdutos);
-                                                
+
                                                 var tblAtividade = atividades;
                                                 var nomeTblAtividades = "atividades";
                                                 salvarDados(tblAtividade, nomeTblAtividades);
-                                                
+
                                                 var tblLojasProdutoAtividades = lojasProdutosAtividades;
                                                 var nomeLojasProdutoAtividades = "lojas_produtos_atividades";
                                                 salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades);
-                                                
+
                                                 var tblAmostradoresLojasUnidades = amostradoresLojasUnidades;
                                                 var nomeAmostradoresLojasUnidades = "amostradores_lojas_unidades";
                                                 salvarDados(tblAmostradoresLojasUnidades, nomeAmostradoresLojasUnidades);
-                                                
+
                                                 if (!$("#tblCabecalho tr td #select_amostrador")[0].disabled) {
                                                     popularComboAmostrador(tblAmostrador);
                                                     closeModal();
