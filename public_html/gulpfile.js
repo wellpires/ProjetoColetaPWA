@@ -30,7 +30,7 @@ gulp.task('generate-sw', function () {
                 handler: 'networkFirst',
                 options: {
                     cache: {
-                        name: 'coletaDadosCache-v1'
+                        name: 'coletaDadosCache-v2'
                     }
                 }
             }]

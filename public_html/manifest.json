@@ -39,7 +39,6 @@
         }
 
     ],
-    "scope": "./",
     "start_url": "/index.html",
     "orientation": "any",
     "display": "standalone",

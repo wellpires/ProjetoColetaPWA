@@ -72,8 +72,8 @@ var components = function () {
 
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
-    var ORIGEM = "http://localhost:8080/ColetaWS/";
-//    var ORIGEM = "https://coletaWS.mybluemix.net/";
+//    var ORIGEM = "http://localhost:8080/ColetaWS/";
+    var ORIGEM = "https://coletaWS.mybluemix.net/";
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + "buscarAmostrador";
     var GET_BUSCAR_LOJAS = ORIGEM + "buscarLojas";
     var GET_BUSCAR_UNIDADES = ORIGEM + "buscarUnidades";
@@ -99,8 +99,7 @@ var urls = function () {
 
 //==============================================================================
 
-window.onload = function () {
-
+(function ($, window, document) {
 
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("service-worker.js").then(function (registration) {
@@ -182,9 +181,14 @@ window.onload = function () {
                 $("#tblColeta td select.func_atividade")[rowIndex - 1].value = "";
 
                 if (rowIndex === $("#tblColeta tr").length - 1) {
+
+                    $.each($("#tblColeta tr td span"), function (index, object) {
+                        $(object).parents('tr').css('background-color', '');
+                    });
+
                     zerarContagemRegressiva();
                     startTime();
-                    CountDown().Start(301000, $("#tblColeta tr td span"));
+                    CountDown().Start(300000, $("#tblColeta tr td span"));
                 }
 
                 if (($("#tblColeta tr").length - 1) === 1) {
@@ -348,8 +352,8 @@ window.onload = function () {
                                     carregarAmostradoresLojasUnidades().done(function (amostradoresLojasUnidades) {
                                         components.spanStatus().text("FINALIZANDO...");
                                         sincronizarColetaAmostraComServidor().then(function (data) {
-                                            gravarColeta(data).always(function () {
-                                                console.log(arguments);
+                                            gravarColeta(data).always(function (status) {
+                                                console.log(status.status);
                                                 $.when(apagarDados()).then(function () {
                                                     var tblAmostrador = amostradores;
                                                     var nomeTblAmostrador = "amostradores";
@@ -444,7 +448,9 @@ window.onload = function () {
             errorModal();
         });
     });
-};
+})(window.jQuery, window, document);
+
+window.onload = function () {};
 
 function startTime() {
     var today = new Date();
