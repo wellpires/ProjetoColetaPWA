@@ -18,27 +18,25 @@ function main() {
 
 
 var salvarDados = function (storageObj, tabela) {
-    var tbl = db.getSchema().table(tabela);
-    if (storageObj instanceof Array) {
-        var rows = storageObj.map(function (obj) {
-            return tbl.createRow(obj);
-        });
+    try {
+        var tbl = db.getSchema().table(tabela);
+        if (storageObj instanceof Array) {
+            var rows = storageObj.map(function (obj) {
+                return tbl.createRow(obj);
+            });
+        }
+        db.insert().into(tbl).values(rows).exec();
+    } catch (e) {
+        throw e;
     }
-    db.insert().into(tbl).values(rows).exec();
 };
 
-var apagarDados = function () {
-//    var tbl = db.getSchema().table(tabela);
-//    db.delete().from(tbl);
-    db.delete().from(db.getSchema().table('amostradores')).exec();
-    db.delete().from(db.getSchema().table('lojas')).exec();
-    db.delete().from(db.getSchema().table('produtos')).exec();
-    db.delete().from(db.getSchema().table('unidades')).exec();
-    db.delete().from(db.getSchema().table('funcionarios')).exec();
-    db.delete().from(db.getSchema().table('atividades')).exec();
-    db.delete().from(db.getSchema().table('lojas_produtos_atividades')).exec();
-    db.delete().from(db.getSchema().table('coleta_amostra')).exec();
-    db.delete().from(db.getSchema().table('amostradores_lojas_unidades')).exec();
+var apagarDados = function (tabela) {
+    try {
+        db.delete().from(db.getSchema().table(tabela)).exec();
+    } catch (e) {
+        throw e;
+    }
 };
 
 var buscarDadosAmostrador = function () {
