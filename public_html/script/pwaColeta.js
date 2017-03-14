@@ -74,7 +74,7 @@ var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
 //    var ORIGEM = "http://localhost:8080/ColetaWS/";
     var ORIGEM = "https://coletaWS.mybluemix.net/";
-    var GET_BUSCAR_AMOSTRADORES = ORIGEM + "buscarAmostrador";
+    var GET_BUSCAR_AMOSTRADORES = ORIGEM + "buscarAmostradores";
     var GET_BUSCAR_LOJAS = ORIGEM + "buscarLojas";
     var GET_BUSCAR_UNIDADES = ORIGEM + "buscarUnidades";
     var GET_BUSCAR_FUNCIONARIOS = ORIGEM + "buscarFuncionarios";
@@ -91,9 +91,9 @@ var urls = function () {
         GET_BUSCAR_FUNCIONARIOS: GET_BUSCAR_FUNCIONARIOS,
         GET_BUSCAR_PRODUTOS: GET_BUSCAR_PRODUTOS,
         GET_BUSCAR_ATIVIDADES: GET_BUSCAR_ATIVIDADES,
-        POST_GRAVAR_COLETA: POST_GRAVAR_COLETA,
         GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES: GET_BUSCAR_LOJAS_PRODUTOS_ATIVIDADES,
-        GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES: GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES
+        GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES: GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES,
+        POST_GRAVAR_COLETA: POST_GRAVAR_COLETA
     };
 }();
 
@@ -115,7 +115,7 @@ var urls = function () {
     startTime();
 
     components.btnNovaLinha().click(function () {
-        $.get("row_coleta.html", function (data) {
+        $.get("row_coleta.html").then(function (data) {
 
             var rowCount = $("#tblColeta tr").length;
 
@@ -196,6 +196,7 @@ var urls = function () {
                 }
 
             });
+
 
             var jqueryBtnDeletar = "#" + deletarId;
             $(jqueryBtnDeletar).click(function () {
@@ -324,24 +325,21 @@ var urls = function () {
         if (!confirm("Tem certeza?")) {
             return;
         }
-        openModal();
-        infoModal();
         if (!navigator.onLine) {
-            alert("Você está offline. Nenhum dados será carregado ou gravado no servidor.");
+            alert("Você está offline. Nenhum dado será carregado ou gravado no servidor.");
+            showInfoModal("CARREGANDO DADOS DO BANCO LOCAL");
             buscarDadosAmostrador().then(function (rows) {
                 if (rows.length === 0) {
                     closeModal();
                     return;
                 }
                 popularComboAmostrador(rows);
-                closeModal();
             }).catch(function () {
-                components.spanStatus().text("Erro ao conectar no banco de dados local.");
-                errorModal();
+                showErrorModal("Erro ao conectar no banco de dados local.");
             });
             return;
         }
-        components.spanStatus().text("CARREGANDO DADOS DO SERVIDOR...");
+        showInfoModal("CARREGANDO DADOS DO SERVIDOR...");
         carregarAmostrador().done(function (amostradores) {
             carregarLojas().done(function (lojas) {
                 carregarUnidades().done(function (unidades) {
@@ -350,102 +348,86 @@ var urls = function () {
                             carregarAtividades().done(function (atividades) {
                                 carregarLojasProdutosAtividades().done(function (lojasProdutosAtividades) {
                                     carregarAmostradoresLojasUnidades().done(function (amostradoresLojasUnidades) {
-                                        components.spanStatus().text("FINALIZANDO...");
-                                        sincronizarColetaAmostraComServidor().then(function (data) {
-                                            gravarColeta(data).always(function (status) {
-                                                console.log(status.status);
-                                                $.when(apagarDados()).then(function () {
+                                        showInfoModal("FINALIZANDO...");
+                                        buscarDadosColetaAmostra().then(function (data) {
+                                            gravarColeta(data).always(function (response) {
+                                                try {
+                                                    if (response.status !== 200) {
+                                                        apagarDados('coleta_amostra');
+                                                    }
+
                                                     var tblAmostrador = amostradores;
                                                     var nomeTblAmostrador = "amostradores";
-                                                    salvarDados(tblAmostrador, nomeTblAmostrador).then(function () {
-                                                        var tblLojas = lojas;
-                                                        var nomeTblLojas = "lojas";
-                                                        salvarDados(tblLojas, nomeTblLojas).then(function () {
-                                                            var tblUnidades = unidades;
-                                                            var nomeTblUnidades = "unidades";
-                                                            salvarDados(tblUnidades, nomeTblUnidades).then(function () {
-                                                                var tblFuncionarios = funcionarios;
-                                                                var nomeTblFuncionarios = "funcionarios";
-                                                                salvarDados(tblFuncionarios, nomeTblFuncionarios).then(function () {
-                                                                    var tblProdutos = produtos;
-                                                                    var nomeTblProdutos = "produtos";
-                                                                    salvarDados(tblProdutos, nomeTblProdutos).then(function () {
-                                                                        var tblAtividade = atividades;
-                                                                        var nomeTblAtividades = "atividades";
-                                                                        salvarDados(tblAtividade, nomeTblAtividades).then(function () {
-                                                                            var tblLojasProdutoAtividades = lojasProdutosAtividades;
-                                                                            var nomeLojasProdutoAtividades = "lojas_produtos_atividades";
-                                                                            salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades).then(function () {
-                                                                                var tblAmostradoresLojasUnidades = amostradoresLojasUnidades;
-                                                                                var nomeAmostradoresLojasUnidades = "amostradores_lojas_unidades";
-                                                                                salvarDados(tblAmostradoresLojasUnidades, nomeAmostradoresLojasUnidades).then(function () {
-                                                                                    if (!$("#tblCabecalho tr td #select_amostrador")[0].disabled) {
-                                                                                        popularComboAmostrador(tblAmostrador);
-                                                                                        closeModal();
-                                                                                    }
-                                                                                });
-                                                                            }).catch(function () {
-                                                                                components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                                                errorModal();
-                                                                            });
-                                                                        }).catch(function () {
-                                                                            components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                                            errorModal();
-                                                                        });
-                                                                    }).catch(function () {
-                                                                        components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                                        errorModal();
-                                                                    });
-                                                                }).catch(function () {
-                                                                    components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                                    errorModal();
-                                                                });
-                                                            }).catch(function () {
-                                                                components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                                errorModal();
-                                                            });
-                                                        }).catch(function () {
-                                                            components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                            errorModal();
-                                                        });
-                                                    }).catch(function () {
-                                                        components.spanStatus().text("ERRO AO CONECTAR NO BANCO DE DADOS LOCAL.");
-                                                        errorModal();
-                                                    });
-                                                });
+                                                    apagarDados(nomeTblAmostrador);
+                                                    salvarDados(tblAmostrador, nomeTblAmostrador);
+
+                                                    var tblLojas = lojas;
+                                                    var nomeTblLojas = "lojas";
+                                                    apagarDados(nomeTblLojas);
+                                                    salvarDados(tblLojas, nomeTblLojas);
+
+                                                    var tblUnidades = unidades;
+                                                    var nomeTblUnidades = "unidades";
+                                                    apagarDados(nomeTblUnidades);
+                                                    salvarDados(tblUnidades, nomeTblUnidades);
+
+                                                    var tblFuncionarios = funcionarios;
+                                                    var nomeTblFuncionarios = "funcionarios";
+                                                    apagarDados(nomeTblFuncionarios);
+                                                    salvarDados(tblFuncionarios, nomeTblFuncionarios);
+
+                                                    var tblProdutos = produtos;
+                                                    var nomeTblProdutos = "produtos";
+                                                    apagarDados(nomeTblProdutos);
+                                                    salvarDados(tblProdutos, nomeTblProdutos);
+
+                                                    var tblAtividade = atividades;
+                                                    var nomeTblAtividades = "atividades";
+                                                    apagarDados(nomeTblAtividades);
+                                                    salvarDados(tblAtividade, nomeTblAtividades);
+
+                                                    var tblLojasProdutoAtividades = lojasProdutosAtividades;
+                                                    var nomeLojasProdutoAtividades = "lojas_produtos_atividades";
+                                                    apagarDados(nomeLojasProdutoAtividades);
+                                                    salvarDados(tblLojasProdutoAtividades, nomeLojasProdutoAtividades);
+
+                                                    var tblAmostradoresLojasUnidades = amostradoresLojasUnidades;
+                                                    var nomeAmostradoresLojasUnidades = "amostradores_lojas_unidades";
+                                                    apagarDados(nomeAmostradoresLojasUnidades);
+                                                    salvarDados(tblAmostradoresLojasUnidades, nomeAmostradoresLojasUnidades);
+
+                                                    if (!$("#tblCabecalho tr td #select_amostrador")[0].disabled) {
+                                                        popularComboAmostrador(tblAmostrador);
+                                                        closeModal();
+                                                    }
+                                                } catch (e) {
+                                                    showErrorModal(e);
+                                                }
                                             });
-                                        }).catch(function () {
-                                            components.spanStatus().text("ERRO AO CARREGAR DADOS DO BANCO LOCAL.");
-                                            errorModal();
+                                        }).catch(function (e) {
+                                            showErrorModal("ERRO AO CARREGAR DADOS DO BANCO LOCAL.\n" + e);
                                         });
-                                    })
+                                    });
                                 }).fail(function (e) {
-                                    components.spanStatus().text("ERRO AO CARREGAR DADOS DO SERVIDOR.");
-                                    errorModal();
+                                    showErrorModal("ERRO AO CARREGAR DADOS DO SERVIDOR.\n" + e);
                                 });
                             }).fail(function (e) {
-                                components.spanStatus().text("ERRO AO CARREGAR ATIVIDADES DO SERVIDOR.");
-                                errorModal();
+                                showErrorModal("ERRO AO CARREGAR ATIVIDADES DO SERVIDOR.\n" + e);
                             });
                         }).fail(function (e) {
-                            components.spanStatus().text("ERRO AO CARREGAR PRODUTOS DO SERVIDOR.");
-                            errorModal();
+                            showErrorModal("ERRO AO CARREGAR PRODUTOS DO SERVIDOR.\n" + e);
                         });
                     }).fail(function (e) {
-                        components.spanStatus().text("ERRO AO CARREGAR FUNCIONÁRIOS DO SERVIDOR.");
-                        errorModal();
+                        showErrorModal("ERRO AO CARREGAR FUNCIONÁRIOS DO SERVIDOR.\n" + e);
                     });
                 }).fail(function (e) {
-                    components.spanStatus().text("ERRO AO CARREGAR UNIDADES DO SERVIDOR.");
-                    errorModal();
+                    showErrorModal("ERRO AO CARREGAR UNIDADES DO SERVIDOR.\n" + e);
                 });
             }).fail(function (e) {
-                components.spanStatus().text("ERRO AO CARREGAR LOJAS DO SERVIDOR.");
-                errorModal();
+                showErrorModal("ERRO AO CARREGAR LOJAS DO SERVIDOR.\n" + e);
             });
         }).fail(function (e) {
-            components.spanStatus().text("ERRO AO CARREGAR AMOSTRADOR DO SERVIDOR.");
-            errorModal();
+            showErrorModal("ERRO AO CARREGAR AMOSTRADOR DO SERVIDOR.\n" + e);
         });
     });
 })(window.jQuery, window, document);
@@ -606,15 +588,12 @@ var carregarAmostradoresLojasUnidades = function () {
     return $.get(urls.GET_BUSCAR_AMOSTRADORES_LOJAS_UNIDADES);
 };
 
-var sincronizarColetaAmostraComServidor = function () {
-    return buscarDadosColetaAmostra();
-};
-
 var gravarColeta = function (data) {
+    var json = JSON.stringify(data);
     return $.ajax({
         url: urls.POST_GRAVAR_COLETA,
         type: "post",
-        data: JSON.stringify(data),
+        data: json,
         contentType: "application/json",
         dataType: "json"
     });
@@ -772,4 +751,22 @@ var errorModal = function () {
     setTimeout(function () {
         closeModal();
     }, 5000);
+};
+
+var showInfoModal = function (msg) {
+    showModal(msg, 1);
+};
+
+var showErrorModal = function (msg) {
+    showModal(msg, 0);
+};
+
+var showModal = function (msg, type) {
+    openModal();
+    components.spanStatus().text(msg);
+    if (type === 0) {
+        errorModal();
+    } else {
+        infoModal();
+    }
 };
