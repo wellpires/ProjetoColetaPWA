@@ -73,7 +73,7 @@ var components = function () {
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
 //    var ORIGEM = "http://localhost:8080/ColetaWS/";
-    var ORIGEM = "https://coletaWS.mybluemix.net/";
+    var ORIGEM = "https://coletawsdev.mybluemix.net/";
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + "buscarAmostradores";
     var GET_BUSCAR_LOJAS = ORIGEM + "buscarLojas";
     var GET_BUSCAR_UNIDADES = ORIGEM + "buscarUnidades";
@@ -134,7 +134,8 @@ var urls = function () {
             var idBtnAcao = "btnAcao" + randomId;
             var tempoId = "spanTempo" + randomId;
             var deletarId = "btnDeletar" + randomId;
-
+            
+            
             $("#id_div_inicial").attr("id", divId);
             $("#id_btn_inicial").attr("id", idBtnAcao);
             $("#id_btn_apagar").attr("id", deletarId);
@@ -143,7 +144,8 @@ var urls = function () {
             var cbFuncionario = $("#tblColeta tr td select")[tamanhoFunci - 3];
             var cbProduto = $("#tblColeta tr td select")[tamanhoFunci - 2];
             var cbAtividade = $("#tblColeta tr td select")[tamanhoFunci - 1];
-
+//            $(cbAtividade).find("option").remove().end().append("<option value=\"\">Selecione</option>").val("");
+            
             popularComboFuncionarios(cbFuncionario, cbProduto);
 
             var jqueryBtnAcao = "#" + idBtnAcao;
@@ -352,7 +354,7 @@ var urls = function () {
                                         buscarDadosColetaAmostra().then(function (data) {
                                             gravarColeta(data).always(function (response) {
                                                 try {
-                                                    if (response.status !== 200) {
+                                                    if (response.status === 200) {
                                                         apagarDados('coleta_amostra');
                                                     }
 
@@ -594,7 +596,7 @@ var gravarColeta = function (data) {
         url: urls.POST_GRAVAR_COLETA,
         type: "post",
         data: json,
-        contentType: "application/json",
+        contentType: "application/json; charset=utf-8",
         dataType: "json"
     });
 
@@ -632,7 +634,11 @@ var gravarDados = function (rowIndex, limiteItens) {
         var atividadeValue = null;
 
         if ($(funcAtividade)[i] === undefined) {
-            atividadeValue = $(funcAtividade).text();
+        	if($("#tblColeta tr .func_atividade")[i].disabled){
+        		atividadeValue = 'Selecione';
+        	}else{
+                atividadeValue = $(funcAtividade).text();
+        	}
         } else {
             atividadeValue = $(funcAtividade)[i].text;
         }
@@ -647,13 +653,16 @@ var gravarDados = function (rowIndex, limiteItens) {
         }
 
 
+        var data = new Date();
+        var dataUTC = new Date(Date.UTC(data.getFullYear(), data.getMonth(), data.getDate(), data.getHours(), data.getMinutes(), data.getSeconds()));
+        
         var json = {
             "amostrador": amostradorValue,
             "loja": lojaValue,
             "unidade": unidadeVale,
-            "dataColeta": new Date(),
-            "horaColeta": new Date(),
-            "horaReal": new Date(),
+            "dataColeta": dataUTC,
+            "horaColeta": dataUTC,
+            "horaReal": dataUTC,
             "produto": produtoValue,
             "atividade": atividadeValue,
             "statusAmostra": "",

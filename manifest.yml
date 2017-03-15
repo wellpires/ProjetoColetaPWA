@@ -1,0 +1,6 @@
+---
+applications:
+- name: ColetaAmostra
+  memory: 388M
+  host: coletaamostradev
+  domain: mybluemix.net

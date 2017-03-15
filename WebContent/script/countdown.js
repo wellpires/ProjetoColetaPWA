@@ -34,7 +34,7 @@ var CountDown = function () {
                     $($('#tblColeta tr td select.func_produto')[i]).val('');
                     $($('#tblColeta tr td select.func_atividade')[i]).val('');
                     GuiTimer[i].innerHTML = '05:00';
-                    if (i === 1) {
+                    if (i === 0) {
                         var registrarArray = $('#tblColeta tr td button');
                         var indicePartida = 0;
                         for (var x = 0; x < registrarArray.length; x++) {
@@ -45,10 +45,9 @@ var CountDown = function () {
 
                         gravarDados(indicePartida, registrarArray.length);
 
-                        $(GuiTimer[0].parentNode.parentNode.children[3].children).attr('disabled', false);
                     }
                     GuiTimer[i].parentNode.parentNode.style.backgroundColor = 'white';
-                    $(GuiTimer[i].parentNode.parentNode.children[3].children).attr('disabled', true);
+                    $(GuiTimer[i].parentNode.parentNode.children[3].children).attr('disabled', (i > 0));
 
                     if (i === (GuiTimer.length - 1)) {
                         keep(300000);

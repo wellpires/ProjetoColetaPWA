@@ -4,9 +4,11 @@ var swPrecache = require('sw-precache');
 gulp.task('generate-sw', function () {
     var swOptions = {
         staticFileGlobs: [
-            './*.html',
+            './*.{html, json, js}',
             './images/*.{png,svg,gif,jpg}',
             './script/*.js',
+            './script/schemas/*.js',
+            './script/utils/*.js',
             './styles/*.css',
             './scss/*.scss',
             './plugins/*.js',
