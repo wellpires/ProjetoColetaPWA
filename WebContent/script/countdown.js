@@ -31,8 +31,6 @@ var CountDown = function () {
             for (var i = 0; i < GuiTimer.length; i++) {
                 GuiTimer[i].innerHTML = (Minutes < 10 ? '0' : '') + Minutes + ':' + (Seconds < 10 ? '0' : '') + Seconds;
                 if (converterMinutosParaMilis(GuiTimer[i].innerHTML) === 0) {
-                    $($('#tblColeta tr td select.func_produto')[i]).val('');
-                    $($('#tblColeta tr td select.func_atividade')[i]).val('');
                     GuiTimer[i].innerHTML = '05:00';
                     if (i === 0) {
                         var registrarArray = $('#tblColeta tr td button');
@@ -46,6 +44,8 @@ var CountDown = function () {
                         gravarDados(indicePartida, registrarArray.length);
 
                     }
+                    $($('#tblColeta tr td select.func_produto')[i]).val('');
+                    $($('#tblColeta tr td select.func_atividade')[i]).val('');
                     GuiTimer[i].parentNode.parentNode.style.backgroundColor = 'white';
                     $(GuiTimer[i].parentNode.parentNode.children[3].children).attr('disabled', (i > 0));
 
