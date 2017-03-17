@@ -8,4 +8,5 @@ app.use(express.static('./WebContent'));
 http.createServer(app)
 .listen(process.env.PORT || 4040, function() {
 	console.log('Servidor iniciado');
+	console.log('http://localhost:4040');
 });

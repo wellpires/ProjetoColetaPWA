@@ -144,21 +144,20 @@ var urls = function () {
             var cbFuncionario = $("#tblColeta tr td select")[tamanhoFunci - 3];
             var cbProduto = $("#tblColeta tr td select")[tamanhoFunci - 2];
             var cbAtividade = $("#tblColeta tr td select")[tamanhoFunci - 1];
-//            $(cbAtividade).find("option").remove().end().append("<option value=\"\">Selecione</option>").val("");
             
             popularComboFuncionarios(cbFuncionario, cbProduto);
 
             var jqueryBtnAcao = "#" + idBtnAcao;
             $(jqueryBtnAcao).click(function (e) {
                 $(jqueryBtnAcao).attr("value", "REGISTRAR");
-                var rowIndex = $("#tblColeta tr").index(e.target.parentNode.parentNode);
+                var rowIndex = $("#tblColeta tr button").index(e.target)
                 var buttonComponent = $("#tblColeta tr td button");
 
                 var msg = "";
-                if ($($("#tblColeta tr td select.func_produto :selected")[rowIndex - 1]).val() === "") {
+                if ($($("#tblColeta tr td select.func_produto :selected")[rowIndex]).val() === "") {
                     msg += "Favor selecionar um produto";
                 }
-                if ($($("#tblColeta tr td select.func_atividade :selected")[rowIndex - 1]).val() === "") {
+                if ($($("#tblColeta tr td select.func_atividade :selected")[rowIndex]).val() === "") {
                     msg += "\nFavor selecionar uma atividade";
 
                 }
@@ -167,22 +166,22 @@ var urls = function () {
                     alert(msg);
                     return;
                 }
+                
+                gravarDados_2(rowIndex, false);
 
-                gravarDados(rowIndex - 1);
 
-
-                if (buttonComponent[rowIndex] === undefined) {
+                if (buttonComponent[rowIndex + 1] === undefined) {
                     buttonComponent[0].disabled = false;
-                    buttonComponent[rowIndex - 1].disabled = true;
+                    buttonComponent[rowIndex].disabled = true;
                 } else {
-                    buttonComponent[rowIndex].disabled = false;
-                    buttonComponent[rowIndex - 1].disabled = true;
+                    buttonComponent[rowIndex + 1].disabled = false;
+                    buttonComponent[rowIndex].disabled = true;
                 }
 
-                $("#tblColeta td select.func_produto")[rowIndex - 1].value = "";
-                $("#tblColeta td select.func_atividade")[rowIndex - 1].value = "";
+                $("#tblColeta td select.func_produto")[rowIndex].value = "";
+                $("#tblColeta td select.func_atividade")[rowIndex].value = "";
 
-                if (rowIndex === $("#tblColeta tr").length - 1) {
+                if ((rowIndex + 1) === $("#tblColeta tr").length - 1) {
 
                     $.each($("#tblColeta tr td span"), function (index, object) {
                         $(object).parents('tr').css('background-color', '');
@@ -602,6 +601,43 @@ var gravarColeta = function (data) {
 
 };
 
+var gravarDados_2 = function(indice, isVariosRegistros){
+    var amostradorValue = components.cbAmostrador().find("option:selected").text();
+    var lojaValue = components.cbLojas().find("option:selected").text();
+    var unidadeVale = components.cbUnidades().find("option:selected").text();
+    var arrayJson = [];
+    var data = new Date();
+    var dataUTC = new Date(Date.UTC(data.getFullYear(), data.getMonth(), data.getDate(), data.getHours(), data.getMinutes(), data.getSeconds()));
+    
+    if(isVariosRegistros){
+    	
+    }
+    else{
+    	
+    	var funcionario = $('#tblColeta tr .func_nome :selected')[indice].text;
+    	var produto = $('#tblColeta tr .func_atividade :selected')[indice].text;
+    	var atividade = $('#tblColeta tr .func_produto :selected')[indice].text;
+    	
+        var json = {
+            "amostrador": amostradorValue,
+            "loja": lojaValue,
+            "unidade": unidadeVale,
+            "dataColeta": dataUTC,
+            "horaColeta": dataUTC,
+            "horaReal": dataUTC,
+            "funcionario": funcionario,
+            "produto": produto,
+            "atividade": atividade,
+            "statusAmostra": ""
+        };
+        
+        arrayJson.push(json);
+    }
+    
+    salvarDados(arrayJson, "coleta_amostra");
+    
+}
+
 var gravarDados = function (rowIndex, limiteItens) {
     var amostradorValue = components.cbAmostrador().find("option:selected").text();
     var lojaValue = components.cbLojas().find("option:selected").text();
@@ -613,6 +649,9 @@ var gravarDados = function (rowIndex, limiteItens) {
     //MARACUTAIA MONSTRA! CRIANÇAS, NÃO REPITAM ISSO EM CASA!
     var init = 0;
     var limit = funcProduto.length;
+    
+    // VERIFICAR SE A VARIÁVEL rowIndex É 'undefined', SE FOR 'undefined' QUER DIZER QUE SERÁ GRAVADO NO
+    // BANCO APENAS O REGISTRO DA LINHA ONDE FOI CLICADA EM 'REGISTRAR'
     if (rowIndex !== undefined) {
         init = rowIndex;
         limit = rowIndex + 1;
