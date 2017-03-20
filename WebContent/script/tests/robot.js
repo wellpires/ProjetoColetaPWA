@@ -1,9 +1,16 @@
-var IDS_INTERVAL = 0;
+var ID_INTERVAL_REGISTRO = 0;
+var ID_INTERVAL_TBL_LOG = 0;
+var QTDE_REGISTRADA = -1;
+var HORA_INICIAL = null;
+
+//ADICIONAR TABELA DE LOG
+$('<div style="width: 100%;overflow:scroll;height:800px;"><table id="tblLog" style="border: 1px solid black;border-collapse: collapse;width:100%"><tr style="border: 1px solid black;border-collapse: collapse;"><th style="border: 1px solid black;border-collapse: collapse;">Qtd Registrada</th><th style="border: 1px solid black;border-collapse: collapse;">Qtd retornada do BD</th><th style="border: 1px solid black;border-collapse: collapse;">Status</th></tr></table></div>').insertAfter('#tblColeta');
 
 var CONFIG = (function(){
+
 	components.btnNovaLinha().off('click');
 	components.btnNovaLinha().click(function () {
-			console.error('FUNÇÃO ALTERADAAAAAA');
+		console.error('FUNÇÃO ALTERADAAAAAA');
         $.get("row_coleta.html").then(function (data) {
             var rowCount = $("#tblColeta tr").length;
 
@@ -84,6 +91,8 @@ var CONFIG = (function(){
                 if (($("#tblColeta tr").length - 1) === 1) {
                     e.target.disabled = false;
                 }
+                
+                QTDE_REGISTRADA++;
 
             });
 
@@ -122,11 +131,34 @@ var CONFIG = (function(){
 		}
 	}
 	
+	
+	
 })();
 
 var INICIAR = (function(){
 	
-	/* =================================== FUNÇÕES =================================== */
+	var funcaoLog = function(){
+		/* =================================== FUNÇÃO PARA LOG =================================== */
+//		if(ID_INTERVAL_TBL_LOG  === 0){
+//			ID_INTERVAL_TBL_LOG = setInterval(function(){
+				var linhaHtml = '<tr style="border: 1px solid black;border-collapse: collapse;"><td  style="border: 1px solid black;border-collapse: collapse;"><div><p>${VALOR_1}</p></div></td><td style="border: 1px solid black;border-collapse: collapse;"><div><p>${VALOR_2}</p></div></td><td style="border: 1px solid black;border-collapse: collapse;"><div><p>${VALOR_3}</p></div></td></tr>';
+			
+				var tblAmostra = db.getSchema().table('coleta_amostra');
+		    	var query = db.select(lf.fn.count(tblAmostra.idAmostra.as('QTDE'))).from(tblAmostra);
+		    	query.exec().then(function(data){
+		    		var status = data[0]['COUNT(idAmostra)'] === QTDE_REGISTRADA ? 'OK' :  'NOK';
+		    		var qtde = data[0]['COUNT(idAmostra)'];
+		    		linhaHtml = linhaHtml.replace('${VALOR_1}', QTDE_REGISTRADA); 
+		    		linhaHtml = linhaHtml.replace('${VALOR_2}', qtde);
+		    		linhaHtml = linhaHtml.replace('${VALOR_3}', status);
+		    		console.log(QTDE_REGISTRADA + '  ---- ' + qtde + '  ---- ' + status);
+		    		$('#tblLog').append(linhaHtml);
+				});
+//			},TEMPO);
+//		}
+	}
+	
+	/* ====================================== FUNÇÕES ====================================== */
 	var gerarValorAleatorio = function(max){
 		return Math.floor(Math.random() * (max - 1) + 1);
 	}
@@ -178,10 +210,34 @@ var INICIAR = (function(){
 				window.confirm = oldConfirm;
 				return true;
 			}
-		components.btnIniciar().click();
+			components.btnIniciar().click();
 		}
 
 		var funcaoIntervalo = function() {
+			
+			var regex = /:/;
+			var data = new Date();
+			
+			if(HORA_INICIAL !== null){
+
+				var TEMPO = converterMinutosParaMilis('10:00');
+				var hora_final = components.txtHoraAtual().text().split(regex);
+				var dataFinal = new Date(data.getFullYear(), (data.getMonth() + 1), data.getDate(), hora_final[0], hora_final[1], hora_final[2]);
+				
+				var diferenca = dataFinal.getTime() - HORA_INICIAL.getTime();
+				if(diferenca >= TEMPO){
+					HORA_INICIAL = null;
+					funcaoLog();
+					
+				}
+			}
+			else{
+				var horaInicial = components.txtHoraAtual().text().split(regex);
+				HORA_INICIAL = new Date(data.getFullYear(), (data.getMonth() + 1), data.getDate(), horaInicial[0], horaInicial[1], horaInicial[2]);
+				funcaoLog();
+			}
+			
+			
 			var linhas = $('#tblColeta tr button');
 			var numLinhas = linhas.length;
 			
@@ -193,13 +249,13 @@ var INICIAR = (function(){
 			}
 		};
 
-		var interval_1 = setInterval(funcaoIntervalo, 2000);
-		console.error('INTERVALO' + interval_1);
-		IDS_INTERVAL = interval_1;
+		var clicarRegistrar = setInterval(funcaoIntervalo, 2000);
+		ID_INTERVAL_REGISTRO = clicarRegistrar;
 		console.info("CLICANDO EM INICIAR - FIM");
 	};
 
 	var iniciarColeta = function(preencherLinhas,clicarEmIniciar) {
+		clearInterval(ID_INTERVAL_REGISTRO);
 		$.when(preencherLinhas()).then(clicarEmIniciar());
 	}
 	
