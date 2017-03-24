@@ -151,8 +151,10 @@ var INICIAR = (function(){
 		    		linhaHtml = linhaHtml.replace('${VALOR_1}', QTDE_REGISTRADA); 
 		    		linhaHtml = linhaHtml.replace('${VALOR_2}', qtde);
 		    		linhaHtml = linhaHtml.replace('${VALOR_3}', status);
-		    		console.log(QTDE_REGISTRADA + '  ---- ' + qtde + '  ---- ' + status);
 		    		$('#tblLog').append(linhaHtml);
+		    		if(status === 'NOK'){
+		    			alert('ERRO ENCONTRADO!');
+		    		}
 				});
 //			},TEMPO);
 //		}
