@@ -73,7 +73,8 @@ var components = function () {
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
 //    var ORIGEM = "http://localhost:8080/ColetaWS/";
-    var ORIGEM = "https://coletawsdev.mybluemix.net/";
+//    var ORIGEM = "https://coletawsdev.mybluemix.net/";
+    var ORIGEM = "https://coletaws.mybluemix.net/";
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + "buscarAmostradores";
     var GET_BUSCAR_LOJAS = ORIGEM + "buscarLojas";
     var GET_BUSCAR_UNIDADES = ORIGEM + "buscarUnidades";
@@ -144,7 +145,6 @@ var urls = function () {
             var cbFuncionario = $("#tblColeta tr td select")[tamanhoFunci - 3];
             var cbProduto = $("#tblColeta tr td select")[tamanhoFunci - 2];
             var cbAtividade = $("#tblColeta tr td select")[tamanhoFunci - 1];
-//            $(cbAtividade).find("option").remove().end().append("<option value=\"\">Selecione</option>").val("");
             
             popularComboFuncionarios(cbFuncionario, cbProduto);
 
