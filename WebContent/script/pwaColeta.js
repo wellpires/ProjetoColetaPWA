@@ -72,9 +72,9 @@ var components = function () {
 
 var urls = function () {
     //EM CASO DE ALTERAÇÃO, ALTERAR NO SERVICE WORKER
-//    var ORIGEM = "http://localhost:8080/ColetaWS/";
+   var ORIGEM = "http://localhost:8080/ColetaWS/";
 //    var ORIGEM = "https://coletawsdev.mybluemix.net/";
-    var ORIGEM = "https://coletaws.mybluemix.net/";
+    // var ORIGEM = "https://coletaws.mybluemix.net/";
     var GET_BUSCAR_AMOSTRADORES = ORIGEM + "buscarAmostradores";
     var GET_BUSCAR_LOJAS = ORIGEM + "buscarLojas";
     var GET_BUSCAR_UNIDADES = ORIGEM + "buscarUnidades";

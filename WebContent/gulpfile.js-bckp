@@ -1,8 +1,7 @@
-const { series } = require('gulp');
+const { task } = require('gulp');
+const { swPrecache } = require('sw-precache');
 
-
-function build(cb) {
-    var swPrecache  = require('sw-precache');
+task('build', function () {
     var swOptions = {
         staticFileGlobs: [
             './*.{html, json, js}',
@@ -40,9 +39,6 @@ function build(cb) {
             }]
     };
     return swPrecache.write('./service-worker.js', swOptions, null);
+});
 
-  cb();
-}
-
-exports.build = build;
-exports.default = series(build);
+task('build');
